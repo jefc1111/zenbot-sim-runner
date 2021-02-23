@@ -15,6 +15,11 @@ class StrategyController extends Controller
         return view('list_strategies', ['strategies' => Strategy::all()]);
     }
 
+    public function show($id)
+    {
+        return view('strategy_detail', ['strategy' => Strategy::findOrFail($id)]);
+    }
+
     public function import_strategies() {
         $importer = new StrategyImporter(config('zenbot.location'));
         
