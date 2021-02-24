@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StrategyController;
+use App\Http\Controllers\StrategyOptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,10 @@ use App\Http\Controllers\StrategyController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::get('import-strategies', [StrategyController::class, 'import_strategies']);
 
 Route::resource('strategies', StrategyController::class);
+Route::resource('strategy-options', StrategyOptionController::class);

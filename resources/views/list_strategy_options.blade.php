@@ -1,11 +1,11 @@
 <x-layout>
-    <h2>Strategy: {{ $strategy->name }}</h2>
-    <p>Description: {{ $strategy->description }}</p>
+    <h2>All strategy options</h2>
     <table>
         <thead>
             <tr>
                 <th>id</th>
-                <th>Name</th>
+                <th>Strategy</th>
+                <th>Name</th>                
                 <th>Description</th>
                 <th>Default</th>
                 <th>Unit</th>
@@ -13,10 +13,15 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($strategy->options as $strategy_option)
+            @foreach($strategy_options as $strategy_option)
             <tr>
                 <td>{{ $strategy_option->id }}</td>
-                <td>{{ $strategy_option->name }}</td>
+                <td>
+                    <a href="/strategies/{{ $strategy_option->strategy->id }}">
+                        {{ $strategy_option->strategy->name }}
+                    </a>
+                </td>
+                <td>{{ $strategy_option->name }}</td>                
                 <td>{{ $strategy_option->description }}</td>
                 <td>{{ $strategy_option->default }}</td>
                 <td>{{ $strategy_option->unit }}</td>
@@ -24,5 +29,5 @@
             </tr>
             @endforeach
         </tbody>
-    </table>
+    </table>  
 </x-layout>

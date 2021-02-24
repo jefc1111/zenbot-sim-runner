@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Symfony\Component\Process\Process;
 use App\Utility\StrategyImporter;
 use App\Models\Strategy;
+use App\Models\StrategyOption;
 
 
 class StrategyController extends Controller
@@ -21,6 +21,9 @@ class StrategyController extends Controller
     }
 
     public function import_strategies() {
+        Strategy::truncate();
+        StrategyOption::truncate();
+
         $importer = new StrategyImporter(config('zenbot.location'));
         
         echo $importer->run();

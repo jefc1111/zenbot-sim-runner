@@ -3,6 +3,7 @@
     <table>
         <thead>
             <tr>
+                <th>id</th>
                 <th>Name</th>
                 <th>Description</th>
             </tr>
@@ -10,6 +11,7 @@
         <tbody>
             @foreach($strategies as $strategy)
             <tr>
+                <td>{{ $strategy->id }}</id>
                 <td>
                     <a href="/strategies/{{ $strategy->id }}">{{ $strategy->name }}</a>
                 </td>
@@ -17,5 +19,5 @@
             </tr>
             @endforeach
         </tbody>
-    </table>
+    </table>    
 </x-layout>
