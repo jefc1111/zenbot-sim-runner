@@ -1,11 +1,11 @@
 <html>
     <head>
-        <title>{{ $title ?? 'The zen Zenbot bot' }}</title>
+        <title>{{ $title ?? 'Zenbot sim runner' }}</title>
         <link rel="stylesheet" href="/css/app.css">
     </head>
     <body>
         <h1>
-            <a href="/">The zen Zenbot bot</a>
+            <a href="/">Zenbot sim runner</a>
         </h1>
         <hr />        
         {{ $slot }}

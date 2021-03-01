@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StrategyController;
 use App\Http\Controllers\StrategyOptionController;
+use App\Http\Controllers\SimRunBatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,8 @@ Route::get('import-strategies', [StrategyController::class, 'import_strategies']
 
 Route::resource('strategies', StrategyController::class);
 Route::resource('strategy-options', StrategyOptionController::class);
+
+
+Route::get('sim-run-batch/select-strategies', [SimRunBatchController::class, 'select_strategies']);
+Route::post('sim-run-batch/refine-strategies', [SimRunBatchController::class, 'refine_strategies']);
+Route::resource('sim-run-batch', SimRunBatchController::class);
