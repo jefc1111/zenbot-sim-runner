@@ -7,6 +7,10 @@
         input {
             border: none;
         }
+
+        ul {
+            list-style-type: none;
+        }
     </style>
     <h2>Refine sim run batch</h2>
     <form method="post" action="/sim-run-batch">
