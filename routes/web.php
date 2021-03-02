@@ -28,4 +28,5 @@ Route::resource('strategy-options', StrategyOptionController::class);
 
 Route::get('sim-run-batch/select-strategies', [SimRunBatchController::class, 'select_strategies']);
 Route::post('sim-run-batch/refine-strategies', [SimRunBatchController::class, 'refine_strategies']);
+Route::post('sim-run-batch/confirm', [SimRunBatchController::class, 'confirm']);
 Route::resource('sim-run-batch', SimRunBatchController::class);

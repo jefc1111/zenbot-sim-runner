@@ -1,11 +1,20 @@
 <x-layout>
     <style>
+        table {
+            width: 100%;            
+        }
+
+        table tr td:nth-child(n+6) {
+            
+        }
+
         table tr td:nth-child(n+6), input {
             background: #ddd;
         }
 
         input {
             border: none;
+            width: 20px;
         }
 
         ul {
@@ -13,7 +22,7 @@
         }
     </style>
     <h2>Refine sim run batch</h2>
-    <form method="post" action="/sim-run-batch">
+    <form method="post" action="/sim-run-batch/confirm">
         @csrf  
         <ul>
             @foreach($strategies as $strategy)
@@ -40,9 +49,9 @@
                             <td>{{ $strategy_option->default }}</td>
                             <td>{{ $strategy_option->unit }}</td>
                             <td>{{ $strategy_option->step }}</td>
-                            <td><input type="text" size="6" /></td>
-                            <td><input type="text" size="6" /></td>
-                            <td><input type="text" size="6" /></td>
+                            <td><input type="text" name="{{ $strategy_option->id }}-min" /></td>
+                            <td><input type="text" name="{{ $strategy_option->id }}-max" /></td>
+                            <td><input type="text" name="{{ $strategy_option->id }}-step" /></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -50,5 +59,6 @@
             </li>    
             @endforeach
         </ul>
+        <input type="submit" value="Submit">
     </form>    
 </x-layout>

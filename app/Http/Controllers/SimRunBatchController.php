@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Strategy;
+use App\Models\StrategyOption;
 
 class SimRunBatchController extends Controller
 {
@@ -17,11 +18,6 @@ class SimRunBatchController extends Controller
         //
     }
 
-    public function select_strategies()
-    {
-        return view('create_sim_run_batch.select_strategies', ['strategies' => Strategy::all()]);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -32,12 +28,42 @@ class SimRunBatchController extends Controller
         //
     }
 
+    public function select_strategies()
+    {
+        return view('create_sim_run_batch.select_strategies', ['strategies' => Strategy::all()]);
+    }
+
     public function refine_strategies() 
     {
-        \Log::debug('COCKS');
-        \Log::debug(request()->get('strategies'));
         return view('create_sim_run_batch.refine_strategies', 
             ['strategies' => Strategy::findMany(request()->get('strategies'))]
+        );
+    }
+
+    public function confirm()
+    {
+        $input = request()->except('_token');
+
+        $by_option_id = [];
+
+        foreach ($input as $k => $v) {
+            [ $option_id, $option_attribute ] = explode('-', $k);
+            
+            if (! array_key_exists($option_id, $by_option_id)) {
+                $by_option_id[$option_id] = ['option_id' => $option_id];    
+            }
+
+            $by_option_id[$option_id][$option_attribute] = $v;
+        }
+        
+        $sim_runs = array_map(function($item) {
+            return new SimRun();
+        }, $by_option_id);
+
+        \Log::error($sim_runs);
+
+        return view('create_sim_run_batch.confirm', 
+            []
         );
     }
 
