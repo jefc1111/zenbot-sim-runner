@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Strategy;
-use App\Models\StrategyOption;
+use App\Models\SimRunBatch;
 
 class SimRunBatchController extends Controller
 {
@@ -42,28 +42,12 @@ class SimRunBatchController extends Controller
 
     public function confirm()
     {
-        $input = request()->except('_token');
-
-        $by_option_id = [];
-
-        foreach ($input as $k => $v) {
-            [ $option_id, $option_attribute ] = explode('-', $k);
-            
-            if (! array_key_exists($option_id, $by_option_id)) {
-                $by_option_id[$option_id] = ['option_id' => $option_id];    
-            }
-
-            $by_option_id[$option_id][$option_attribute] = $v;
-        }
-        
-        $sim_runs = array_map(function($item) {
-            return new SimRun();
-        }, $by_option_id);
-
-        \Log::error($sim_runs);
+        // Ask sim run batch to spawn set of sim runs 
+        // Give sim run batch the input data
+        $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
 
         return view('create_sim_run_batch.confirm', 
-            []
+            [ 'strategies' => $strategies ]
         );
     }
 

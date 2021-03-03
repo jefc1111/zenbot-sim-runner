@@ -8,13 +8,13 @@
             
         }
 
-        table tr td:nth-child(n+6), input {
+        table tr td:nth-child(n+6), input[type=text] {
             background: #ddd;
         }
 
-        input {
+        input[type=text] {
             border: none;
-            width: 20px;
+            width: 40px;
         }
 
         ul {
