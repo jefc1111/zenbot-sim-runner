@@ -1,8 +1,17 @@
 <x-layout>
     <h2>Confirm sim runs for batch</h2>
     <form method="post" action="/sim-run-batch">
-        @csrf  
+        @csrf
+        <h2>Sim run quantities</h2>
+        <ul>
+            @foreach($strategies as $strategy)
+            <li>
+                {{ $strategy->name }}: {{ count($strategy->sim_runs) }}
+            </li>
+            @endforeach
+        </ul>
         @foreach($strategies as $strategy)
+        <h2>Sim run detail</h2>
         <h3>{{ $strategy->name }}</h3>
         <table>
             <thead>
