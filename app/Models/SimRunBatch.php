@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Strategy;
 use App\Models\StrategyOption;
 use App\Models\SimRun;
 
@@ -11,6 +12,8 @@ class SimRunBatch extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+    
     public static function make_sim_runs(array $input_data)
     {
         function contains_only_nulls(array $arr): bool 
@@ -92,7 +95,7 @@ class SimRunBatch extends Model
         return $result;
     }
 
-    private static function make_sim_runs_for_strategy(Strategy $strategy, array $input_data)
+    private static function make_sim_runs_for_strategy(Strategy $strategy, array $input_data): Strategy
     {
         $option_values_keyed_by_option_id = [];
 
@@ -123,6 +126,8 @@ class SimRunBatch extends Model
             $sim_run = new SimRun();
         
             $sim_run->strategy = $strategy;
+
+            $sim_run->set_unsaved_strategy_option_data($combination);
 
             return $sim_run;
         }, $all_combinations);

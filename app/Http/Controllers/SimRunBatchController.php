@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Strategy;
 use App\Models\SimRunBatch;
+use App\Models\SimRun;
 
 class SimRunBatchController extends Controller
 {
@@ -59,7 +60,39 @@ class SimRunBatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sim_run_batch = SimRunBatch::create([
+            'exchange_id' => 1,
+            'product_id' => 2,
+            'days' => 30,
+            'start' => '2020-01-01',
+            'end' => '2020-01-31',
+            'buy_pct' => 50,
+            'sell_pct' => 50
+        ]);
+
+        $input_data = request()->except('_token');
+
+        $input_data_as_entry_per_sim_run = [];
+
+        foreach ($input_data as $k => $v) {
+            [ $index, $option_id ] = explode('-', $k);
+
+            $input_data_as_entry_per_sim_run[$index][$option_id] = $v;
+        }
+
+        foreach ($input_data_as_entry_per_sim_run as $options_for_sim_run) {
+            $sim_run = SimRun::create([
+                'strategy_id' => 222,
+                'sim_run_batch_id' => $sim_run_batch->id
+            ]);
+
+            foreach ($options_for_sim_run as $option_id => $option_value) {
+
+            }
+        }
+
+
+        dd($input_data_as_entry_per_sim_run);
     }
 
     /**
