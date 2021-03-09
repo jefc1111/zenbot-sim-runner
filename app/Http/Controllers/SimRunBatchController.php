@@ -16,7 +16,7 @@ class SimRunBatchController extends Controller
      */
     public function index()
     {
-        //
+        return view('sim_run_batches.list', ['sim_run_batches' => SimRunBatch::all()]);
     }
 
     /**
@@ -31,12 +31,12 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
-        return view('create_sim_run_batch.select_strategies', ['strategies' => Strategy::all()]);
+        return view('sim_run_batches.create.select_strategies', ['strategies' => Strategy::all()]);
     }
 
     public function refine_strategies() 
     {
-        return view('create_sim_run_batch.refine_strategies', 
+        return view('sim_run_batches.create.refine_strategies', 
             ['strategies' => Strategy::findMany(request()->get('strategies'))]
         );
     }
@@ -47,7 +47,7 @@ class SimRunBatchController extends Controller
         // Give sim run batch the input data
         $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
 
-        return view('create_sim_run_batch.confirm', 
+        return view('sim_run_batches.create.confirm', 
             [ 'strategies' => $strategies ]
         );
     }
@@ -77,18 +77,14 @@ class SimRunBatchController extends Controller
         foreach ($input_data as $k => $v) {
             [ $index, $option_id ] = explode('-', $k);
 
-            $input_data_as_entry_per_sim_run[$index][$option_id] = $v;
+            $input_data_as_entry_per_sim_run[$index][$option_id] = ['value' => $v];
         }
 
         foreach ($input_data_as_entry_per_sim_run as $options_for_sim_run) {
-            $sim_run = SimRun::create([
+            SimRun::create([
                 'strategy_id' => 222,
                 'sim_run_batch_id' => $sim_run_batch->id
-            ]);
-
-            foreach ($options_for_sim_run as $option_id => $option_value) {
-
-            }
+            ])->strategy_options()->sync($options_for_sim_run);
         }
 
 
@@ -103,7 +99,7 @@ class SimRunBatchController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('sim_run_batches.show', ['batch' => SimRunBatch::findOrFail($id)]);
     }
 
     /**

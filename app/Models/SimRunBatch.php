@@ -13,7 +13,12 @@ class SimRunBatch extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    
+
+    public function sim_runs()
+    {
+        return $this->hasMany(SimRun::class);
+    }
+
     public static function make_sim_runs(array $input_data)
     {
         function contains_only_nulls(array $arr): bool 
