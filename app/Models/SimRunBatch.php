@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Strategy;
 use App\Models\StrategyOption;
 use App\Models\SimRun;
+use App\Models\Exchange;
+use App\Models\Product;
 
 class SimRunBatch extends Model
 {
@@ -17,6 +19,16 @@ class SimRunBatch extends Model
     public function sim_runs()
     {
         return $this->hasMany(SimRun::class);
+    }
+
+    public function exchange()
+    {
+        return $this->belongsTo(Exchange::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public static function make_sim_runs(array $input_data)

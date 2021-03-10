@@ -12,7 +12,7 @@
             @foreach($batch->sim_runs as $sim_run)
             <tr>
                 <td>{{ $sim_run->id }}</id>
-                <td>DO THIS NEXT. CUTRRENTLY HARDCODDED TO '222'</id>
+                <td>{{ $sim_run->strategy->name }}</id>
                 <td>{{ $sim_run->cmd() }}</td>
             </tr>
             @endforeach

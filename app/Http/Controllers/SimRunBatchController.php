@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Strategy;
+use App\Models\StrategyOption;
 use App\Models\SimRunBatch;
 use App\Models\SimRun;
 
@@ -81,14 +82,15 @@ class SimRunBatchController extends Controller
         }
 
         foreach ($input_data_as_entry_per_sim_run as $options_for_sim_run) {
+            $strategy_id = StrategyOption::findOrFail(array_key_first($options_for_sim_run))->strategy_id;
+
             SimRun::create([
-                'strategy_id' => 222,
+                'strategy_id' => $strategy_id,
                 'sim_run_batch_id' => $sim_run_batch->id
             ])->strategy_options()->sync($options_for_sim_run);
         }
 
-
-        dd($input_data_as_entry_per_sim_run);
+        return redirect('/sim-run-batch/'.$sim_run_batch->id);
     }
 
     /**

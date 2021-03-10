@@ -45,7 +45,9 @@ class SimRun extends Model
 
     public function cmd(): string
     {
-        return "zenbot sim --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " . 
+        $selector = $this->sim_run_batch->exchange->name.".".$this->sim_run_batch->product->name;
+
+        return "zenbot sim $selector --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " . 
         $this->strategy_options->map(fn($o) => "{$o->name}=\"{$o->pivot->value}\"")->join(' --');
     }
 }

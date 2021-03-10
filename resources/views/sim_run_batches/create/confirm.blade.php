@@ -51,7 +51,7 @@
                     <td>
                         <input 
                             type="text" 
-                            name="{{ $k }}-{{ $strategy_option->id }}"
+                            name="{{ $strategy_option->strategy_id }}_{{ $k }}-{{ $strategy_option->id }}"
                             value="{{ $sim_run->get_value_for_option($strategy_option) }}" 
                         />                        
                     </td>
