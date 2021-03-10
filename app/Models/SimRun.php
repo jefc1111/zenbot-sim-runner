@@ -47,7 +47,17 @@ class SimRun extends Model
     {
         $selector = $this->sim_run_batch->exchange->name.".".$this->sim_run_batch->product->name;
 
-        return "zenbot sim $selector --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " . 
-        $this->strategy_options->map(fn($o) => "{$o->name}=\"{$o->pivot->value}\"")->join(' --');
+        return "zenbot sim $selector --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " .$this->option_str();
+    }
+
+    private function option_str()
+    {
+        // Including any value for `period_length` was causing a `Error: invalid bucket size spec:` error 
+        // at cmd line
+        // I _think_ `period_length` is just a dupe of `period` anyway. Maybe. 
+        return $this->strategy_options
+        ->filter(fn($o) => $o->name !== 'period_length')
+        ->map(fn($o) => "{$o->name}=\"{$o->pivot->value}\"")
+        ->join(' --');
     }
 }
