@@ -15,8 +15,16 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->integer('exchange_id');
+            $table->string('name');
+            $table->string('asset');
+            $table->string('currency');
+            $table->string('min_size')->nullable();
+            $table->string('max_size')->nullable();
+            $table->string('min_total')->nullable();
+            $table->string('increment')->nullable();
+            $table->string('asset_increment')->nullable();
+            $table->string('label');            
             $table->timestamps();
         });
     }

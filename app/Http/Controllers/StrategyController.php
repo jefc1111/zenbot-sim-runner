@@ -12,20 +12,17 @@ class StrategyController extends Controller
 {
     public function index()
     {
-        return view('list_strategies', ['strategies' => Strategy::all()]);
+        return view('strategies.list', ['strategies' => Strategy::all()]);
     }
 
     public function show($id)
     {
-        return view('strategy_detail', ['strategy' => Strategy::findOrFail($id)]);
+        return view('strategies.show', ['strategy' => Strategy::findOrFail($id)]);
     }
 
     public function import_strategies() {
-        Strategy::truncate();
-        StrategyOption::truncate();
-
         $importer = new StrategyImporter(config('zenbot.location'));
         
-        echo $importer->run();
+        $importer->run();
     }
 }

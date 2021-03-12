@@ -21,6 +21,12 @@ class SimRun extends Model
         return $this->belongsToMany(StrategyOption::class)->withPivot('value');
     }
 
+    /*
+CUNT
+NEXT:
+SELECTION OF EXCHANGE AND PRODUCT FOR BATCH
+GET RID of 'DAYS' OPTION FOR SIM RUN BATCH AND JUST USE START AND END DATES (PICKER CAN OFFER '30 DAYS' etc)
+*/
     public function strategy()
     {
         return $this->belongsTo(Strategy::class);
@@ -50,7 +56,7 @@ class SimRun extends Model
         return "zenbot sim $selector --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " .$this->option_str();
     }
 
-    private function option_str()
+    private function option_str(): string
     {
         // Including any value for `period_length` was causing a `Error: invalid bucket size spec:` error 
         // at cmd line

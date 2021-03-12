@@ -14,6 +14,8 @@
         <br />
         <a href="/strategies">List strategies</a>  
         <br />
+        <a href="/exchanges">List exchanges</a>  
+        <br />
         <a href="/strategy-options">List strategy options</a>        
     </body>
 </html>
