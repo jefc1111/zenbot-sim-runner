@@ -11,12 +11,22 @@ class ExchangeController extends Controller
 {
     public function index()
     {
-        return view('exchanges.list', ['exchanges' => Exchange::all()]);
+        return view('exchanges.list', [
+            'exchanges' => Exchange::all()
+        ]);
     }
 
     public function show($id)
     {
-        return view('exchanges.show', ['exchange' => Exchange::findOrFail($id)]);
+        $exchange = Exchange::with('products')->findOrFail($id);
+
+        if(request()->ajax()){
+            return response()->json($exchange);
+        } 
+
+        return view('exchanges.show', [
+            'exchange' => $exchange
+        ]);
     }
 
     public function import_exchanges() {

@@ -21,8 +21,9 @@
             list-style-type: none;
         }
     </style>
-    <h2>Confirm sim runs for batch</h2>
+    
     <form method="post" action="/sim-run-batch">
+        <h2>Confirm sim runs for batch</h2>
         @csrf
         <h2>Sim run quantities</h2>
         <ul>
@@ -69,6 +70,6 @@
             </tbody>
         </table>
         @endforeach
-        <input type="submit" value="Submit">
+        <input type="submit" value="Save">
     </form>    
 </x-layout>

@@ -21,12 +21,13 @@ class SimRun extends Model
         return $this->belongsToMany(StrategyOption::class)->withPivot('value');
     }
 
-    /*
+/*
 CUNT
 NEXT:
 SELECTION OF EXCHANGE AND PRODUCT FOR BATCH
 GET RID of 'DAYS' OPTION FOR SIM RUN BATCH AND JUST USE START AND END DATES (PICKER CAN OFFER '30 DAYS' etc)
 */
+
     public function strategy()
     {
         return $this->belongsTo(Strategy::class);

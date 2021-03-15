@@ -7,6 +7,7 @@ use App\Models\Strategy;
 use App\Models\StrategyOption;
 use App\Models\SimRunBatch;
 use App\Models\SimRun;
+use App\Models\Exchange;
 
 class SimRunBatchController extends Controller
 {
@@ -17,7 +18,9 @@ class SimRunBatchController extends Controller
      */
     public function index()
     {
-        return view('sim_run_batches.list', ['sim_run_batches' => SimRunBatch::all()]);
+        return view('sim_run_batches.list', [
+            'sim_run_batches' => SimRunBatch::all()
+        ]);
     }
 
     /**
@@ -27,12 +30,21 @@ class SimRunBatchController extends Controller
      */
     public function create()
     {
-        //
+        $date_format = 'Y-m-d';
+
+        return view('sim_run_batches.create.init', [
+            'exchanges' => Exchange::all(),
+            'initial_name' => "Sim run batch ".\Str::random(4),
+            'initial_start_date' => date($date_format, strtotime('-30 days')),
+            'initial_end_date' => date($date_format, strtotime('-1 days'))
+        ]);
     }
 
     public function select_strategies()
     {
-        return view('sim_run_batches.create.select_strategies', ['strategies' => Strategy::all()]);
+        return view('sim_run_batches.create.select_strategies', [
+            'strategies' => Strategy::all()
+        ]);
     }
 
     public function refine_strategies() 

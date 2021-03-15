@@ -2,6 +2,7 @@
     <head>
         <title>{{ $title ?? 'Zenbot sim runner' }}</title>
         <link rel="stylesheet" href="/css/app.css">
+        <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
         <h1>

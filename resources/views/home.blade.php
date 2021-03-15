@@ -7,7 +7,7 @@
             <a href="/exchanges">List exchanges and products</a>
         </li>
         <li>
-            <a href="/sim-run-batch/select-strategies">Create sim run batch</a>
+            <a href="/sim-run-batch/create">Create sim run batch</a>
         </li>
     </ul>
     <h3>Import data from Zenbot</h3>
