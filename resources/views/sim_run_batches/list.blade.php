@@ -5,7 +5,13 @@
             <tr>
                 <th>id</th>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Exchange</th>
+                <th>Product</th>
+                <th>Asset</th>
+                <th>Currency</th>
+                <th>Qty sim runs</th>
+                <th>Qty strategies</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -13,9 +19,15 @@
             <tr>
                 <td>{{ $sim_run_batch->id }}</id>
                 <td>
-                    <a href="/strategies/{{ $sim_run_batch->id }}">{{ $sim_run_batch->id }}</a>
+                    <a href="/sim-run-batches/{{ $sim_run_batch->id }}">{{ $sim_run_batch->name }}</a>
                 </td>
-                <td></td>
+                <td>{{ $sim_run_batch->exchange->name }}</td>
+                <td>{{ $sim_run_batch->product->name }}</td>
+                <td>{{ $sim_run_batch->product->asset }}</td>
+                <td>{{ $sim_run_batch->product->currency }}</td>
+                <td>{{ $sim_run_batch->sim_runs->count() }}</td>
+                <td>{{ $sim_run_batch->qty_strategies() }}</td>
+                <td>status</td>
             </tr>
             @endforeach
         </tbody>

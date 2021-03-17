@@ -18,7 +18,7 @@ class CreateSimRunStrategyOptionPivotTable extends Migration
             $table->unsignedBigInteger('strategy_option_id')->index();
             $table->foreign('strategy_option_id')->references('id')->on('strategy_options')->onDelete('cascade');
             $table->primary(['sim_run_id', 'strategy_option_id']);
-            $table->string('value');
+            $table->string('value')->nullable();
         });
     }
 

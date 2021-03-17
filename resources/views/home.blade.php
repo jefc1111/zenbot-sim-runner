@@ -7,6 +7,9 @@
             <a href="/exchanges">List exchanges and products</a>
         </li>
         <li>
+            <a href="/exchanges">List exchanges and products</a>
+        </li>
+        <li>
             <a href="/sim-run-batch/create">Create sim run batch</a>
         </li>
     </ul>

@@ -15,10 +15,10 @@ class CreateSimRunBatchesTable extends Migration
     {
         Schema::create('sim_run_batches', function (Blueprint $table) {
             $table->id();
-            $table->string('notes')->default('');
+            $table->string('name');
+            $table->string('notes')->nullable();
             $table->integer('exchange_id');
             $table->integer('product_id');
-            $table->integer('days');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->integer('buy_pct');

@@ -24,8 +24,9 @@ class SimRun extends Model
 /*
 CUNT
 NEXT:
-SELECTION OF EXCHANGE AND PRODUCT FOR BATCH
-GET RID of 'DAYS' OPTION FOR SIM RUN BATCH AND JUST USE START AND END DATES (PICKER CAN OFFER '30 DAYS' etc)
+In sim run batch controller `store` method, we need to get the inputted data from the 
+init form (by passing it along through the session..?). 
+Also looks like I missed buy_pct and sell_pct in the form. 
 */
 
     public function strategy()
@@ -52,9 +53,13 @@ GET RID of 'DAYS' OPTION FOR SIM RUN BATCH AND JUST USE START AND END DATES (PIC
 
     public function cmd(): string
     {
-        $selector = $this->sim_run_batch->exchange->name.".".$this->sim_run_batch->product->name;
-
-        return "zenbot sim $selector --strategy {$this->strategy->name} --days {$this->sim_run_batch->days} " .$this->option_str();
+        return "zenbot sim {$this->sim_run_batch->get_selector()} 
+        --strategy {$this->strategy->name} 
+        --start {$this->sim_run_batch->start->format('Y-m-d')} 
+        --end {$this->sim_run_batch->end->format('Y-m-d')}
+        --buy_pct {$this->sim_run_batch->buy_pct}
+        --sell_pct {$this->sim_run_batch->sell_pct}
+        " .$this->option_str();
     }
 
     private function option_str(): string

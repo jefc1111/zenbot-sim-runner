@@ -16,6 +16,14 @@ class SimRunBatch extends Model
 
     protected $guarded = ['id'];
 
+    protected $dates = [
+        'start',
+        'end',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function sim_runs()
     {
         return $this->hasMany(SimRun::class);
@@ -29,6 +37,21 @@ class SimRunBatch extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function qty_strategies()
+    {
+        return $this->get_all_strategies_used()->count();
+    } 
+
+    private function get_all_strategies_used()
+    {
+        return $this->sim_runs->map(fn($sr) => $sr->strategy)->unique();
+    }
+
+    public function get_selector(): string
+    {
+        return $this->exchange->name.".".$this->product->asset."-".$this->product->currency;
     }
 
     public static function make_sim_runs(array $input_data)
@@ -150,5 +173,5 @@ class SimRunBatch extends Model
         }, $all_combinations);
 
         return $strategy;
-    }
+    }    
 }

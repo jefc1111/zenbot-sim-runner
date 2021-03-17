@@ -17,6 +17,8 @@
         <br />
         <a href="/exchanges">List exchanges</a>  
         <br />
-        <a href="/strategy-options">List strategy options</a>        
+        <a href="/strategy-options">List strategy options</a>     
+        <br />
+        <a href="/sim-run-batches">List sim run batches</a>        
     </body>
 </html>

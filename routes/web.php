@@ -32,7 +32,7 @@ Route::resource('exchanges', ExchangeController::class);
 Route::resource('strategy-options', StrategyOptionController::class);
 
 // Sim run batch creation
-Route::get('sim-run-batch/select-strategies', [SimRunBatchController::class, 'select_strategies']);
+Route::post('sim-run-batch/select-strategies', [SimRunBatchController::class, 'select_strategies']);
 Route::post('sim-run-batch/refine-strategies', [SimRunBatchController::class, 'refine_strategies']);
 Route::post('sim-run-batch/confirm', [SimRunBatchController::class, 'confirm']);
-Route::resource('sim-run-batch', SimRunBatchController::class);
+Route::resource('sim-run-batches', SimRunBatchController::class);

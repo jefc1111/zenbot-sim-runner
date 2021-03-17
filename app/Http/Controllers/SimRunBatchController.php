@@ -42,13 +42,17 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
+        request()->flashExcept('_token');
+
         return view('sim_run_batches.create.select_strategies', [
             'strategies' => Strategy::all()
         ]);
     }
 
     public function refine_strategies() 
-    {
+    {        
+        request()->session()->reflash();
+
         return view('sim_run_batches.create.refine_strategies', 
             ['strategies' => Strategy::findMany(request()->get('strategies'))]
         );
@@ -56,6 +60,8 @@ class SimRunBatchController extends Controller
 
     public function confirm()
     {
+        request()->session()->reflash();
+
         // Ask sim run batch to spawn set of sim runs 
         // Give sim run batch the input data
         $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
@@ -72,16 +78,8 @@ class SimRunBatchController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $sim_run_batch = SimRunBatch::create([
-            'exchange_id' => 1,
-            'product_id' => 2,
-            'days' => 30,
-            'start' => '2020-01-01',
-            'end' => '2020-01-31',
-            'buy_pct' => 50,
-            'sell_pct' => 50
-        ]);
+    {        
+        $sim_run_batch = SimRunBatch::create(request()->old());
 
         $input_data = request()->except('_token');
 
@@ -102,7 +100,7 @@ class SimRunBatchController extends Controller
             ])->strategy_options()->sync($options_for_sim_run);
         }
 
-        return redirect('/sim-run-batch/'.$sim_run_batch->id);
+        return redirect('/sim-run-batches/'.$sim_run_batch->id);
     }
 
     /**
@@ -113,7 +111,9 @@ class SimRunBatchController extends Controller
      */
     public function show($id)
     {
-        return view('sim_run_batches.show', ['batch' => SimRunBatch::findOrFail($id)]);
+        return view('sim_run_batches.show', [
+            'batch' => SimRunBatch::findOrFail($id)
+        ]);
     }
 
     /**
