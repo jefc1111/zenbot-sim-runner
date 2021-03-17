@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Select strategies</h2>
-    <form method="post" action="/sim-run-batch/refine-strategies">
+    <form method="post" action="/sim-run-batches/create/refine-strategies">
         @csrf  
         <table>
             <thead>

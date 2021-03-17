@@ -1,6 +1,6 @@
 <x-layout>    
     <h2>Create sim run batch</h2>
-    <form method="post" action="/sim-run-batch/select-strategies">
+    <form method="post" action="/sim-run-batches/create/select-strategies">
         @csrf
         <fieldset>    
             <label for="name">Name</label><br>

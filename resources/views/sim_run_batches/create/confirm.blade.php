@@ -22,7 +22,7 @@
         }
     </style>
     
-    <form method="post" action="/sim-run-batch">
+    <form method="post" action="/sim-run-batches">
         <h2>Confirm sim runs for batch</h2>
         @csrf
         <h2>Sim run quantities</h2>

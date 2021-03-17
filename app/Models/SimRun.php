@@ -24,9 +24,7 @@ class SimRun extends Model
 /*
 CUNT
 NEXT:
-In sim run batch controller `store` method, we need to get the inputted data from the 
-init form (by passing it along through the session..?). 
-Also looks like I missed buy_pct and sell_pct in the form. 
+Need to conform that POST data _is_ being truncated, as suspected, when there is large qty of sim runs to save  
 */
 
     public function strategy()

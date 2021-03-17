@@ -31,5 +31,6 @@
             </tr>
             @endforeach
         </tbody>
-    </table>    
+    </table> 
+    <a href="/sim-run-batches/create">Create</a>
 </x-layout>

@@ -22,7 +22,7 @@
         }
     </style>
     <h2>Refine sim run batch</h2>
-    <form method="post" action="/sim-run-batch/confirm">
+    <form method="post" action="/sim-run-batches/create/confirm">
         @csrf  
         <ul>
             @foreach($strategies as $strategy)
