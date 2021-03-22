@@ -5,6 +5,7 @@ use App\Http\Controllers\StrategyController;
 use App\Http\Controllers\ExchangeController;
 use App\Http\Controllers\StrategyOptionController;
 use App\Http\Controllers\SimRunBatchController;
+use App\Http\Controllers\SimRunController;
 use App\Http\Controllers\ImportFromZenbotController;
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +36,8 @@ Route::resource('strategy-options', StrategyOptionController::class);
 Route::post('sim-run-batches/create/select-strategies', [SimRunBatchController::class, 'select_strategies']);
 Route::post('sim-run-batches/create/refine-strategies', [SimRunBatchController::class, 'refine_strategies']);
 Route::post('sim-run-batches/create/confirm', [SimRunBatchController::class, 'confirm']);
+
 Route::resource('sim-run-batches', SimRunBatchController::class);
+
+Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);
+Route::resource('sim-runs', SimRunController::class);

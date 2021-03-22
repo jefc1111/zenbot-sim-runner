@@ -20,8 +20,12 @@
         <tbody>
             @foreach($batch->sim_runs as $sim_run)
             <tr>
-                <td>{{ $sim_run->id }}</id>
-                <td>{{ $sim_run->strategy->name }}</id>
+                <td>
+                    <a href="/sim-runs/{{ $sim_run->id }}">{{ $sim_run->id }}</a>
+                </id>
+                <td>
+                    <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
+                </td>
                 <td>{{ $sim_run->cmd() }}</td>
             </tr>
             @endforeach

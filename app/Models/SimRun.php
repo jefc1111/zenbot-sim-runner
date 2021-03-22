@@ -8,6 +8,9 @@ use App\Models\StrategyOption;
 use App\Models\Strategy;
 use App\Models\SimRunBatch;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 class SimRun extends Model
 {
     use HasFactory;
@@ -51,23 +54,73 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
 
     public function cmd(): string
     {
-        return "zenbot sim {$this->sim_run_batch->get_selector()} 
-        --strategy {$this->strategy->name} 
-        --start {$this->sim_run_batch->start->format('Y-m-d')} 
-        --end {$this->sim_run_batch->end->format('Y-m-d')}
-        --buy_pct {$this->sim_run_batch->buy_pct}
-        --sell_pct {$this->sim_run_batch->sell_pct}
-        " .$this->option_str();
+        return implode(' ', $this->cmd_components());
     }
 
-    private function option_str(): string
+    private function cmd_common_components(): array
+    {
+        $components = [
+            config('zenbot.node_executable'), 
+            config('zenbot.location').'/zenbot.js', 
+            'sim',
+            $this->sim_run_batch->get_selector(),
+            "--strategy={$this->strategy->name}",
+            "--start={$this->sim_run_batch->start->format('Y-m-d')}", 
+            "--end={$this->sim_run_batch->end->format('Y-m-d')}",
+            "--buy_pct={$this->sim_run_batch->buy_pct}",
+            "--sell_pct={$this->sim_run_batch->sell_pct}",
+            "--filename=none",
+            "--silent",
+        ];
+
+        return $components;
+    }
+
+    private function cmd_option_components(): array
     {
         // Including any value for `period_length` was causing a `Error: invalid bucket size spec:` error 
         // at cmd line
         // I _think_ `period_length` is just a dupe of `period` anyway. Maybe. 
         return $this->strategy_options
         ->filter(fn($o) => $o->name !== 'period_length')
-        ->map(fn($o) => "{$o->name}=\"{$o->pivot->value}\"")
-        ->join(' --');
+        ->map(fn($o) => "--$o->name={$o->value}")->toArray();
+    }
+
+    private function cmd_components(): array
+    {
+        return array_merge(
+            $this->cmd_common_components(), 
+            $this->cmd_option_components()
+        );
+    }
+
+    public function run()
+    {
+        $process = new Process($this->cmd_components());
+
+        $process->setWorkingDirectory(config('zenbot.location'));
+
+        $process->run();
+
+        if ($process->getExitCode() !== 0) {
+            \Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
+        }
+
+        if (!$process->isSuccessful()) {
+            //throw new ProcessFailedException($process);
+        }
+
+        return [
+            'success' => $process->isSuccessful(),
+            'error' => $process->getErrorOutput(),
+            'output' => $process->isSuccessful() ? $this->extract_json_result($process->getOutput()) : null
+        ];
+    }
+
+    private function extract_json_result(string $raw_cmd_output): object
+    {
+        // The third argument to `explode()` is to make it only split on the first occurence of '{'
+        // Also, the split removes the '{' so we have to reinstate it.
+        return json_decode('{'.explode('{', $raw_cmd_output, 2)[1]);
     }
 }

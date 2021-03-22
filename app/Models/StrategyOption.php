@@ -22,4 +22,9 @@ class StrategyOption extends Model
     {
         return $this->belongsTo(Strategy::class);
     }
+
+    public function getValueAttribute()
+    {
+        return $this->pivot->value.$this->unit;
+    }
 }
