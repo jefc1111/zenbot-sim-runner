@@ -49,7 +49,11 @@
     <script>
         $("#run").click(function() {
             $.get("/sim-runs/run/{{ $sim_run->id }}", function(res) {
-                location.reload()
+                if (! res.success) {
+                    alert(res.error);
+                } else {
+                    location.reload();
+                }                
             });
         });
     </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SimRun;
+use App\Jobs\ProcessSimRun;
 
 class SimRunController extends Controller
 {
@@ -89,6 +90,6 @@ class SimRunController extends Controller
     {
         $sim_run = SimRun::findOrFail($id);
 
-        return $sim_run->run();
+        ProcessSimRun::dispatch($sim_run);
     }
 }

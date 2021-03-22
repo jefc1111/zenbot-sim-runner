@@ -114,7 +114,7 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
         $process->run();
 
         if ($process->getExitCode() !== 0) {
-            \Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
+            //\Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
         }
 
         $success = $process->isSuccessful();
