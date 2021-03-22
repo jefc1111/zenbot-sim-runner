@@ -17,6 +17,7 @@ class CreateSimRunsTable extends Migration
             $table->id();            
             $table->integer('sim_run_batch_id');
             $table->integer('strategy_id');
+            $table->json('result')->nullable();
             $table->timestamps();
         });
     }

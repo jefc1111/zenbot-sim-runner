@@ -11,6 +11,7 @@
                 <th>Currency</th>
                 <th>Qty sim runs</th>
                 <th>Qty strategies</th>
+                <th>Best vs. buy hold</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td>{{ $sim_run_batch->product->currency }}</td>
                 <td>{{ $sim_run_batch->sim_runs->count() }}</td>
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
+                <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
                 <td>status</td>
             </tr>
             @endforeach

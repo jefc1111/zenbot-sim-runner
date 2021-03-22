@@ -15,7 +15,13 @@ class SimRun extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = [
+        'id'
+    ];
+
+    protected $casts = [
+        'result' => 'array'
+    ];
 
     public array $unsaved_strategy_option_data = []; // key is option id, value is string value
 
@@ -38,6 +44,11 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
     public function sim_run_batch()
     {
         return $this->belongsTo(SimRunBatch::class);
+    }
+
+    public function getVsBuyHoldAttribute()
+    {
+        return $this->result ? $this->result['simresults']['vs_buy_hold'] : null;
     }
 
     public function set_unsaved_strategy_option_data(array $strategy_option_data): void
@@ -106,14 +117,20 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
             \Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
         }
 
-        if (!$process->isSuccessful()) {
+        $success = $process->isSuccessful();
+
+        if ($success) {
+            $this->result = $this->extract_json_result($process->getOutput());    
+        
+            $this->save();
+        } else {
             //throw new ProcessFailedException($process);
-        }
+        }         
 
         return [
-            'success' => $process->isSuccessful(),
+            'success' => $success,
             'error' => $process->getErrorOutput(),
-            'output' => $process->isSuccessful() ? $this->extract_json_result($process->getOutput()) : null
+            'output' => $this->result
         ];
     }
 

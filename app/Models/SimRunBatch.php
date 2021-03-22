@@ -174,4 +174,9 @@ class SimRunBatch extends Model
 
         return $strategy;
     }    
+
+    public function best_vs_buy_hold()
+    {
+        return $this->sim_runs->map(fn($sr) => $sr->vs_buy_hold)->max();
+    }
 }

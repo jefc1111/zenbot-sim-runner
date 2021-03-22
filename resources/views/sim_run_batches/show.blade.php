@@ -15,6 +15,7 @@
                 <th>id</th>
                 <th>Strategy</th>                
                 <th>cmd</th>
+                <th>vs. buy hold</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,11 @@
                     <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
                 </td>
                 <td>{{ $sim_run->cmd() }}</td>
+                <td>
+                    @if($sim_run->result)
+                    {{ $sim_run->vs_buy_hold }}
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>
