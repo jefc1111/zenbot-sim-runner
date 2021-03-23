@@ -109,6 +109,8 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
     {
         $process = new Process($this->cmd_components());
 
+        $process->setTimeout(900);
+
         $process->setWorkingDirectory(config('zenbot.location'));
 
         $process->run();

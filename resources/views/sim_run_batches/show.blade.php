@@ -37,4 +37,16 @@
             @endforeach
         </tbody>
     </table>    
+    <span id="run">RUN</span>
+    <script>
+        $("#run").click(function() {
+            $.get("/sim-run-batches/run/{{ $batch->id }}", function(res) {
+                if (! res.success) {
+                    alert(res.error);
+                } else {
+                    location.reload();
+                }                
+            });
+        });
+    </script>
 </x-layout>

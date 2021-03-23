@@ -9,10 +9,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\SimRun;
+use Illuminate\Bus\Batchable;
 
 class ProcessSimRun implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $sim_run;
 
@@ -33,6 +34,8 @@ class ProcessSimRun implements ShouldQueue
      */
     public function handle()
     {
-        \Log::error($this->sim_run->run());
+        $this->sim_run->run();
+        
+        \Log::error('complete');
     }
 }

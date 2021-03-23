@@ -9,6 +9,10 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use Illuminate\Bus\Batch;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
+use App\Jobs\ProcessSimRun;
 
 class SimRunBatch extends Model
 {
@@ -178,5 +182,28 @@ class SimRunBatch extends Model
     public function best_vs_buy_hold()
     {
         return $this->sim_runs->map(fn($sr) => $sr->vs_buy_hold)->max();
+    }
+
+    public function run()
+    {
+        \Log::error('About to submit batch.');
+
+        $batch = Bus::batch(
+            $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
+        )->then(function (Batch $batch) {
+            $success = true;
+            // All jobs completed successfully...
+        })->catch(function (Batch $batch, Throwable $e) {
+            $success = false;
+            // First batch job failure detected...
+        })->finally(function (Batch $batch) {
+            // The batch has finished executing...
+        })->dispatch();
+        
+        return [
+            'success' => true,
+            'error' => 'error',
+            'output' => 'COCKS'
+        ];
     }
 }

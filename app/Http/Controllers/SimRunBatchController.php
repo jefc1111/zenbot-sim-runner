@@ -42,6 +42,7 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
+        \Log::error(request()->input());
         request()->flashExcept('_token');
 
         return view('sim_run_batches.create.select_strategies', [
@@ -51,6 +52,8 @@ class SimRunBatchController extends Controller
 
     public function refine_strategies() 
     {        
+        \Log::error(request()->input());
+        \Log::error(request()->old());
         request()->session()->reflash();
 
         return view('sim_run_batches.create.refine_strategies', 
@@ -79,6 +82,7 @@ class SimRunBatchController extends Controller
      */
     public function store(Request $request)
     {        
+        \Log::error(request()->old());
         $sim_run_batch = SimRunBatch::create(request()->old());
 
         $input_data = request()->except('_token');
@@ -148,5 +152,12 @@ class SimRunBatchController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function run($id)
+    {
+        $sim_run_batch = SimRunBatch::findOrFail($id);
+
+        $sim_run_batch->run();
     }
 }
