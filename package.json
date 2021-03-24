@@ -11,13 +11,14 @@
     },
     "devDependencies": {
         "axios": "^0.21",
-        "jquery": "^3.6.0",
-        "jquery-ui": "^1.12.1",
+        "bootstrap": "^4.0.0",
+        "jquery": "^3.2",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
+        "popper.js": "^1.12",
         "postcss": "^8.1.14",
         "resolve-url-loader": "^3.1.2",
-        "sass": "^1.32.8",
-        "sass-loader": "^8.0.2"
+        "sass": "^1.15.2",
+        "sass-loader": "^8.0.0"
     }
 }
