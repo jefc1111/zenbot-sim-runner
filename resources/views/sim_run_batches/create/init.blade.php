@@ -28,7 +28,7 @@
                 <select name="product_id" id="product_id" class="form-control">
                     @if(! $exchanges->isEmpty())                
                     @foreach($exchanges->first()->products as $product)
-                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                    <option {{ $product->id === 12 ? 'selected' : null }} value="{{ $product->id }}">{{ $product->name }}</option>
                     @endforeach
                     @endif
                 </select>

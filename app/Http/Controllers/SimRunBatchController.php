@@ -35,16 +35,14 @@ class SimRunBatchController extends Controller
         return view('sim_run_batches.create.init', [
             'exchanges' => Exchange::all(),
             'initial_name' => "Sim run batch ".\Str::random(4),
-            'initial_start_date' => date($date_format, strtotime('-30 days')),
-            'initial_end_date' => date($date_format, strtotime('-1 days'))
+            'initial_start_date' => date($date_format, strtotime('-13 days')),
+            'initial_end_date' => date($date_format, strtotime('-12 days'))
         ]);
     }
 
     public function select_strategies()
     {
-        \Log::error('SELECT STRATEGIES');
-        \Log::error(request()->input());
-        request()->flashExcept('_token');
+        request()->session()->put('form_data', request()->all());
 
         return view('sim_run_batches.create.select_strategies', [
             'strategies' => Strategy::all()
@@ -52,12 +50,7 @@ class SimRunBatchController extends Controller
     }
 
     public function refine_strategies() 
-    {        
-        \Log::error('REFINE STRATEGIES');
-        \Log::error(request()->input());
-        \Log::error(request()->old());
-        request()->session()->reflash();
-
+    {             
         return view('sim_run_batches.create.refine_strategies', 
             ['strategies' => Strategy::findMany(request()->get('strategies'))]
         );
@@ -65,10 +58,6 @@ class SimRunBatchController extends Controller
 
     public function confirm()
     {
-        \Log::error('CONFIRM');
-        \Log::error(request()->old());
-        request()->session()->reflash();
-
         // Ask sim run batch to spawn set of sim runs 
         // Give sim run batch the input data
         $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
@@ -86,9 +75,7 @@ class SimRunBatchController extends Controller
      */
     public function store(Request $request)
     {      
-        \Log::error('STORE');  
-        \Log::error(request()->old());
-        $sim_run_batch = SimRunBatch::create(request()->old());
+        $sim_run_batch = SimRunBatch::create(request()->session()->get('form_data'));
 
         $input_data = request()->except('_token');
 
