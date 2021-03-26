@@ -107,13 +107,23 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
 
     public function run()
     {
+        $errored_output = [];
+
+        set_time_limit(900);
+
         $process = new Process($this->cmd_components());
 
         $process->setTimeout(900);
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
-        $process->run();
+        $process->run(function($type, $buffer) use(&$errored_output) {
+            if (Process::ERR === $type) {
+                $errored_output[] = $buffer;
+            } else {
+                //$success_output[] = $buffer;
+            }
+        });
 
         if ($process->getExitCode() !== 0) {
             //\Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
@@ -126,14 +136,20 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
         
             $this->save();
         } else {
-            //throw new ProcessFailedException($process);
+            $this->result = implode($stuff);    
+        
+            $this->save();
+
+            throw new ProcessFailedException($process);
         }         
 
+        /* No point returning anything 
         return [
             'success' => $success,
             'error' => $process->getErrorOutput(),
             'output' => $this->result
         ];
+        */
     }
 
     private function extract_json_result(string $raw_cmd_output): object

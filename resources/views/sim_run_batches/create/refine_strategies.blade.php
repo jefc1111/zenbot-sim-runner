@@ -28,7 +28,7 @@
             @foreach($strategies as $strategy)
             <li>
                 <h3>{{ $strategy->name }}</h3>
-                <table>
+                <table class="table table-sm table-bordered">
                     <thead>
                         <tr>
                             <th>Name</th>                

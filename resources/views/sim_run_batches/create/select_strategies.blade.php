@@ -2,7 +2,7 @@
     <h2>Select strategies</h2>
     <form method="post" action="/sim-run-batches/create/refine-strategies">
         @csrf  
-        <table>
+        <table class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th>id</th>

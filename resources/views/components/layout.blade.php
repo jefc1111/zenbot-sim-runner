@@ -14,14 +14,14 @@
             <hr />        
             {{ $slot }}
             <hr />
-            <a href="/">Home</a>
-            <br />
+            <a href="/">Home</a>            
+            <small class="text-secondary">|</small>
             <a href="/strategies">List strategies</a>  
-            <br />
+            <small class="text-secondary">|</small>
             <a href="/exchanges">List exchanges</a>  
-            <br />
+            <small class="text-secondary">|</small>
             <a href="/strategy-options">List strategy options</a>     
-            <br />
+            <small class="text-secondary">|</small>
             <a href="/sim-run-batches">List sim run batches</a>
         </div>        
     </body>

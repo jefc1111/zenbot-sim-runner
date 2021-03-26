@@ -42,6 +42,7 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
+        \Log::error('SELECT STRATEGIES');
         \Log::error(request()->input());
         request()->flashExcept('_token');
 
@@ -52,6 +53,7 @@ class SimRunBatchController extends Controller
 
     public function refine_strategies() 
     {        
+        \Log::error('REFINE STRATEGIES');
         \Log::error(request()->input());
         \Log::error(request()->old());
         request()->session()->reflash();
@@ -63,6 +65,8 @@ class SimRunBatchController extends Controller
 
     public function confirm()
     {
+        \Log::error('CONFIRM');
+        \Log::error(request()->old());
         request()->session()->reflash();
 
         // Ask sim run batch to spawn set of sim runs 
@@ -81,7 +85,8 @@ class SimRunBatchController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {      
+        \Log::error('STORE');  
         \Log::error(request()->old());
         $sim_run_batch = SimRunBatch::create(request()->old());
 

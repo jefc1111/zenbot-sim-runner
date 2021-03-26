@@ -9,7 +9,7 @@
     {{ $batch->buy_pct }}<br>
     {{ $batch->sell_pct }}<br>
     <h3>Sim runs</h3>
-    <table>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>
@@ -35,14 +35,15 @@
             @endforeach
         </tbody>
     </table>    
-    <span id="run">RUN</span>
+    <button type="button" class="btn btn-success" id="run">RUN</button>
+    
     <script>
         $("#run").click(function() {
             $.get("/sim-run-batches/run/{{ $batch->id }}", function(res) {
                 if (! res.success) {
-                    alert(res.error);
+                    
                 } else {
-                    location.reload();
+                    //location.reload();
                 }                
             });
         });
