@@ -25,6 +25,8 @@
     <br/>
     <button type="button" class="btn btn-success" id="run">RUN</button>
     <br/>
+    <code>{{ $sim_run->log }}</code>
+    <br/>
     @if($sim_run->result)
     <span>vs. buy hold: {{ $sim_run->vs_buy_hold }}</span>
     <pre id="result">

@@ -46,9 +46,23 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
         return $this->belongsTo(SimRunBatch::class);
     }
 
-    public function getVsBuyHoldAttribute()
+    public function get_simresult_attr(string $attr): ?string
     {
-        return $this->result ? $this->result['simresults']['vs_buy_hold'] : null;
+        return $this->result ? $this->result['simresults'][$attr] : null;
+    }
+
+    public function result(string $attr): ?string
+    {
+        $res = $this->get_simresult_attr($attr);
+
+        return ! is_null($res) ? $res : null;
+    }
+
+    public function result_pct(string $attr): ?string 
+    {
+        $res = $this->get_simresult_attr($attr);
+
+        return ! is_null($res) ? round($res, 2)."%" : null;
     }
 
     public function set_unsaved_strategy_option_data(array $strategy_option_data): void
@@ -136,20 +150,12 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
         
             $this->save();
         } else {
-            $this->result = implode($stuff);    
+            $this->log = implode($errored_output);    
         
             $this->save();
 
             throw new ProcessFailedException($process);
         }         
-
-        /* No point returning anything 
-        return [
-            'success' => $success,
-            'error' => $process->getErrorOutput(),
-            'output' => $this->result
-        ];
-        */
     }
 
     private function extract_json_result(string $raw_cmd_output): object
