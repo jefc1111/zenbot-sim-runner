@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Exchanges</h2>
-    <table>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>

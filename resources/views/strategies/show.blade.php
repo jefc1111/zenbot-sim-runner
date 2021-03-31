@@ -1,7 +1,8 @@
 <x-layout>
     <h2>Strategy: {{ $strategy->name }}</h2>
     <p>Description: {{ $strategy->description }}</p>
-    <table>
+    <h4>Strategy options</h4>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>

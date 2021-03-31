@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Sim run batches</h2>
-    <table>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>

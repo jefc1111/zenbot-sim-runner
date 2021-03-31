@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Exchange: {{ $exchange->name }}</h2>
-    <table>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>
@@ -15,7 +15,7 @@
                 <th>Label</th>
             </tr>
         </thead>
-        <h3>Products</h3>
+        <h4>Products</h4>
         <tbody>
             @foreach($exchange->products as $product)
             <tr>
