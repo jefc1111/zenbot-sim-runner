@@ -42,6 +42,7 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
+        \Log::error(request()->all());
         request()->session()->put('form_data', request()->all());
 
         return view('sim_run_batches.create.select_strategies', [
@@ -65,6 +66,19 @@ class SimRunBatchController extends Controller
         return view('sim_run_batches.create.confirm', 
             [ 'strategies' => $strategies ]
         );
+    }
+
+    public function copy($id)
+    {
+        $batch = SimRunBatch::findOrFail($id);
+
+        \Log::error($batch->attributesToArray());
+
+        request()->session()->put('form_data', $batch->attributesToArray());
+
+        return view('sim_run_batches.create.select_strategies', [
+            'strategies' => Strategy::all()
+        ]);
     }
 
     /**

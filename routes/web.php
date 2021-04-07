@@ -38,6 +38,7 @@ Route::post('sim-run-batches/create/refine-strategies', [SimRunBatchController::
 Route::post('sim-run-batches/create/confirm', [SimRunBatchController::class, 'confirm']);
 
 Route::get('sim-run-batches/run/{id}', [SimRunBatchController::class, 'run']);
+Route::get('sim-run-batches/copy/{id}', [SimRunBatchController::class, 'copy']);
 Route::resource('sim-run-batches', SimRunBatchController::class);
 
 Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);

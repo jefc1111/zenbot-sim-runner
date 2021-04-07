@@ -38,8 +38,18 @@
                     </tbody>
                 </table>
             </div>        
-            <div class="col-md-4"></div>
-            <div class="col-md-4"></div>
+            <div class="col-md-2">
+                <br/>
+                <br/>
+                <p>
+                    <button type="button" class="btn btn-success btn-block" id="run">Run</button>
+                </p>
+                <br/>
+                <p>
+                    <a type="button" class="btn btn-secondary btn-block" href="copy/{{ $batch->id }}">Copy</a>
+                </p>
+            </div>
+            <div class="col-md-6"></div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -69,8 +79,7 @@
                         </tr>
                         @endforeach
                     </tbody>
-                </table>    
-                <button type="button" class="btn btn-success" id="run">Run</button>
+                </table>                    
             </div>
         </div>
     </div>
