@@ -2,41 +2,7 @@
     <div class="container">    
         <div class="row">            
             <div class="col-md-4">
-                <h2>{{ $batch->name }}</h2>
-                <table class="table table-sm">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Info</td>
-                            <td>{{ $batch->info }}</td>
-                        </tr>
-                        <tr>
-                            <td>Product</td>
-                            <td>{{ $batch->product->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Exchange</td>
-                            <td>{{ $batch->exchange->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Start date</td>
-                            <td>{{ $batch->start }}</td>
-                        </tr>
-                        <tr>
-                            <td>End date</td>
-                            <td>{{ $batch->end }}</td>
-                        </tr>
-                        <tr>
-                            <td>Buy %</td>
-                            <td>{{ $batch->buy_pct }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sell %</td>
-                            <td>{{ $batch->sell_pct }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                @include('sim_run_batches.metadata_snippet')
             </div>        
             <div class="col-md-2">
                 <br/>
@@ -46,7 +12,8 @@
                 </p>
                 <br/>
                 <p>
-                    <a type="button" class="btn btn-secondary btn-block" href="copy/{{ $batch->id }}">Copy</a>
+                    <a type="button" class="btn btn-info btn-block" href="copy/{{ $batch->id }}">Copy</a>
+                    <small>Copy basic batch info only. Strategies can be selected and refined after copying.</small>
                 </p>
             </div>
             <div class="col-md-6"></div>

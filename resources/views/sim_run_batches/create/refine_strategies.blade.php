@@ -22,6 +22,7 @@
         }
     </style>
     <h2>Refine sim run batch</h2>
+    @include('sim_run_batches.metadata_snippet')
     <form method="post" action="/sim-run-batches/create/confirm">
         @csrf  
         <ul>

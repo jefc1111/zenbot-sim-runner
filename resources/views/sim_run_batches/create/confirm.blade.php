@@ -21,7 +21,7 @@
             list-style-type: none;
         }
     </style>
-    
+    @include('sim_run_batches.metadata_snippet')
     <form method="post" action="/sim-run-batches">
         <h2>Confirm sim runs for batch</h2>
         @csrf

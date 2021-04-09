@@ -1,4 +1,5 @@
 <x-layout>
+    @include('sim_run_batches.metadata_snippet')
     <h2>Select strategies</h2>
     <form method="post" action="/sim-run-batches/create/refine-strategies">
         @csrf  

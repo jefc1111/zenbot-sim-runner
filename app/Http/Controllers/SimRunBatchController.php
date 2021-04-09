@@ -46,15 +46,17 @@ class SimRunBatchController extends Controller
         request()->session()->put('form_data', request()->all());
 
         return view('sim_run_batches.create.select_strategies', [
-            'strategies' => Strategy::all()
+            'strategies' => Strategy::all(),
+            'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);
     }
 
     public function refine_strategies() 
     {             
-        return view('sim_run_batches.create.refine_strategies', 
-            ['strategies' => Strategy::findMany(request()->get('strategies'))]
-        );
+        return view('sim_run_batches.create.refine_strategies', [
+            'strategies' => Strategy::findMany(request()->get('strategies')),
+            'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
+        ]);
     }
 
     public function confirm()
@@ -63,21 +65,9 @@ class SimRunBatchController extends Controller
         // Give sim run batch the input data
         $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
 
-        return view('sim_run_batches.create.confirm', 
-            [ 'strategies' => $strategies ]
-        );
-    }
-
-    public function copy($id)
-    {
-        $batch = SimRunBatch::findOrFail($id);
-
-        \Log::error($batch->attributesToArray());
-
-        request()->session()->put('form_data', $batch->attributesToArray());
-
-        return view('sim_run_batches.create.select_strategies', [
-            'strategies' => Strategy::all()
+        return view('sim_run_batches.create.confirm', [ 
+            'strategies' => $strategies,
+            'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);
     }
 
@@ -89,7 +79,7 @@ class SimRunBatchController extends Controller
      */
     public function store(Request $request)
     {      
-        $sim_run_batch = SimRunBatch::create(request()->session()->get('form_data'));
+        $sim_run_batch = SimRunBatch::create(request()->session()->get('form_data')); // Now save it to the db
 
         $input_data = request()->except('_token');
 
@@ -111,6 +101,19 @@ class SimRunBatchController extends Controller
         }
 
         return redirect('/sim-run-batches/'.$sim_run_batch->id);
+    }
+
+    public function copy($id)
+    {
+        $batch = SimRunBatch::findOrFail($id);
+
+        \Log::error($batch->attributesToArray());
+
+        request()->session()->put('form_data', $batch->attributesToArray());
+
+        return view('sim_run_batches.create.select_strategies', [
+            'strategies' => Strategy::all()
+        ]);
     }
 
     /**
