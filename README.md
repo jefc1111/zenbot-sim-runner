@@ -31,12 +31,8 @@
   <h3 align="center">Zenbot Sim Runner</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    A sim run automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
     ·
     <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
     ·
@@ -208,4 +204,4 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 [license-url]: https://github.com/jefc1111/zenbot-sim-runner/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/geoff-clayton-b0222982/
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: readme_images/main_screenshot.png
