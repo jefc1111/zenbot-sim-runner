@@ -25,7 +25,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/jefc1111/zenbot-sim-runner">
-    <img src="readme-images/logo_200x200.png" alt="Logo" width="80" height="80">
+    <img src="readme_images/logo_200x200.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Zenbot Sim Runner</h3>
