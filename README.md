@@ -75,7 +75,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import varioius data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
+This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import various data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
 
 I built this because:
 * Testing and refining strategies is key to profitable use of a trading bot.
@@ -84,16 +84,16 @@ I built this because:
 
 This was primarily built for my own use and so is super-janky in places! There are no tests, no form validation, etc etc, so errors and bugs at this stage are to be expected. 
 
-Zenbot itself has disclaimers that should suffice, but just to be sure the message gets across: Use this project and Zenbot AT YOUR OWN RISK. You can and probably will lose money if and when you live trade on an exchange.
+Zenbot itself has disclaimers that should suffice, but just to be sure the message gets across: Use this project and Zenbot <strong>AT YOUR OWN RISK</strong>. You can and probably will lose money if and when you live trade on an exchange.
 
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project leverages the excellent PHP framework Laravel. In particular, it uses Laravel's job queue functionality to allow queueing up controlled submission of many simulation runs in one batch. 
+* [Laravel](https://laravel.com)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
 
-
+I GOT UP TO HERE
 
 <!-- GETTING STARTED -->
 ## Getting Started
