@@ -1,8 +1,11 @@
-<h2>{{ $batch->name }}</h2>
 <table class="table table-sm">
     <thead>
     </thead>
     <tbody>
+        <tr>
+            <td>Name</td>
+            <td>{{ $batch->name }}</td>
+        </tr>
         <tr>
             <td>Info</td>
             <td>{{ $batch->info }}</td>

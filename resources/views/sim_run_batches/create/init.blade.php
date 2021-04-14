@@ -1,5 +1,5 @@
-<x-layout>    
-    <h2>Create sim run batch</h2>
+<x-layout>        
+    @include('sim_run_batches.create.progress_bar', ['progress_pct' => 10])
     <form method="post" action="/sim-run-batches/create/select-strategies">
         @csrf
         <div class="mb-3 row"> 
