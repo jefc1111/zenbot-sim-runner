@@ -100,14 +100,14 @@ in a nutshell, you need to install the dependencies, tell it where your working 
 
 ### Prerequisites
 
-* Zenbot
-  This project is meaningless without it!
+* Zenbot  
+  This project is meaningless without it!  
   https://github.com/DeviaVir/zenbot
-* npm
+* npm  
   You probably already have npm installed if you have a working copy of Zenbot!
-* composer (PHP dependency manager)
+* composer (PHP dependency manager)  
   https://getcomposer.org/download/
-* Redis
+* Redis  
   https://redis.io/topics/quickstart
 
 
