@@ -109,6 +109,7 @@ in a nutshell, you need to install the dependencies, tell it where your working 
 * Redis  
   https://redis.io/topics/quickstart
 
+*Note:* Zenbot Sim Runner does not deal with backfilling - you need to do this directly from Zenbot before running any relevant sim runs.
 
 ### Installation
 
