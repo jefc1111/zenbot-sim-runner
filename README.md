@@ -1,9 +1,6 @@
 <!--
 *** This README is adapted from https://github.com/othneildrew/Best-README-Template/blob/master/README.md 
 -->
-
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -20,8 +17,6 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 -->
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
