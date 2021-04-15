@@ -107,7 +107,7 @@ in a nutshell, you need to install the dependencies, tell it where your working 
   You probably already have npm installed if you have a working copy of Zenbot!
 * composer (PHP dependency manager)  
   https://getcomposer.org/download/
-* MySQL / MariaDB
+* MySQL / MariaDB  
   I installed MariaDB on Manjaro. You may prefer to use a db in the cloud, or MySQL on Ubuntu etc etc. You could probably use MSSQL Server and maybe others because Laravel provides a layer of abstraction between the DB and the app code. I have only tested wiyth MariaDB.  
 * Redis  
   https://redis.io/topics/quickstart
@@ -135,8 +135,10 @@ in a nutshell, you need to install the dependencies, tell it where your working 
    ```sh
    php artisan migrate
    ```
-
-
+6. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
+   ```sh
+   php artisan serve
+   ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -150,20 +152,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+[Project Trello board](https://trello.com/b/xlTinWNf/zenbot-sim-runner)
 
 
 
@@ -177,9 +166,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Geoff - jefc_uk@hotmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/jefc1111/zenbot-sim-runner](https://github.com/jefc1111/zenbot-sim-runner)
 
 
 
