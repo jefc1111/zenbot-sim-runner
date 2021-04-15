@@ -137,12 +137,18 @@ in a nutshell, you need to install the dependencies, tell it where your working 
    php artisan serve
    ```
 
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Work in progress
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Import strategies, exchanges and products from Zenbot (this populates the corresponding MySQL tables)
+2. Create a sim run batch (select strategies, refine strategies, confirm)
+3. Run the batch, or individual sim runs
+4. Observe queued jobs
+5. View results
+6. Copy batch details
 
 
 
