@@ -107,24 +107,33 @@ in a nutshell, you need to install the dependencies, tell it where your working 
   You probably already have npm installed if you have a working copy of Zenbot!
 * composer (PHP dependency manager)  
   https://getcomposer.org/download/
+* MySQL / MariaDB
+  I installed MariaDB on Manjaro. You may prefer to use a db in the cloud, or MySQL on Ubuntu etc etc. You could probably use MSSQL Server and maybe others because Laravel provides a layer of abstraction between the DB and the app code. I have only tested wiyth MariaDB.  
 * Redis  
   https://redis.io/topics/quickstart
 
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/jefc1111/zenbot-sim-runner.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+3. Install composer packages 
+   ```sh
+   composer install
+   ```
+4. Build front end bundle  
+   ```sh
+   npm run dev
+   ```
+5. Create database tables
+   ```sh
+   php artisan migrate
    ```
 
 
