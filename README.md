@@ -93,21 +93,27 @@ This project leverages the excellent PHP framework Laravel. In particular, it us
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
 
-I GOT UP TO HERE
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This section is a work in progress :)
+
+I am running this on Manjaro Linux but it doesn't have any very exotic dependencies so it should run on any mainstream OS.  
+
+in a nutshell, you need to install the dependencies, tell it where your working instance of Zenbot is, import some data from Zenbot and away you go!
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+* Zenbot
+  This project is meaningless without it!
+  https://github.com/DeviaVir/zenbot
 * npm
-  ```sh
-  npm install npm@latest -g
-  ```
+  You probably already have npm installed if you have a working copy of Zenbot!
+* composer (PHP dependency manager)
+  https://getcomposer.org/download/
+* Redis
+  https://redis.io/topics/quickstart
+
 
 ### Installation
 
