@@ -1,6 +1,3 @@
-<!--
-*** This README is adapted from https://github.com/othneildrew/Best-README-Template/blob/master/README.md 
--->
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -174,17 +171,12 @@ Project Link: [https://github.com/jefc1111/zenbot-sim-runner](https://github.com
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+* [Zenbot](https://github.com/DeviaVir/zenbot)
+* [Laravel](https://laravel.com/)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+* [Best README Template](https://github.com/othneildrew/Best-README-Template)
+* [Bootstrap](https://getbootstrap.com/)
 
 
 
