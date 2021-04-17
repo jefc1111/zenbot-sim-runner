@@ -137,7 +137,12 @@ in a nutshell, you need to install the dependencies, tell it where your working 
    ```sh
    php artisan serve
    ```
-
+In my own dev environment right now I have to run three commands to get things working;
+```sh
+redis-server
+php artisan horizon
+php artisan serve
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
