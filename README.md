@@ -1,9 +1,3 @@
-<!--
-*** This README is adapted from https://github.com/othneildrew/Best-README-Template/blob/master/README.md 
--->
-
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -12,15 +6,14 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+<!--
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
+-->
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -31,12 +24,12 @@
   <h3 align="center">Zenbot Sim Runner</h3>
 
   <p align="center">
-    A sim run automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>
+    A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and analysing subsequent results in Zenbot.
     <br />
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Request Feature</a>
   </p>
 </p>
 
@@ -75,116 +68,127 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import various data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
+I built this because:
+* Testing and refining strategies is key to profitable use of a trading bot.
+* Zenbot's built in default functionality allows running of only simulation at a time, so tweaking parameters for comparison is laborious.
+* Zenbot stores simulation results in a format which does not easily allow comparison across multiple simulations. 
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
+This was primarily built for my own use and so is super-janky in places! There are no tests, no form validation, etc etc, so errors and bugs at this stage are to be expected. 
 
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+Zenbot itself has disclaimers that should suffice, but just to be sure the message gets across: Use this project and Zenbot <strong>AT YOUR OWN RISK</strong>. You can and probably will lose money if and when you live trade on an exchange.
 
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project leverages the excellent PHP framework Laravel. In particular, it uses Laravel's job queue functionality to allow queueing up controlled submission of many simulation runs in one batch. 
+* [Laravel](https://laravel.com)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This section is a work in progress :)
+
+I am running this on Manjaro Linux but it doesn't have any very exotic dependencies so it should run on any mainstream OS.  
+
+in a nutshell, you need to install the dependencies, tell it where your working instance of Zenbot is, import some data from Zenbot and away you go!
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* Zenbot  
+  This project is meaningless without it!  
+  https://github.com/DeviaVir/zenbot
+* npm  
+  You probably already have npm installed if you have a working copy of Zenbot!
+* composer (PHP dependency manager)  
+  https://getcomposer.org/download/
+* MySQL / MariaDB  
+  I installed MariaDB on Manjaro. You may prefer to use a db in the cloud, or MySQL on Ubuntu etc etc. You could probably use MSSQL Server and maybe others because Laravel provides a layer of abstraction between the DB and the app code. I have only tested wiyth MariaDB.  
+* Redis  
+  https://redis.io/topics/quickstart
+
+*Note:* Zenbot Sim Runner does not deal with backfilling - you need to do this directly from Zenbot before running any relevant sim runs.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/jefc1111/zenbot-sim-runner.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+3. Install composer packages 
+   ```sh
+   composer install
    ```
-
-
+4. Build front end bundle  
+   ```sh
+   npm run dev
+   ```
+5. Create database tables
+   ```sh
+   php artisan migrate
+   ```
+6. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
+   ```sh
+   php artisan serve
+   ```
+In my own dev environment right now I have to run three commands to get things working;
+```sh
+redis-server
+php artisan horizon
+php artisan serve
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Work in progress
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Import strategies, exchanges and products from Zenbot (this populates the corresponding MySQL tables)
+2. Create a sim run batch (select strategies, refine strategies, confirm)
+3. Run the batch, or individual sim runs
+4. Observe queued jobs
+5. View results
+6. Copy batch details
 
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+[Project Trello board](https://trello.com/b/xlTinWNf/zenbot-sim-runner)
 
 
 
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License.
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Geoff - jefc_uk@hotmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/jefc1111/zenbot-sim-runner](https://github.com/jefc1111/zenbot-sim-runner)
 
 
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+* [Zenbot](https://github.com/DeviaVir/zenbot)
+* [Laravel](https://laravel.com/)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+* [Best README Template](https://github.com/othneildrew/Best-README-Template)
+* [Bootstrap](https://getbootstrap.com/)
 
 
 
