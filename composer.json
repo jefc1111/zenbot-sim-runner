@@ -1,10 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "jefc1111/zenbot-sim-runner",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A sim run / backtesting automator fpor Zenbot",
     "keywords": [
-        "framework",
-        "laravel"
+        "cryptocurrency",
+        "zenbot",
+        "backtesting"
     ],
     "license": "MIT",
     "require": {
