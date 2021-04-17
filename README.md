@@ -24,7 +24,7 @@
   <h3 align="center">Zenbot Sim Runner</h3>
 
   <p align="center">
-    A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and analysing subsequent results in Zenbot.
+    A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and subsequent analysis of results.
     <br />
     ·
     <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Report Bug</a>
