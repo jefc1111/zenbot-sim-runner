@@ -211,3 +211,24 @@ Project Link: [https://github.com/jefc1111/zenbot-sim-runner](https://github.com
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/geoff-clayton-b0222982/
 [product-screenshot]: readme_images/main_screenshot.png
+[product-screenshot-1]: readme_images/screenshots_290421/1_new_sim_run_batch.png
+[product-screenshot-2]: readme_images/screenshots_290421/2_select_strategies.png
+[product-screenshot-3]: readme_images/screenshots_290421/3_refine_strategies.png
+[product-screenshot-4]: readme_images/screenshots_290421/4_review_sim_runs.png
+[product-screenshot-5]: readme_images/screenshots_290421/5_batch_ready_to_run.png
+[product-screenshot-6]: readme_images/screenshots_290421/6_batch_results.png
+[product-screenshot-7]: readme_images/screenshots_290421/7_results_of_one_sim_run.png
+
+
+
+
+
+
+
+
+
+
+
+
+
+
