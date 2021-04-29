@@ -24,7 +24,7 @@
   <h3 align="center">Zenbot Sim Runner</h3>
 
   <p align="center">
-    A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and analysing subsequent results in Zenbot.
+    A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and subsequent analysis of results.
     <br />
     ·
     <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Report Bug</a>
@@ -49,10 +49,10 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#installation">Installation</a><strong> - work in progress</strong></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage</a><strong> - work in progress</strong></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -133,7 +133,9 @@ in a nutshell, you need to install the dependencies, tell it where your working 
    ```sh
    php artisan migrate
    ```
-6. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
+6. Set your queue connection to 'redis'. In Laravel's `.env` by adding `QUEUE_CONNECTION=redis`. In the absence of that line it will default to `sync` (which can be more convenient for troubleshooting etc).
+ 
+7. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
    ```sh
    php artisan serve
    ```
