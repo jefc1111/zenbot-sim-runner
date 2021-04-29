@@ -133,7 +133,9 @@ in a nutshell, you need to install the dependencies, tell it where your working 
    ```sh
    php artisan migrate
    ```
-6. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
+6. Set your queue connection to 'redis'. In Laravel's `.env` by adding `QUEUE_CONNECTION=redis`. In the absence of that line it will default to `sync` (which can be more convenient for troubleshooting etc).
+ 
+7. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
    ```sh
    php artisan serve
    ```
