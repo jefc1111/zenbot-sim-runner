@@ -66,14 +66,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]]
-[![Product Name Screen Shot][product-screenshot-1]]
-[![Product Name Screen Shot][product-screenshot-2]]
-[![Product Name Screen Shot][product-screenshot-3]]
-[![Product Name Screen Shot][product-screenshot-4]]
-[![Product Name Screen Shot][product-screenshot-5]]
-[![Product Name Screen Shot][product-screenshot-6]]
-[![Product Name Screen Shot][product-screenshot-7]]
+[product-screenshot]
+[product-screenshot-1]
+[product-screenshot-2]
+[product-screenshot-3]
+[product-screenshot-4]
+[product-screenshot-5]
+[product-screenshot-6]
+[product-screenshot-7]
 
 This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import various data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
 
