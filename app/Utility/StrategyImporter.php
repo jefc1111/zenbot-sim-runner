@@ -66,15 +66,21 @@ class StrategyImporter
                 $strategy->save();
             }
             else if (substr_count($line, '--') > 0) {
+                $default = $this->extract_option_default_value(trim($line));
+                $unit = $this->extract_option_unit(trim($line));
+
+                // Convert hours to minutes
+                if ($unit === 'h') {
+                    $unit = 'm';
+                    $default = $default * 60;
+                }
+
                 $strategy->options()->save(new StrategyOption([
                     'name' => $this->extract_option_name(trim($line)),
                     'description' => $this->extract_option_description(trim($line)),
-                    'default' => $this->extract_option_default_value(trim($line)),
-                    'unit' => $this->extract_option_unit(trim($line)),
-                    'step' => $this->get_step_size(
-                        $this->extract_option_default_value(trim($line)), 
-                        $this->extract_option_unit(trim($line))
-                    )
+                    'default' => $default,
+                    'unit' => $unit,
+                    'step' => $this->get_step_size($default, $unit)
                 ]));
             }
         }
