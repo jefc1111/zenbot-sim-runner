@@ -188,7 +188,7 @@ return [
 
         'local' => [
             'supervisor-1' => [
-                'maxProcesses' => 3,
+                'maxProcesses' => env('MAX_LOCAL_PROCESSES', 3),
             ],
         ],
     ],
