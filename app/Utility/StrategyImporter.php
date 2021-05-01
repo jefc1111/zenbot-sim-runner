@@ -41,7 +41,7 @@ class StrategyImporter
         $strategy = null;
         foreach ($lines as $i => $line) {
             if (
-                strlen($line) > 1 &&                      // Line has more than one character
+                strlen($line) > 1 &&         // Line has more than one character
                 substr($line, 0, 1) !== ' '  // First character is not a space
             ) {
                 // Every strategy should have 'description' or 'options' on the next line
