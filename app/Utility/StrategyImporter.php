@@ -4,6 +4,7 @@ namespace App\Utility;
 
 use App\Models\Strategy;
 use App\Models\StrategyOption;
+use Symfony\Component\Process\Process;
 
 class StrategyImporter 
 {
@@ -17,21 +18,54 @@ class StrategyImporter
     
     public function run() 
     {
-        $lines = explode("\n", file_get_contents("$this->zenbot_location/docs/strategies/list-strategies.md"));
+        // Get strategy list from Zenbot
+        $process = new Process([
+            config('zenbot.node_executable'),
+            config('zenbot.location').'/zenbot.js',
+            'list-strategies'
+        ]);
 
+        $process->setTimeout(60);
+        $process->setWorkingDirectory(config('zenbot.location'));
+        $process->run();
+
+        // Discard ANSI color control characters in output
+        $output = preg_replace('/\e[[][A-Za-z0-9];?[0-9]*m?/', '', $process->getOutput());
+
+        // Split output into lines array
+        $lines = [];
+        if ($process->isSuccessful()) {
+            $lines = explode("\n", $output);
+        }
+
+        $strategy = null;
         foreach ($lines as $i => $line) {
             if (
-                substr($line, 0, 1) !== ' ' &&     // First character is not a space
-                substr_count($line, '`') === 0 &&  // No backticks
-                substr_count($line, ' ') === 0 &&  // No spaces
-                strlen($line) > 1                  // Have more than one character
-            ) { // We are starting a new strategy listing
-                $strategy = new Strategy(['name' => $line]);                
-            } else if (substr_count($line, 'description') === 1) {
-                $strategy->description = trim($lines[$i + 1]);
+                strlen($line) > 1 &&                      // Line has more than one character
+                substr($line, 0, 1) !== ' '  // First character is not a space
+            ) {
+                // Every strategy should have 'description' or 'options' on the next line
+                $nextline = trim($lines[$i + 1]);
+                if (
+                    substr_count($nextline, 'description') !== 1 &&
+                    substr_count($nextline, 'options') !== 1
+                ) {
+                    // Not actually a new strategy
+                    continue;
+                }
 
+                // We are starting a new strategy listing
+                $strategy = new Strategy([
+                    // Only use first word on this line
+                    'name' => explode(' ', $line, 2)[0]
+                ]);
                 $strategy->save();
-            } else if (substr_count($line, '--') > 0) {
+            }
+            else if (substr_count($line, 'description') === 1) {
+                $strategy->description = trim($lines[$i + 1]);
+                $strategy->save();
+            }
+            else if (substr_count($line, '--') > 0) {
                 $strategy->options()->save(new StrategyOption([
                     'name' => $this->extract_option_name(trim($line)),
                     'description' => $this->extract_option_description(trim($line)),
