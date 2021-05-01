@@ -17,7 +17,7 @@
     <h4>Import data from Zenbot</h4>
     <ul class="list-group">
         <li class="list-group-item">
-            <a href="/import-all">Import all (run `php artisan migrate:fresh` first)</a>
+            <a href="/import-all">Import all (run `php artisan migrate:fresh` first. WARNING: will delete all sim run data.)</a>
         </li>
         <li class="list-group-item">
             <a href="/import-strategies">Import strategies</a>
