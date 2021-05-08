@@ -37,10 +37,10 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: homestead
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: homestead
-      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: zenbot_sim_runner
+      MYSQL_ROOT_PASSWORD: password 
+      MYSQL_USER: zsr
+      MYSQL_PASSWORD: zsrpw
 
 volumes:
   redis:
