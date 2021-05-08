@@ -16,13 +16,16 @@ if [ "$role" = "app" ]; then
 
 elif [ "$role" = "queue" ]; then
 
-    echo "Queue role"
-    exit 1
+    echo "Running the queue..."
+    php /var/www/html/artisan horizon
 
 elif [ "$role" = "scheduler" ]; then
 
-    echo "Scheduler role"
-    exit 1
+    while [ true ]
+    do
+      php /var/www/html/artisan schedule:run --verbose --no-interaction &
+      sleep 60
+    done
 
 else
     echo "Could not match the container role \"$role\""

@@ -8,6 +8,6 @@ RUN chown -R www-data:www-data /var/www/html * \
     && chmod u+x /usr/local/bin/start \
     && chmod -R 777 /var/www/html/storage \
     && a2enmod rewrite \
-    && docker-php-ext-install pdo pdo_mysql
+    && docker-php-ext-install pdo pdo_mysql pcntl
 
 CMD ["/usr/local/bin/start"]
