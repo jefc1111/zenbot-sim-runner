@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>Sim runs</h4>
-                <table class="table table-sm table-bordered">
+                <table id="sim-runs" class="table table-sm table-bordered">
                     <thead>
                         <tr>
                             <th>id</th>
@@ -59,6 +59,10 @@
                     //location.reload();
                 }                
             });
+        });
+
+        $(document).ready(function () {
+            $('#sim-runs').DataTable();
         });
     </script>
 </x-layout>
