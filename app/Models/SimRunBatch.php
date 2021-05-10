@@ -246,10 +246,10 @@ class SimRunBatch extends Model
 
         $ranked_runs_for_winning_strategy = $runs_for_winning_strategy->sortByDesc(fn($sr) => $sr->result('vs_buy_hold'));
 
-        dd($ranked_runs_for_winning_strategy->map(function($sr) use($varying_strategy_options) {
+        $ranked_buy_holds_with_varying_options = $ranked_runs_for_winning_strategy->map(function($sr) use($varying_strategy_options) {
             $ddd = $varying_strategy_options->map(fn($opt) => $sr->strategy_options->find($opt->id)->pivot->value)->implode(' - ');
 
             return $sr->result('vs_buy_hold') . ' - ' . $ddd;
-        }));
+        });
     }
 }
