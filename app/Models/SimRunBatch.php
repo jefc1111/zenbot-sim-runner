@@ -13,6 +13,7 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
+use Illuminate\Database\Eloquent\Collection;
 
 class SimRunBatch extends Model
 {
@@ -179,11 +180,6 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
-    public function best_vs_buy_hold()
-    {
-        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
-    }
-
     public function run()
     {
         \Log::error('About to submit batch.');
@@ -205,5 +201,55 @@ class SimRunBatch extends Model
             'error' => 'error',
             'output' => 'COCKS'
         ];
+    }
+
+    public function best_vs_buy_hold()
+    {
+        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
+    }
+
+    private function winning_sim_run(): SimRun
+    {
+        
+        return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
+    }
+
+    private function winning_strategy(): Strategy
+    {
+        return $this->winning_sim_run()->strategy;
+    }
+
+    private function all_sim_runs_for_strategy(Strategy $strategy): Collection
+    {
+        return $this->sim_runs->where('strategy_id', $strategy->id);
+    }
+
+    // $sim_runs all need to have the same strategy so need to probably check that
+    private function get_varying_strategy_options(Collection $sim_runs, Strategy $strategy)
+    {
+        return $strategy->options->filter(function($opt) use($sim_runs) {
+            $all_values_for_opt = $sim_runs->map(fn($sr) => $sr->strategy_options->find($opt->id)->pivot->value)->values();
+        
+            // We only want to return strategy options where the set of sim runs given has more than 
+            // one distinct value (i.e. the user did select a range for interpolation)
+            return count($all_values_for_opt->unique()) > 1;
+        });
+    }
+
+    public function get_recommendation()
+    {
+        $winning_strategy = $this->winning_strategy();
+
+        $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($winning_strategy);
+
+        $varying_strategy_options = $this->get_varying_strategy_options($runs_for_winning_strategy, $winning_strategy);
+
+        $ranked_runs_for_winning_strategy = $runs_for_winning_strategy->sortByDesc(fn($sr) => $sr->result('vs_buy_hold'));
+
+        dd($ranked_runs_for_winning_strategy->map(function($sr) use($varying_strategy_options) {
+            $ddd = $varying_strategy_options->map(fn($opt) => $sr->strategy_options->find($opt->id)->pivot->value)->implode(' - ');
+
+            return $sr->result('vs_buy_hold') . ' - ' . $ddd;
+        }));
     }
 }
