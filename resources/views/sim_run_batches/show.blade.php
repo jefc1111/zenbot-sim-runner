@@ -1,5 +1,8 @@
 <x-layout>
     <div class="container">    
+        <div class="row">
+            <div id="varying-options-chart" style="width:100%; height:400px;"></div>
+        </div>
         <div class="row">            
             <div class="col-md-4">
                 @include('sim_run_batches.metadata_snippet')
@@ -63,6 +66,64 @@
 
         $(document).ready(function () {
             $('#sim-runs').DataTable();
+
+            const chart = Highcharts.chart('varying-options-chart', {
+                chart: {
+                    type: 'line'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: 'Sim runs for strategy "{{ $batch->winning_strategy()->name }}"'
+                },
+                xAxis: {
+                    categories: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->pluck('id')->values()) !!}
+                },
+                yAxis: [                    
+                    {
+                        title: {
+                            text: 'Vs buy & hold'
+                        },
+                        opposite: true
+                    },
+                    @foreach($batch->get_varying_strategy_options() as $opt)
+                    {
+                        title: {
+                            text: "{{ $opt->name }}"
+                        },
+                    },
+                    @endforeach
+                ],
+                series: [{
+                    name: 'Vs by hold',
+                    yAxis: 0,
+                    type: 'area',
+                    pointWidth: 10,
+                    opacity: 0.1,
+                    data: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
+                }, 
+                @foreach($batch->get_varying_strategy_options()->values() as $k => $opt)
+                {
+                    name: "{{ $opt->name }}",
+                    yAxis: {{ $k + 1 }},
+                    data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)->pivot->value)->values() !!}     
+                },
+                @endforeach
+                
+                /*
+                {
+                    name: 'opt 2',
+                    yAxis: 1,
+                    data: [5, 7, 3]                    
+                }, {
+                    name: 'opt 1',
+                    yAxis: 2,
+                    data: [2, 4, 9]
+                }
+                */
+                ]        
+            });            
         });
     </script>
 </x-layout>
