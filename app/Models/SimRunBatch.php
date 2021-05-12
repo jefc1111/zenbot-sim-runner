@@ -208,8 +208,7 @@ class SimRunBatch extends Model
     }
 
     private function winning_sim_run(): SimRun
-    {
-        
+    {   
         return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
     }
 
