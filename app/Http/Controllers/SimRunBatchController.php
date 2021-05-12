@@ -127,7 +127,7 @@ class SimRunBatchController extends Controller
     {
         $batch = SimRunBatch::findOrFail($id);
 
-        return view('sim_run_batches.show', [
+        return view('sim_run_batches.show.main', [
             'batch' => $batch
         ]);
     }
