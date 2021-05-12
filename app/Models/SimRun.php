@@ -58,11 +58,11 @@ Need to conform that POST data _is_ being truncated, as suspected, when there is
         return ! is_null($res) ? $res : null;
     }
 
-    public function result_pct(string $attr): ?string 
+    public function result_pct(string $attr, int $precision = 2): ?string 
     {
         $res = $this->get_simresult_attr($attr);
 
-        return ! is_null($res) ? round($res, 2)."%" : null;
+        return ! is_null($res) ? round($res, $precision)."%" : null;
     }
 
     public function set_unsaved_strategy_option_data(array $strategy_option_data): void
