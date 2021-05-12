@@ -84,7 +84,7 @@
                 }                
             });
         });
-
+        
         $(document).ready(function () {
             $('table#sim-runs-table').DataTable();
 
@@ -143,18 +143,6 @@
                     data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)->pivot->value)->values() !!}     
                 },
                 @endforeach
-                
-                /*
-                {
-                    name: 'opt 2',
-                    yAxis: 1,
-                    data: [5, 7, 3]                    
-                }, {
-                    name: 'opt 1',
-                    yAxis: 2,
-                    data: [2, 4, 9]
-                }
-                */
                 ]        
             });            
         });
