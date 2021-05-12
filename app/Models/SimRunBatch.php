@@ -245,7 +245,7 @@ class SimRunBatch extends Model
         $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($winning_strategy);
 
         return $winning_strategy->options->filter(function($opt) use($runs_for_winning_strategy) {
-            $all_values_for_opt = $runs_for_winning_strategy->map(fn($sr) => $sr->strategy_options->find($opt->id)->pivot->value)->values();
+            $all_values_for_opt = $runs_for_winning_strategy->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
         
             // We only want to return strategy options where the set of sim runs given has more than 
             // one distinct value (i.e. the user did select a range for interpolation)
@@ -274,7 +274,7 @@ class SimRunBatch extends Model
         17 => "8.2426050750119 - 1 - 3"
         */
         $ranked_buy_holds_with_varying_options = $ranked_runs_for_winning_strategy->map(function($sr) use($varying_strategy_options) {
-            $ddd = $varying_strategy_options->map(fn($opt) => $sr->strategy_options->find($opt->id)->pivot->value)->implode(' - ');
+            $ddd = $varying_strategy_options->map(fn($opt) => $sr->strategy_options->find($opt->id)?->pivot->value)->implode(' - ');
 
             return $sr->result('vs_buy_hold') . ' - ' . $ddd;
         });

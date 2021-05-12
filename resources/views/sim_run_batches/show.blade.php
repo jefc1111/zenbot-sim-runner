@@ -98,6 +98,9 @@
                 title: {
                     text: 'Sim runs for strategy "{{ $batch->winning_strategy()->name }}"'
                 },
+                tooltip: {
+                    shared: true
+                },
                 xAxis: {
                     categories: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->pluck('id')->values()) !!}
                 },
@@ -140,7 +143,7 @@
                 {
                     name: "{{ $opt->name }}",
                     yAxis: {{ $k + 2 }},
-                    data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)->pivot->value)->values() !!}     
+                    data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)->values() !!}     
                 },
                 @endforeach
                 ]        
