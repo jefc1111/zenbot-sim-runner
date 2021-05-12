@@ -17,7 +17,7 @@
                 <a id="overview-tab" data-toggle="tab" class="nav-link active" href="#overview">Overview</a>
             </li>
             <li class="nav-item">
-                <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">Sim runs</a>
+                <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">Sim runs ({{ $batch->sim_runs->count() }})</a>
             </li>
             <li class="nav-item">
                 <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">Analysis</a>
