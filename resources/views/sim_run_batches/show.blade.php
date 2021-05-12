@@ -26,7 +26,7 @@
     </div>
     <div class="">
         <div class="tab-content" id="sim-run-batch-tab-content">
-            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="tab-pane show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                 <div class="row">
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
@@ -37,7 +37,7 @@
                     <small>Copy basic batch info only. Strategies can be selected and refined after copying.</small>
                 </div>
             </div>
-            <div class="tab-pane fade" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
+            <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
                 <div class="row">
                     <div class="col-md-12">
                         <table id="sim-runs-table" class="table table-sm table-bordered">
@@ -60,7 +60,7 @@
                                         <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
                                     </td>
                                     <td>{{ $sim_run->result('total_trades') }}</td>
-                                    <td>{{ $sim_run->result_pct('profit') }}</td>
+                                    <td>{{ $sim_run->result_pct('profit', 4) }}</td>
                                     <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
                                 </tr>
                                 @endforeach
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
+            <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
                 <div id="varying-options-chart" style="width:100%; height:400px;"></div>
             </div>
         </div>            
@@ -108,6 +108,12 @@
                         },
                         opposite: true
                     },
+                    {
+                        title: {
+                            text: 'Qty trades'
+                        },
+                        opposite: true
+                    },
                     @foreach($batch->get_varying_strategy_options() as $opt)
                     {
                         title: {
@@ -119,15 +125,21 @@
                 series: [{
                     name: 'Vs by hold',
                     yAxis: 0,
-                    type: 'area',
-                    pointWidth: 10,
-                    opacity: 0.1,
+                    type: 'area',                    
+                    opacity: 0.2,
                     data: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
+                }, 
+                {
+                    name: 'Qty trades',
+                    yAxis: 1,
+                    type: 'column',
+                    opacity: 0.2,
+                    data: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
                 }, 
                 @foreach($batch->get_varying_strategy_options()->values() as $k => $opt)
                 {
                     name: "{{ $opt->name }}",
-                    yAxis: {{ $k + 1 }},
+                    yAxis: {{ $k + 2 }},
                     data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)->pivot->value)->values() !!}     
                 },
                 @endforeach
@@ -146,5 +158,19 @@
                 ]        
             });            
         });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var hash = $(e.target).attr('href');
+        if (history.pushState) {
+            history.pushState(null, null, hash);
+        } else {
+            location.hash = hash;
+        }
+        });
+
+        var hash = window.location.hash;
+        if (hash) {
+        $('.nav-link[href="' + hash + '"]').tab('show');
+        }
     </script>
 </x-layout>
