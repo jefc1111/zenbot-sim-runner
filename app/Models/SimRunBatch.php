@@ -44,6 +44,11 @@ class SimRunBatch extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function humanised_date_range(): string 
+    {
+        return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
+    } 
+
     public function qty_strategies()
     {
         return $this->get_all_strategies_used()->count();
@@ -54,9 +59,14 @@ class SimRunBatch extends Model
         return $this->sim_runs->map(fn($sr) => $sr->strategy)->unique();
     }
 
+    public function get_pair_name(): string 
+    {
+        return $this->product->asset."-".$this->product->currency;
+    }
+
     public function get_selector(): string
     {
-        return $this->exchange->name.".".$this->product->asset."-".$this->product->currency;
+        return $this->exchange->name.".".$this->get_pair_name();
     }
 
     public static function make_sim_runs(array $input_data)

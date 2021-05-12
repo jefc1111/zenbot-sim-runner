@@ -11,9 +11,11 @@
     </head>
     <body>
         <div class="container">
-            <h1>
-                <a href="/">Zenbot sim runner</a>
-            </h1>
+            <div class="row">
+                <h1>
+                    <a href="/">Zenbot sim runner</a>
+                </h1>
+            </div>
             <hr />        
             {{ $slot }}
             <hr />
