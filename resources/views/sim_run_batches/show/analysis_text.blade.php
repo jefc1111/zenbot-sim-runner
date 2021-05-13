@@ -9,11 +9,11 @@
 <p>
     {{ $batch->get_varying_strategy_options()->count() }} strategy options had varying values over {{ $batch->all_sim_runs_for_strategy($strategy)->count() }} sim runs for the winning strategy
 </p>
-@foreach($batch->get_varying_strategy_options() as $strategy_option)
+@foreach($batch->get_varying_strategy_options() as $opt)
 <p>
-    Strategy option <strong>{{ $strategy_option->name }}</strong> had minimum value PLACEHOLDER and maximum value PLACEHOLDER<br>
-    INCREASING | DECREASING the value for <strong>{{ $strategy_option->name }}</strong> appears to improve profitability<br>
-    OR it is unclear what effect <strong>{{ $strategy_option->name }}</strong> has on profitability<br>
+    Strategy option <strong>{{ $opt->name }}</strong> had minimum value {{ $batch->option_values($opt)->min() }} and maximum value {{ $batch->option_values($opt)->max() }} with step interval of {{ $batch->first_step_interval_for_option($opt) }} (final interval {{ $batch->last_step_interval_for_option($opt) }})<br>
+    INCREASING | DECREASING the value for <strong>{{ $opt->name }}</strong> appears to improve profitability<br>
+    OR it is unclear what effect <strong>{{ $opt->name }}</strong> has on profitability<br>
     [show figures to back up the above statement]<br>
 </p>
 @endforeach

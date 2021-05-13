@@ -250,11 +250,25 @@ class SimRunBatch extends Model
         });
     }
 
-    public function option_values_for_strategy(Strategy $strategy, StrategyOption $opt)
+    public function option_values(StrategyOption $opt)
     {
-        return $this->all_sim_runs_for_strategy($strategy)
+        return $this->all_sim_runs_for_strategy($opt->strategy)
             ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))
             ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
             ->values();
+    }
+
+    public function first_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[1] - $vals[0] : 'unknown';   
+    }
+
+    public function last_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[count($vals) - 1] - $vals[count($vals) - 2] : 'unknown';   
     }
 }

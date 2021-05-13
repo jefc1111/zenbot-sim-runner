@@ -56,7 +56,7 @@
         {
             name: "{{ $opt->name }}",
             yAxis: {{ $k + 2 }},
-            data: {!! $batch->option_values_for_strategy($strategy, $opt) !!}     
+            data: {!! $batch->option_values($opt) !!}     
         },
         @endforeach
         ]        
