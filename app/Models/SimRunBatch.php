@@ -227,14 +227,11 @@ class SimRunBatch extends Model
         return $this->winning_sim_run()->strategy;
     }
 
-    private function all_sim_runs_for_strategy(Strategy $strategy): Collection
+    public function all_sim_runs_for_strategy(Strategy $strategy, string $sort_by_result_attr = null): Collection
     {
-        return $this->sim_runs->where('strategy_id', $strategy->id);
-    }
+        $sim_runs = $this->sim_runs->where('strategy_id', $strategy->id);
 
-    public function all_sim_runs_for_winning_strategy(): Collection
-    {
-        return $this->sim_runs->where('strategy_id', $this->winning_sim_run()->strategy->id)->sortBy(fn($sr) => $sr->result('vs_buy_hold'));
+        return $sort_by_result_attr ? $sim_runs->sortBy(fn($sr) => $sr->result('vs_buy_hold')) : $sim_runs;
     }
 
     // $sim_runs all need to have the same strategy so need to probably check that
@@ -253,39 +250,7 @@ class SimRunBatch extends Model
         });
     }
 
-    public function get_recommendation()
-    {
-        $varying_strategy_options = $this->get_varying_strategy_options();
-
-        $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($this->winning_strategy());
-
-        $ranked_runs_for_winning_strategy = $runs_for_winning_strategy->sortByDesc(fn($sr) => $sr->result('vs_buy_hold'));
-
-
-        /*
-        22 => "37.156021370643 - 3 - 2"
-        18 => "27.87782583519 - 2 - 1"
-        21 => "25.050653956893 - 3 - 1"
-        16 => "19.063081741262 - 1 - 2"
-        15 => "18.999379191857 - 1 - 1"
-        19 => "17.871603514619 - 2 - 2"
-        23 => "11.216836556321 - 3 - 3"
-        20 => "11.197403048429 - 2 - 3"
-        17 => "8.2426050750119 - 1 - 3"
-        */
-        $ranked_buy_holds_with_varying_options = $ranked_runs_for_winning_strategy->map(function($sr) use($varying_strategy_options) {
-            $ddd = $varying_strategy_options->map(fn($opt) => $sr->strategy_options->find($opt->id)?->pivot->value)->implode(' - ');
-
-            return $sr->result('vs_buy_hold') . ' - ' . $ddd;
-        });
-    }
-
-    public function option_values_for_winning_strategy(StrategyOption $opt)
-    {
-        return $this->option_values_for_strategy($this->winning_strategy(), $opt);
-    }
-
-    private function option_values_for_strategy(Strategy $strategy, StrategyOption $opt)
+    public function option_values_for_strategy(Strategy $strategy, StrategyOption $opt)
     {
         return $this->all_sim_runs_for_strategy($strategy)
             ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))

@@ -1,13 +1,13 @@
 <hr>
 <p>
     @if($batch->qty_strategies() === 1)
-    All sim runs were for a single strategy - <strong>{{ $batch->winning_strategy()->name }}</strong>
+    All sim runs were for a single strategy - <strong>{{ $strategy->name }}</strong>
     @else
-    <strong>{{ $batch->winning_strategy()->name }}</strong> was the winning strategy. There were {{ $batch->qty_strategies() }} strategies used.
+    <strong>{{ $strategy()->name }}</strong> was the winning strategy. There were {{ $batch->qty_strategies() }} strategies used.
     @endif
 </p>
 <p>
-    {{ $batch->get_varying_strategy_options()->count() }} strategy options had varying values over {{ $batch->all_sim_runs_for_winning_strategy()->count() }} sim runs for the winning strategy
+    {{ $batch->get_varying_strategy_options()->count() }} strategy options had varying values over {{ $batch->all_sim_runs_for_strategy($strategy)->count() }} sim runs for the winning strategy
 </p>
 @foreach($batch->get_varying_strategy_options() as $strategy_option)
 <p>

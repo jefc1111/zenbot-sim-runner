@@ -9,13 +9,13 @@
             enabled: false
         },
         title: {
-            text: 'Sim runs for strategy "{{ $batch->winning_strategy()->name }}"'
+            text: 'Sim runs for strategy "{{ $strategy->name }}"'
         },
         tooltip: {
             shared: true
         },
         xAxis: {
-            categories: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->pluck('id')->values()) !!}
+            categories: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->pluck('id')->values()) !!}
         },
         yAxis: [                    
             {
@@ -43,20 +43,20 @@
             yAxis: 0,
             type: 'area',                    
             opacity: 0.2,
-            data: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
+            data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
         }, 
         {
             name: 'Qty trades',
             yAxis: 1,
             type: 'column',
             opacity: 0.2,
-            data: {!! json_encode($batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
+            data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
         }, 
         @foreach($batch->get_varying_strategy_options()->values() as $k => $opt)
         {
             name: "{{ $opt->name }}",
             yAxis: {{ $k + 2 }},
-            data: {!! $batch->option_values_for_winning_strategy($opt) !!}     
+            data: {!! $batch->option_values_for_strategy($strategy, $opt) !!}     
         },
         @endforeach
         ]        

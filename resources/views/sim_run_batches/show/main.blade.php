@@ -45,8 +45,8 @@
                 </div>
             </div>
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
-                @include('sim_run_batches.show.analysis_chart')
-                @include('sim_run_batches.show.analysis_text')
+                @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
+                @include('sim_run_batches.show.analysis_text', ['strategy' => $batch->winning_strategy()])
             </div>
         </div>            
     </div>
