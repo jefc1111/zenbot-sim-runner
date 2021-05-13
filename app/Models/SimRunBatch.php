@@ -222,6 +222,11 @@ class SimRunBatch extends Model
         return $this->sim_runs->filter(fn($sr) => $sr->log)->count();
     }
 
+    public function percent_complete(): int
+    {
+        return ($this->qty_complete() / $this->sim_runs->count()) * 100;
+    }
+
     public function best_vs_buy_hold()
     {
         return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
@@ -280,5 +285,49 @@ class SimRunBatch extends Model
         $vals = $this->option_values($opt)->unique()->sort()->values();
 
         return count($vals) > 2 ? $vals[count($vals) - 1] - $vals[count($vals) - 2] : 'unknown';   
+    }
+
+    public function trend_score_for_option(StrategyOption $opt): int
+    {
+        $option_values = $this->option_values($opt);
+
+        $score = 0;
+
+        $i = 0;
+
+        while ($i < count($option_values) - 1) {
+            $score += $option_values[$i] <=> $option_values[$i + 1];            
+
+            $i++;
+        }
+
+        return $score;
+    }
+
+    public function get_recommendation_for_option(StrategyOption $opt)
+    {
+        $res = [];
+
+        if ($this->trend_score_for_option($opt) > 0) {
+            $res['min'] = $this->option_values($opt)->max() + $this->first_step_interval_for_option($opt);
+            $res['max'] = $res['min'] + $this->option_values($opt)->max() - $this->option_values($opt)->min();
+            $res['step'] = $this->first_step_interval_for_option($opt);
+        } else if ($this->trend_score_for_option($opt) < 0) {
+            $res['max'] = $this->option_values($opt)->min() - $this->first_step_interval_for_option($opt);
+            $res['min'] = $res['max'] - ($this->option_values($opt)->max() - $this->option_values($opt)->min());
+            $res['step'] = $this->first_step_interval_for_option($opt);
+        } else {
+            $res['min'] = null;
+            $res['max'] = null;
+            $res['step'] = null;
+        }
+
+        $ddd = '';
+
+        foreach ($res as $k => $v) {
+            $ddd .= $k.": ".$v.", ";
+        }
+
+        return $ddd;
     }
 }

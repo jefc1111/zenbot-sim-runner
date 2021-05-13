@@ -14,7 +14,7 @@
             
         </div>
         <div style="text-align: right; " class="text-muted col-md-6">
-            <small>{{ ($batch->qty_complete() / $batch->sim_runs->count()) * 100 }}% complete ({{ $batch->qty_errored() }} errored)</small>
+            <small><span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">{{ $batch->percent_complete() }}% complete</span> ({{ $batch->qty_errored() }} errored)</small>
         </div>
     </div>
     <div class="">
@@ -37,10 +37,11 @@
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
                 <div class="row">
-                    <button type="button" class="btn btn-success" id="run">Run</button>    
-                    <br/>            
-                    <a type="button" class="btn btn-primary" href="copy/{{ $batch->id }}">Copy</a>
-                    <small>Copy basic batch info only. Strategies can be selected and refined after copying.</small>
+                    <button style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">Run</button>    
+                </div>          
+                <div class="row">
+                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
+                    <span class="text-muted">Copy basic batch info only. Strategies can be selected and refined after copying.</class>
                 </div>
             </div>
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">

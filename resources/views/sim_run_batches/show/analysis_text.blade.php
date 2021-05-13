@@ -12,9 +12,12 @@
 @foreach($batch->get_varying_strategy_options() as $opt)
 <p>
     Strategy option <strong>{{ $opt->name }}</strong> had minimum value {{ $batch->option_values($opt)->min() }} and maximum value {{ $batch->option_values($opt)->max() }} with step interval of {{ $batch->first_step_interval_for_option($opt) }} (final interval {{ $batch->last_step_interval_for_option($opt) }})<br>
-    INCREASING | DECREASING the value for <strong>{{ $opt->name }}</strong> appears to improve profitability<br>
-    OR it is unclear what effect <strong>{{ $opt->name }}</strong> has on profitability<br>
-    [show figures to back up the above statement]<br>
+    The trend score is {{ $batch->trend_score_for_option($opt) }}<br>
+    @if ($batch->trend_score_for_option($opt) === 0)
+    It is unclear what, if any, effect <strong>{{ $opt->name }}</strong> has on profitability<br>
+    @else
+    <strong>{{ $batch->trend_score_for_option($opt) < 0 ? 'Decreasing' : 'Increasing' }}</strong> the value for <strong>{{ $opt->name }}</strong> appears to improve profitability<br>
+    @endif
 </p>
 @endforeach
 <hr>
@@ -23,7 +26,7 @@
 </p>
 <p>
 @foreach($batch->get_varying_strategy_options() as $strategy_option)
-    <strong>{{ $strategy_option->name }}</strong>: min 10 max 100 step 20<br> 
+    <strong>{{ $strategy_option->name }}</strong>: {{ $batch->get_recommendation_for_option($strategy_option) }}<br> 
 @endforeach
 </p>
 <p>
