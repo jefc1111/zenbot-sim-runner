@@ -3,7 +3,7 @@
     @if($batch->qty_strategies() === 1)
     All sim runs were for a single strategy - <strong>{{ $strategy->name }}</strong>
     @else
-    <strong>{{ $strategy()->name }}</strong> was the winning strategy. There were {{ $batch->qty_strategies() }} strategies used.
+    <strong>{{ $strategy->name }}</strong> was the winning strategy. There were {{ $batch->qty_strategies() }} strategies used.
     @endif
 </p>
 <p>

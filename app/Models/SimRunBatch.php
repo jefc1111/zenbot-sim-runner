@@ -212,6 +212,16 @@ class SimRunBatch extends Model
         ];
     }
 
+    public function qty_complete(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->result || $sr->log)->count();
+    }
+
+    public function qty_errored(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->log)->count();
+    }
+
     public function best_vs_buy_hold()
     {
         return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();

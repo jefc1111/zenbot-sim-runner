@@ -6,9 +6,15 @@
             </h3>                
         </div>
         <div style="text-align: right; " class="text-muted col-md-6">
-            <h4>
+            <h5>
                 {{ $batch->get_pair_name() }} {{ $batch->humanised_date_range() }}
-            </h4>
+            </h5>
+        </div>
+        <div class="col-md-6">
+            
+        </div>
+        <div style="text-align: right; " class="text-muted col-md-6">
+            <small>{{ ($batch->qty_complete() / $batch->sim_runs->count()) * 100 }}% complete ({{ $batch->qty_errored() }} errored)</small>
         </div>
     </div>
     <div class="">
