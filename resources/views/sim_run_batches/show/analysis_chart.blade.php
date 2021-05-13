@@ -56,7 +56,7 @@
         {
             name: "{{ $opt->name }}",
             yAxis: {{ $k + 2 }},
-            data: {!! $batch->all_sim_runs_for_winning_strategy()->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)->values() !!}     
+            data: {!! $batch->option_values_for_winning_strategy($opt) !!}     
         },
         @endforeach
         ]        

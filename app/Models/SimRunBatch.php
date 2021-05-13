@@ -279,4 +279,17 @@ class SimRunBatch extends Model
             return $sr->result('vs_buy_hold') . ' - ' . $ddd;
         });
     }
+
+    public function option_values_for_winning_strategy(StrategyOption $opt)
+    {
+        return $this->option_values_for_strategy($this->winning_strategy(), $opt);
+    }
+
+    private function option_values_for_strategy(Strategy $strategy, StrategyOption $opt)
+    {
+        return $this->all_sim_runs_for_strategy($strategy)
+            ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))
+            ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
+            ->values();
+    }
 }
