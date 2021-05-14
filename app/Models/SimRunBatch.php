@@ -287,39 +287,55 @@ class SimRunBatch extends Model
         return count($vals) > 2 ? $vals[count($vals) - 1] - $vals[count($vals) - 2] : 'unknown';   
     }
 
-    public function trend_score_for_option(StrategyOption $opt): int
+    // Returns a score between -1 and 1 which reflects the 'decisiveness' of the trend.
+    // -1 meaning there is clearly a decisive downward trend and +1 meaning a decisive uptrend.
+    // 0 means no obvious trend
+    public function trend_score_for_option(StrategyOption $opt): float
     {
-        $option_values = $this->option_values($opt);
+        // The view calls this method a few times as it stands, so I'm caching the result on the 
+        // StrategyOption instance in case I never get round to improving the view side of things. 
+        if ($opt->weighted_score) {
+            return $opt->weighted_score;
+        }
+
+        $opt_vals = $this->option_values($opt); // These come sorted by vs_buy_hold
 
         $score = 0;
 
         $i = 0;
 
-        while ($i < count($option_values) - 1) {
-            $score += $option_values[$i] <=> $option_values[$i + 1];            
+        while ($i < count($opt_vals) - 1) {
+            // Score 0.5 for a 'flat' move, and -1 for a move down or 1 for a move up. 
+            $score_for_move = $opt_vals[$i + 1] === $opt_vals[$i] ? 0.5 : $opt_vals[$i + 1] <=> $opt_vals[$i];
+            
+            $score += $score_for_move;            
 
             $i++;
         }
 
-        return $score;
+        $opt->weighted_score = $score / $opt_vals->count();
+
+        return $opt->weighted_score;
     }
 
     public function get_recommendation_for_option(StrategyOption $opt)
     {
         $res = [];
 
-        if ($this->trend_score_for_option($opt) > 0) {
+        $this->trend_score_for_option($opt);
+
+        if ($opt->effect_on_trend() === 1) {
             $res['min'] = $this->option_values($opt)->max() + $this->first_step_interval_for_option($opt);
             $res['max'] = $res['min'] + $this->option_values($opt)->max() - $this->option_values($opt)->min();
             $res['step'] = $this->first_step_interval_for_option($opt);
-        } else if ($this->trend_score_for_option($opt) < 0) {
+        } else if ($opt->effect_on_trend() === -1) {
             $res['max'] = $this->option_values($opt)->min() - $this->first_step_interval_for_option($opt);
             $res['min'] = $res['max'] - ($this->option_values($opt)->max() - $this->option_values($opt)->min());
             $res['step'] = $this->first_step_interval_for_option($opt);
-        } else {
-            $res['min'] = null;
-            $res['max'] = null;
-            $res['step'] = null;
+        } else { // Just pick whatever the value was for the most succesful sim run
+            $res['min'] = $this->option_values($opt)->last();
+            $res['max'] = $this->option_values($opt)->last();
+            $res['step'] = 0;
         }
 
         $ddd = '';
@@ -329,5 +345,16 @@ class SimRunBatch extends Model
         }
 
         return $ddd;
+    }
+
+    public function no_recommendation_possible()
+    {
+        $that = $this; 
+
+        return $this->get_varying_strategy_options()->filter(function($opt) use($that) {
+            $that->trend_score_for_option($opt);
+
+            return $opt->effect_on_trend() !== 0;  
+        })->isEmpty();
     }
 }

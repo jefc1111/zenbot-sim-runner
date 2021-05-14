@@ -1,4 +1,5 @@
 <hr>
+<h1>Note: Everything below is a work in progress. </h1>
 <p>
     @if($batch->qty_strategies() === 1)
     All sim runs were for a single strategy - <strong>{{ $strategy->name }}</strong>
@@ -13,7 +14,7 @@
 <p>
     Strategy option <strong>{{ $opt->name }}</strong> had minimum value {{ $batch->option_values($opt)->min() }} and maximum value {{ $batch->option_values($opt)->max() }} with step interval of {{ $batch->first_step_interval_for_option($opt) }} (final interval {{ $batch->last_step_interval_for_option($opt) }})<br>
     The trend score is {{ $batch->trend_score_for_option($opt) }}<br>
-    @if ($batch->trend_score_for_option($opt) === 0)
+    @if ($opt->effect_on_trend() === 0)
     It is unclear what, if any, effect <strong>{{ $opt->name }}</strong> has on profitability<br>
     @else
     <strong>{{ $batch->trend_score_for_option($opt) < 0 ? 'Decreasing' : 'Increasing' }}</strong> the value for <strong>{{ $opt->name }}</strong> appears to improve profitability<br>
@@ -22,7 +23,11 @@
 @endforeach
 <hr>
 <p>
-    No recommendation could be made | It is recommended that a new batch is created with the following attributes: 
+    @if($batch->no_recommendation_possible())
+    No recommendation could be made
+    @else
+    It is recommended that a new batch is created with the following attributes: 
+    @endif
 </p>
 <p>
 @foreach($batch->get_varying_strategy_options() as $strategy_option)
