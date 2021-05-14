@@ -7,6 +7,6 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-body a, body a:visited {
+body a:not(.btn), body a:visited:not(.btn) {
     color: blue !important;
 }

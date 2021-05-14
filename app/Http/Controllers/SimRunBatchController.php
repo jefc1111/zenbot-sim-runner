@@ -112,7 +112,8 @@ class SimRunBatchController extends Controller
         request()->session()->put('form_data', $batch->attributesToArray());
 
         return view('sim_run_batches.create.select_strategies', [
-            'strategies' => Strategy::all()
+            'strategies' => Strategy::all(),
+            'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);
     }
 
@@ -124,8 +125,10 @@ class SimRunBatchController extends Controller
      */
     public function show($id)
     {
-        return view('sim_run_batches.show', [
-            'batch' => SimRunBatch::findOrFail($id)
+        $batch = SimRunBatch::findOrFail($id);
+
+        return view('sim_run_batches.show.main', [
+            'batch' => $batch
         ]);
     }
 

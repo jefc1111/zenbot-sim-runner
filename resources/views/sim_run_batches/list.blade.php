@@ -1,6 +1,6 @@
 <x-layout>
     <h2>Sim run batches</h2>
-    <table class="table table-sm table-bordered">
+    <table id="sim-run-batches" class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>id</th>
@@ -35,4 +35,9 @@
         </tbody>
     </table> 
     <a href="/sim-run-batches/create">Create</a>
+    <script>
+        $(document).ready(function () {
+            $('#sim-run-batches').DataTable();
+        });
+    </script>
 </x-layout>

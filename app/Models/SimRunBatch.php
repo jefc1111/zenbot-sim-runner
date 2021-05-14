@@ -13,6 +13,7 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
+use Illuminate\Database\Eloquent\Collection;
 
 class SimRunBatch extends Model
 {
@@ -43,6 +44,11 @@ class SimRunBatch extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function humanised_date_range(): string 
+    {
+        return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
+    } 
+
     public function qty_strategies()
     {
         return $this->get_all_strategies_used()->count();
@@ -53,9 +59,14 @@ class SimRunBatch extends Model
         return $this->sim_runs->map(fn($sr) => $sr->strategy)->unique();
     }
 
+    public function get_pair_name(): string 
+    {
+        return $this->product->asset."-".$this->product->currency;
+    }
+
     public function get_selector(): string
     {
-        return $this->exchange->name.".".$this->product->asset."-".$this->product->currency;
+        return $this->exchange->name.".".$this->get_pair_name();
     }
 
     public static function make_sim_runs(array $input_data)
@@ -179,11 +190,6 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
-    public function best_vs_buy_hold()
-    {
-        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
-    }
-
     public function run()
     {
         \Log::error('About to submit batch.');
@@ -202,8 +208,153 @@ class SimRunBatch extends Model
         
         return [
             'success' => true,
-            'error' => 'error',
-            'output' => 'COCKS'
+            'error' => 'error'
         ];
+    }
+
+    public function qty_complete(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->result || $sr->log)->count();
+    }
+
+    public function qty_errored(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->log)->count();
+    }
+
+    public function percent_complete(): int
+    {
+        return ($this->qty_complete() / $this->sim_runs->count()) * 100;
+    }
+
+    public function best_vs_buy_hold()
+    {
+        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
+    }
+
+    private function winning_sim_run(): SimRun
+    {   
+        return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
+    }
+
+    public function winning_strategy(): Strategy
+    {
+        return $this->winning_sim_run()->strategy;
+    }
+
+    public function all_sim_runs_for_strategy(Strategy $strategy, string $sort_by_result_attr = null): Collection
+    {
+        $sim_runs = $this->sim_runs->where('strategy_id', $strategy->id);
+
+        return $sort_by_result_attr ? $sim_runs->sortBy(fn($sr) => $sr->result('vs_buy_hold')) : $sim_runs;
+    }
+
+    // $sim_runs all need to have the same strategy so need to probably check that
+    public function get_varying_strategy_options()
+    {
+        $winning_strategy = $this->winning_strategy();
+
+        $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($winning_strategy);
+
+        return $winning_strategy->options->filter(function($opt) use($runs_for_winning_strategy) {
+            $all_values_for_opt = $runs_for_winning_strategy->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
+        
+            // We only want to return strategy options where the set of sim runs given has more than 
+            // one distinct value (i.e. the user did select a range for interpolation)
+            return count($all_values_for_opt->unique()) > 1;
+        });
+    }
+
+    public function option_values(StrategyOption $opt)
+    {
+        return $this->all_sim_runs_for_strategy($opt->strategy)
+            ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))
+            ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
+            ->values();
+    }
+
+    public function first_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[1] - $vals[0] : 'unknown';   
+    }
+
+    public function last_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[count($vals) - 1] - $vals[count($vals) - 2] : 'unknown';   
+    }
+
+    // Returns a score between -1 and 1 which reflects the 'decisiveness' of the trend.
+    // -1 meaning there is clearly a decisive downward trend and +1 meaning a decisive uptrend.
+    // 0 means no obvious trend
+    public function trend_score_for_option(StrategyOption $opt): float
+    {
+        // The view calls this method a few times as it stands, so I'm caching the result on the 
+        // StrategyOption instance in case I never get round to improving the view side of things. 
+        if ($opt->weighted_score) {
+            return $opt->weighted_score;
+        }
+
+        $opt_vals = $this->option_values($opt); // These come sorted by vs_buy_hold
+
+        $score = 0;
+
+        $i = 0;
+
+        while ($i < count($opt_vals) - 1) {
+            // Score 0.5 for a 'flat' move, and -1 for a move down or 1 for a move up. 
+            $score_for_move = $opt_vals[$i + 1] === $opt_vals[$i] ? 0.5 : $opt_vals[$i + 1] <=> $opt_vals[$i];
+            
+            $score += $score_for_move;            
+
+            $i++;
+        }
+
+        $opt->weighted_score = $score / $opt_vals->count();
+
+        return $opt->weighted_score;
+    }
+
+    public function get_recommendation_for_option(StrategyOption $opt)
+    {
+        $res = [];
+
+        $this->trend_score_for_option($opt);
+
+        if ($opt->effect_on_trend() === 1) {
+            $res['min'] = $this->option_values($opt)->max() + $this->first_step_interval_for_option($opt);
+            $res['max'] = $res['min'] + $this->option_values($opt)->max() - $this->option_values($opt)->min();
+            $res['step'] = $this->first_step_interval_for_option($opt);
+        } else if ($opt->effect_on_trend() === -1) {
+            $res['max'] = $this->option_values($opt)->min() - $this->first_step_interval_for_option($opt);
+            $res['min'] = $res['max'] - ($this->option_values($opt)->max() - $this->option_values($opt)->min());
+            $res['step'] = $this->first_step_interval_for_option($opt);
+        } else { // Just pick whatever the value was for the most succesful sim run
+            $res['min'] = $this->option_values($opt)->last();
+            $res['max'] = $this->option_values($opt)->last();
+            $res['step'] = 0;
+        }
+
+        $ddd = '';
+
+        foreach ($res as $k => $v) {
+            $ddd .= $k.": ".$v.", ";
+        }
+
+        return $ddd;
+    }
+
+    public function no_recommendation_possible()
+    {
+        $that = $this; 
+
+        return $this->get_varying_strategy_options()->filter(function($opt) use($that) {
+            $that->trend_score_for_option($opt);
+
+            return $opt->effect_on_trend() !== 0;  
+        })->isEmpty();
     }
 }
