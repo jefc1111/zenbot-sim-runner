@@ -39,6 +39,7 @@ Route::post('sim-run-batches/create/confirm', [SimRunBatchController::class, 'co
 
 Route::get('sim-run-batches/run/{id}', [SimRunBatchController::class, 'run']);
 Route::get('sim-run-batches/copy/{id}', [SimRunBatchController::class, 'copy']);
+Route::get('sim-run-batches/spawn-child-from/{id}', [SimRunBatchController::class, 'spawn_child_from']);
 Route::resource('sim-run-batches', SimRunBatchController::class);
 
 Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);

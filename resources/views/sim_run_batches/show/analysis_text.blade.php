@@ -59,6 +59,6 @@
     Warning! A child batch already exists.<br>
     @endif
     <span class="text-small text-muted">
-        Click <a href="#">here</a> to create a new batch based on the above recommendation.
+        Click <a href="/sim-run-batches/spawn-child-from/{{ $batch->id }}">here</a> to create a new batch based on the above recommendation.
     </span>
 </p>

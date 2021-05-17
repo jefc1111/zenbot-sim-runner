@@ -30,12 +30,6 @@ class SimRun extends Model
         return $this->belongsToMany(StrategyOption::class)->withPivot('value');
     }
 
-/*
-CUNT
-NEXT:
-Need to conform that POST data _is_ being truncated, as suspected, when there is large qty of sim runs to save  
-*/
-
     public function strategy()
     {
         return $this->belongsTo(Strategy::class);

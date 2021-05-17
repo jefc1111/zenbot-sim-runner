@@ -55,6 +55,40 @@ class SimRunBatch extends Model
         return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
     }
 
+    public function spawn_child()
+    {
+        $child_batch = SimRunBatch::create($this->attributesToArray());
+
+        $faked_input_data = [];
+
+        foreach ($this->get_varying_strategy_options() as $opt) {
+            $rec = $this->get_recommendation_for_option($opt);
+            
+            $faked_input_data[$opt->id.'-min'] = $rec->min;
+            $faked_input_data[$opt->id.'-max'] = $rec->max;
+            $faked_input_data[$opt->id.'-step'] = $rec->step;
+        }
+
+        $strategies = $child_batch->make_sim_runs($faked_input_data);
+
+        foreach ($strategies as $strategy) {
+            foreach ($strategy->sim_runs as $sim_run) {                
+                $prepped_data = [];
+
+                foreach ($sim_run->unsaved_strategy_option_data as $opt_id => $value) {
+                    $prepped_data[$opt_id] = ['value' => $value];
+                }
+
+                SimRun::create([
+                    'strategy_id' => $strategy->id,
+                    'sim_run_batch_id' => $child_batch->id
+                ])->strategy_options()->sync($prepped_data);
+            }
+        }
+
+        return $child_batch;
+    }
+
     public function humanised_date_range(): string 
     {
         return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
@@ -81,7 +115,7 @@ class SimRunBatch extends Model
     }
 
     public static function make_sim_runs(array $input_data)
-    {
+    {        
         function contains_only_nulls(array $arr): bool 
         {
             return empty(array_filter($arr, fn($i) => ! is_null($i)));
@@ -235,7 +269,7 @@ class SimRunBatch extends Model
 
     public function percent_complete(): int
     {
-        return ($this->qty_complete() / $this->sim_runs->count()) * 100;
+        return $this->sim_runs->isEmpty() ? 0 : ($this->qty_complete() / $this->sim_runs->count()) * 100;
     }
 
     public function best_vs_buy_hold()

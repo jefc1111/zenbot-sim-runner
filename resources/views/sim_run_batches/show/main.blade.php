@@ -52,8 +52,10 @@
                 </div>
             </div>
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
+                @if(! $batch->sim_runs->isEmpty())
                 @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
                 @include('sim_run_batches.show.analysis_text', ['strategy' => $batch->winning_strategy()])
+                @endif
             </div>
         </div>            
     </div>
