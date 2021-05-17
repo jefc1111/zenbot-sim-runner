@@ -55,7 +55,9 @@
     </div>
 </p>
 <p>
+    @if($batch->child_batch)
     Warning! A child batch already exists.<br>
+    @endif
     <span class="text-small text-muted">
         Click <a href="#">here</a> to create a new batch based on the above recommendation.
     </span>

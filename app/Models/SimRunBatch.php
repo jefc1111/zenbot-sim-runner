@@ -45,6 +45,16 @@ class SimRunBatch extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function parent_batch()
+    {
+        return $this->belongsTo('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
+    public function child_batch()
+    {
+        return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
     public function humanised_date_range(): string 
     {
         return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
