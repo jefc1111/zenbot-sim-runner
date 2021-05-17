@@ -14,7 +14,7 @@ class AddParentBatchIdToSimRunBatchesTable extends Migration
     public function up()
     {
         Schema::table('sim_run_batches', function (Blueprint $table) {
-            $table->integer('parent_batch_id');
+            $table->integer('parent_batch_id')->nullable()->after('product_id');
         });
     }
 
