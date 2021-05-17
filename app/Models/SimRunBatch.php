@@ -9,6 +9,7 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use App\Models\NextBatchRecommendation;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
@@ -320,31 +321,7 @@ class SimRunBatch extends Model
 
     public function get_recommendation_for_option(StrategyOption $opt)
     {
-        $res = [];
-
-        $this->trend_score_for_option($opt);
-
-        if ($opt->effect_on_trend() === 1) {
-            $res['min'] = $this->option_values($opt)->max() + $this->first_step_interval_for_option($opt);
-            $res['max'] = $res['min'] + $this->option_values($opt)->max() - $this->option_values($opt)->min();
-            $res['step'] = $this->first_step_interval_for_option($opt);
-        } else if ($opt->effect_on_trend() === -1) {
-            $res['max'] = $this->option_values($opt)->min() - $this->first_step_interval_for_option($opt);
-            $res['min'] = $res['max'] - ($this->option_values($opt)->max() - $this->option_values($opt)->min());
-            $res['step'] = $this->first_step_interval_for_option($opt);
-        } else { // Just pick whatever the value was for the most succesful sim run
-            $res['min'] = $this->option_values($opt)->last();
-            $res['max'] = $this->option_values($opt)->last();
-            $res['step'] = 0;
-        }
-
-        $ddd = '';
-
-        foreach ($res as $k => $v) {
-            $ddd .= $k.": ".$v.", ";
-        }
-
-        return $ddd;
+        return new NextBatchRecommendation($this, $opt);
     }
 
     public function no_recommendation_possible()

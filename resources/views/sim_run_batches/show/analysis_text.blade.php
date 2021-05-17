@@ -31,7 +31,8 @@
 </p>
 <p>
 @foreach($batch->get_varying_strategy_options() as $strategy_option)
-    <strong>{{ $strategy_option->name }}</strong>: {{ $batch->get_recommendation_for_option($strategy_option) }}<br> 
+    <?php $rec = $batch->get_recommendation_for_option($strategy_option) ?>    
+    <strong>{{ $strategy_option->name }}</strong>: min <strong>{{ $rec->min }}</strong> max <strong>{{ $rec->max }}</strong> step <strong>{{ $rec->step }}</strong><br> 
 @endforeach
 </p>
 <p>
