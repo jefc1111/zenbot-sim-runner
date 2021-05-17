@@ -30,10 +30,29 @@
     @endif
 </p>
 <p>
-@foreach($batch->get_varying_strategy_options() as $strategy_option)
-    <?php $rec = $batch->get_recommendation_for_option($strategy_option) ?>    
-    <strong>{{ $strategy_option->name }}</strong>: min <strong>{{ $rec->min }}</strong> max <strong>{{ $rec->max }}</strong> step <strong>{{ $rec->step }}</strong><br> 
-@endforeach
+    <div class="col-md-6">
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Step</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($batch->get_varying_strategy_options() as $strategy_option)
+                <tr>                
+                    <?php $rec = $batch->get_recommendation_for_option($strategy_option) ?>    
+                    <td>{{ $strategy_option->name }}</td>
+                    <td>{{ $rec->min }}</td>
+                    <td>{{ $rec->max }}</td>
+                    <td>{{ $rec->step }}</td> 
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </p>
 <p>
     Warning! A child batch already exists.<br>
