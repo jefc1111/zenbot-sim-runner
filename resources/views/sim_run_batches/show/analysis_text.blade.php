@@ -1,5 +1,4 @@
 <hr>
-<h1>Note: Everything below is a work in progress. </h1>
 <p>
     @if($batch->qty_strategies() === 1)
     All sim runs were for a single strategy - <strong>{{ $strategy->name }}</strong>

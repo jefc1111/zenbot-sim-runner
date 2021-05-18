@@ -3,7 +3,7 @@
         <tr>
             <th>id</th>
             <th>Name</th>
-            <th>Qty trades</th>
+            <th>Qty sim runs</th>
             <th>Generation no.</th>                
             <th>Best vs. buy hold</th>
             <th>Created at</th>
