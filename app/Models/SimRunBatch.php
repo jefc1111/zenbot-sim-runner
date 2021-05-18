@@ -119,10 +119,12 @@ class SimRunBatch extends Model
 
     public static function make_sim_runs(array $input_data)
     {        
-        function contains_only_nulls(array $arr): bool 
-        {
-            return empty(array_filter($arr, fn($i) => ! is_null($i)));
-        }                
+        if (! function_exists('contains_only_nulls')) {
+            function contains_only_nulls(array $arr): bool 
+            {
+                return empty(array_filter($arr, fn($i) => ! is_null($i)));
+            }   
+        }             
 
         $by_option_id = [];
 
@@ -240,9 +242,9 @@ class SimRunBatch extends Model
 
     public function run()
     {
-        \Log::error('About to submit batch.');
-
         $that = $this;
+
+        $auto_spawn_batches = env('AUTO_SPAWN_BATCHES', false);
 
         $batch = Bus::batch(
             $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
@@ -252,17 +254,15 @@ class SimRunBatch extends Model
         })->catch(function(Batch $batch, Throwable $e) {
             $success = false;
             // First batch job failure detected...
-        })->finally(function(Batch $batch) use($that) {
-            // The batch has finished executing...
-            \Log::error('finally');
-            //if (env('AUTO_SPAWN_BATCHES', false)) {
-                \Log::error('finally here');
+        })->finally(function(Batch $batch) use($that, $auto_spawn_batches) {
+            // The batch has finished executing...           
+            if ($auto_spawn_batches) {
                 // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
                 // attributes that 'lead on' from those in the batch that just compoleted. 
                 $new_batch = $that->spawn_child(); 
 
                 $new_batch->run(); // Oooh! Clever!
-            //}
+            }
         })->dispatch();
         
         return [
