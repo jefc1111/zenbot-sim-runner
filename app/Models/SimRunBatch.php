@@ -57,7 +57,10 @@ class SimRunBatch extends Model
 
     public function spawn_child()
     {
-        $child_batch = SimRunBatch::create($this->attributesToArray());
+        $child_batch = SimRunBatch::create(array_merge(
+            $this->attributesToArray(),             
+            [ 'parent_batch_id' => $this->id ]
+        ));
 
         $faked_input_data = [];
 
@@ -239,16 +242,27 @@ class SimRunBatch extends Model
     {
         \Log::error('About to submit batch.');
 
+        $that = $this;
+
         $batch = Bus::batch(
             $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
-        )->then(function (Batch $batch) {
+        )->then(function(Batch $batch) {
             $success = true;
             // All jobs completed successfully...
-        })->catch(function (Batch $batch, Throwable $e) {
+        })->catch(function(Batch $batch, Throwable $e) {
             $success = false;
             // First batch job failure detected...
-        })->finally(function (Batch $batch) {
+        })->finally(function(Batch $batch) use($that) {
             // The batch has finished executing...
+            \Log::error('finally');
+            //if (env('AUTO_SPAWN_BATCHES', false)) {
+                \Log::error('finally here');
+                // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
+                // attributes that 'lead on' from those in the batch that just compoleted. 
+                $new_batch = $that->spawn_child(); 
+
+                $new_batch->run(); // Oooh! Clever!
+            //}
         })->dispatch();
         
         return [

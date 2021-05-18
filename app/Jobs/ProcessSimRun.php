@@ -34,8 +34,6 @@ class ProcessSimRun implements ShouldQueue
      */
     public function handle()
     {
-        $this->sim_run->run();
-        
-        \Log::error('complete');
+        $this->sim_run->run();        
     }
 }
