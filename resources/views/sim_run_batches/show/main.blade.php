@@ -28,6 +28,9 @@
             <li class="nav-item">
                 <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">Analysis</a>
             </li>
+            <li class="nav-item">
+                <a id="ancestry-tab" data-toggle="tab" class="nav-link" href="#ancestry">Ancestry ({{ $batch->batch_ancestry_list()->count() + 1 }})</a>
+            </li>
         </ul>
     </div>
     <div class="">
@@ -56,6 +59,9 @@
                 @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
                 @include('sim_run_batches.show.analysis_text', ['strategy' => $batch->winning_strategy()])
                 @endif
+            </div>
+            <div class="tab-pane" id="ancestry" role="tabpanel" aria-labelledby="ancestry-tab">
+                @include('sim_run_batches.show.ancestry')
             </div>
         </div>            
     </div>

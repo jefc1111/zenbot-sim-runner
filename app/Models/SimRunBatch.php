@@ -57,11 +57,6 @@ class SimRunBatch extends Model
 
     public function spawn_child()
     {
-        $child_batch = SimRunBatch::create(array_merge(
-            $this->attributesToArray(),             
-            [ 'parent_batch_id' => $this->id ]
-        ));
-
         $faked_input_data = [];
 
         foreach ($this->get_varying_strategy_options() as $opt) {
@@ -72,8 +67,16 @@ class SimRunBatch extends Model
             $faked_input_data[$opt->id.'-step'] = $rec->step;
         }
 
+        // We're only ever going to actually get one strategy here because as it stands,
+        // auto-spawned batches are based only on the most succesful strategy from the seed
+        // batch
         $strategies = $child_batch->make_sim_runs($faked_input_data);
 
+        $child_batch = SimRunBatch::create(array_merge(
+            $this->attributesToArray(),             
+            [ 'parent_batch_id' => $this->id ]
+        ));
+        
         foreach ($strategies as $strategy) {
             foreach ($strategy->sim_runs as $sim_run) {                
                 $prepped_data = [];
@@ -244,7 +247,8 @@ class SimRunBatch extends Model
     {
         $that = $this;
 
-        $auto_spawn_batches = env('AUTO_SPAWN_BATCHES', false);
+        // Maybe also want to check if best vs_buy_hold is an improvement on last time
+        $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false);
 
         $batch = Bus::batch(
             $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
@@ -254,14 +258,14 @@ class SimRunBatch extends Model
         })->catch(function(Batch $batch, Throwable $e) {
             $success = false;
             // First batch job failure detected...
-        })->finally(function(Batch $batch) use($that, $auto_spawn_batches) {
+        })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
             // The batch has finished executing...           
-            if ($auto_spawn_batches) {
+            if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
                 // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
                 // attributes that 'lead on' from those in the batch that just compoleted. 
                 $new_batch = $that->spawn_child(); 
 
-                $new_batch->run(); // Oooh! Clever!
+                $new_batch->run();
             }
         })->dispatch();
         
@@ -391,5 +395,10 @@ class SimRunBatch extends Model
 
             return $opt->effect_on_trend() !== 0;  
         })->isEmpty();
+    }
+
+    public function batch_ancestry_list(): \Illuminate\Support\Collection
+    {
+        return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
     }
 }
