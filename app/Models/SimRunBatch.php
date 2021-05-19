@@ -401,8 +401,20 @@ class SimRunBatch extends Model
         })->isEmpty();
     }
 
-    public function batch_ancestry_list(): \Illuminate\Support\Collection
+    private function batch_ancestry_list(): \Illuminate\Support\Collection
     {
         return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
+    }
+
+    private function batch_descendant_list(): \Illuminate\Support\Collection
+    {
+        return $this->child_batch ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) : collect([]);
+    }
+
+    public function batch_ancestry_and_descendants(): \Illuminate\Support\Collection
+    {
+        return $this->batch_ancestry_list()->reverse()
+            ->merge(collect([$this]))
+            ->merge($this->batch_descendant_list());
     }
 }
