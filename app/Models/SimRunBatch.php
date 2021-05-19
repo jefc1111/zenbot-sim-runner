@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class SimRunBatch extends Model
 {
@@ -67,17 +68,20 @@ class SimRunBatch extends Model
             $faked_input_data[$opt->id.'-step'] = $rec->step;
         }
 
-        // We're only ever going to actually get one strategy here because as it stands,
-        // auto-spawned batches are based only on the most succesful strategy from the seed
-        // batch
-        $strategies = $child_batch->make_sim_runs($faked_input_data);
-
         $child_batch = SimRunBatch::create(array_merge(
-            $this->attributesToArray(),             
-            [ 'parent_batch_id' => $this->id ]
+            \Arr::except($this->attributesToArray(), ['name', 'created_at', 'updated_at']),             
+            [ 
+                'name' => '1st child of '.$this->name, 
+                'parent_batch_id' => $this->id 
+            ]
         ));
         
-        foreach ($strategies as $strategy) {
+        // We're only ever going to actually get one strategy here because as it stands,
+        // auto-spawned batches are based only on the most succesful strategy from the seed
+        // batch ($this)
+        $strategies_with_unsaved_sim_runs = $child_batch->make_sim_runs($faked_input_data);
+
+        foreach ($strategies_with_unsaved_sim_runs as $strategy) {
             foreach ($strategy->sim_runs as $sim_run) {                
                 $prepped_data = [];
 
