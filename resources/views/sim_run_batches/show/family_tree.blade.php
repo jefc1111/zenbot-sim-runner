@@ -14,11 +14,11 @@
         <tr class="{{ $batch->id === $subject_batch->id ? 'table-primary' : null }}">
             <td>{{ $batch->id }}</td>
             <td>
-                <a href="/sim-run-batches/{{ $batch->id }}">{{ $batch->name }}</a>
+                <a href="/sim-run-batches/{{ $batch->id }}">{{ $batch->truncated_name() }}</a>
             </id>
             <td>{{ $batch->sim_runs->count() }}</td>
             <td>{{ $i }} {{ $i === 0 ? '(user created)' : null }} {{ $batch->id === $subject_batch->id ? '(this batch)' : null }}</td>
-            <td>{{ $batch->best_vs_buy_hold() }}</td>
+            <td>{{ round($batch->best_vs_buy_hold(), 4) }}%</td>
             <td>{{ $batch->created_at }}</td>
         </tr>
         @endforeach

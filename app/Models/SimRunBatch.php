@@ -16,6 +16,7 @@ use Throwable;
 use App\Jobs\ProcessSimRun;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SimRunBatch extends Model
 {
@@ -30,6 +31,11 @@ class SimRunBatch extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function truncated_name($qty_chars = 30): string
+    {
+        return Str::limit($this->name, $qty_chars, ' (...)'); 
+    }
 
     public function sim_runs()
     {
