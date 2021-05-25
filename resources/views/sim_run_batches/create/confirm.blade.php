@@ -58,14 +58,6 @@
                         />                        
                     </td>
                     @endforeach
-                    <td>
-                        <input 
-                            type="checkbox" 
-                            id="" 
-                            name="" 
-                            value=""
-                        >            
-                    </td>
                 </tr>
                 @endforeach
             </tbody>

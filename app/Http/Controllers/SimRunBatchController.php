@@ -8,6 +8,7 @@ use App\Models\StrategyOption;
 use App\Models\SimRunBatch;
 use App\Models\SimRun;
 use App\Models\Exchange;
+use Illuminate\Support\Arr;
 
 class SimRunBatchController extends Controller
 {
@@ -107,9 +108,17 @@ class SimRunBatchController extends Controller
     {
         $batch = SimRunBatch::findOrFail($id);
 
-        \Log::error($batch->attributesToArray());
-
-        request()->session()->put('form_data', $batch->attributesToArray());
+        request()->session()->put('form_data', array_merge(
+            \Arr::except($batch->attributesToArray(), [
+                'name', 
+                'created_at', 
+                'updated_at', 
+                'parent_batch_id'
+            ]),
+            [
+                'name' => $batch->name.' (copy)'
+            ]
+        ));
 
         return view('sim_run_batches.create.select_strategies', [
             'strategies' => Strategy::all(),
@@ -171,5 +180,14 @@ class SimRunBatchController extends Controller
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
         $sim_run_batch->run();
+    }
+
+    public function spawn_child_from($id)
+    {
+        $source_batch = SimRunBatch::findOrFail($id);
+
+        $child_batch = $source_batch->spawn_child();
+
+        return redirect('/sim-run-batches/'.$child_batch->id);
     }
 }

@@ -9,11 +9,14 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use App\Models\NextBatchRecommendation;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SimRunBatch extends Model
 {
@@ -29,6 +32,11 @@ class SimRunBatch extends Model
         'deleted_at'
     ];
 
+    public function truncated_name($qty_chars = 30): string
+    {
+        return Str::limit($this->name, $qty_chars, ' (...)'); 
+    }
+
     public function sim_runs()
     {
         return $this->hasMany(SimRun::class);
@@ -42,6 +50,59 @@ class SimRunBatch extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function parent_batch()
+    {
+        return $this->belongsTo('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
+    public function child_batch()
+    {
+        return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
+    public function spawn_child()
+    {
+        $faked_input_data = [];
+
+        foreach ($this->get_varying_strategy_options() as $opt) {
+            $rec = $this->get_recommendation_for_option($opt);
+            
+            $faked_input_data[$opt->id.'-min'] = $rec->min;
+            $faked_input_data[$opt->id.'-max'] = $rec->max;
+            $faked_input_data[$opt->id.'-step'] = $rec->step;
+        }
+
+        $child_batch = SimRunBatch::create(array_merge(
+            \Arr::except($this->attributesToArray(), ['name', 'created_at', 'updated_at']),             
+            [ 
+                'name' => '1st child of '.$this->name, 
+                'parent_batch_id' => $this->id 
+            ]
+        ));
+        
+        // We're only ever going to actually get one strategy here because as it stands,
+        // auto-spawned batches are based only on the most succesful strategy from the seed
+        // batch ($this)
+        $strategies_with_unsaved_sim_runs = $child_batch->make_sim_runs($faked_input_data);
+
+        foreach ($strategies_with_unsaved_sim_runs as $strategy) {
+            foreach ($strategy->sim_runs as $sim_run) {                
+                $prepped_data = [];
+
+                foreach ($sim_run->unsaved_strategy_option_data as $opt_id => $value) {
+                    $prepped_data[$opt_id] = ['value' => $value];
+                }
+
+                SimRun::create([
+                    'strategy_id' => $strategy->id,
+                    'sim_run_batch_id' => $child_batch->id
+                ])->strategy_options()->sync($prepped_data);
+            }
+        }
+
+        return $child_batch;
     }
 
     public function humanised_date_range(): string 
@@ -70,11 +131,13 @@ class SimRunBatch extends Model
     }
 
     public static function make_sim_runs(array $input_data)
-    {
-        function contains_only_nulls(array $arr): bool 
-        {
-            return empty(array_filter($arr, fn($i) => ! is_null($i)));
-        }                
+    {        
+        if (! function_exists('contains_only_nulls')) {
+            function contains_only_nulls(array $arr): bool 
+            {
+                return empty(array_filter($arr, fn($i) => ! is_null($i)));
+            }   
+        }             
 
         $by_option_id = [];
 
@@ -192,18 +255,28 @@ class SimRunBatch extends Model
 
     public function run()
     {
-        \Log::error('About to submit batch.');
+        $that = $this;
+
+        // Maybe also want to check if best vs_buy_hold is an improvement on last time
+        $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false);
 
         $batch = Bus::batch(
             $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
-        )->then(function (Batch $batch) {
+        )->then(function(Batch $batch) {
             $success = true;
             // All jobs completed successfully...
-        })->catch(function (Batch $batch, Throwable $e) {
+        })->catch(function(Batch $batch, Throwable $e) {
             $success = false;
             // First batch job failure detected...
-        })->finally(function (Batch $batch) {
-            // The batch has finished executing...
+        })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
+            // The batch has finished executing...           
+            if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
+                // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
+                // attributes that 'lead on' from those in the batch that just compoleted. 
+                $new_batch = $that->spawn_child(); 
+
+                $new_batch->run();
+            }
         })->dispatch();
         
         return [
@@ -224,7 +297,7 @@ class SimRunBatch extends Model
 
     public function percent_complete(): int
     {
-        return ($this->qty_complete() / $this->sim_runs->count()) * 100;
+        return $this->sim_runs->isEmpty() ? 0 : ($this->qty_complete() / $this->sim_runs->count()) * 100;
     }
 
     public function best_vs_buy_hold()
@@ -320,31 +393,7 @@ class SimRunBatch extends Model
 
     public function get_recommendation_for_option(StrategyOption $opt)
     {
-        $res = [];
-
-        $this->trend_score_for_option($opt);
-
-        if ($opt->effect_on_trend() === 1) {
-            $res['min'] = $this->option_values($opt)->max() + $this->first_step_interval_for_option($opt);
-            $res['max'] = $res['min'] + $this->option_values($opt)->max() - $this->option_values($opt)->min();
-            $res['step'] = $this->first_step_interval_for_option($opt);
-        } else if ($opt->effect_on_trend() === -1) {
-            $res['max'] = $this->option_values($opt)->min() - $this->first_step_interval_for_option($opt);
-            $res['min'] = $res['max'] - ($this->option_values($opt)->max() - $this->option_values($opt)->min());
-            $res['step'] = $this->first_step_interval_for_option($opt);
-        } else { // Just pick whatever the value was for the most succesful sim run
-            $res['min'] = $this->option_values($opt)->last();
-            $res['max'] = $this->option_values($opt)->last();
-            $res['step'] = 0;
-        }
-
-        $ddd = '';
-
-        foreach ($res as $k => $v) {
-            $ddd .= $k.": ".$v.", ";
-        }
-
-        return $ddd;
+        return new NextBatchRecommendation($this, $opt);
     }
 
     public function no_recommendation_possible()
@@ -356,5 +405,22 @@ class SimRunBatch extends Model
 
             return $opt->effect_on_trend() !== 0;  
         })->isEmpty();
+    }
+
+    private function batch_ancestry_list(): \Illuminate\Support\Collection
+    {
+        return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
+    }
+
+    private function batch_descendant_list(): \Illuminate\Support\Collection
+    {
+        return $this->child_batch ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) : collect([]);
+    }
+
+    public function batch_ancestry_and_descendants(): \Illuminate\Support\Collection
+    {
+        return $this->batch_ancestry_list()->reverse()
+            ->merge(collect([$this]))
+            ->merge($this->batch_descendant_list());
     }
 }

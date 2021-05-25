@@ -1,5 +1,4 @@
 <hr>
-<h1>Note: Everything below is a work in progress. </h1>
 <p>
     @if($batch->qty_strategies() === 1)
     All sim runs were for a single strategy - <strong>{{ $strategy->name }}</strong>
@@ -30,13 +29,35 @@
     @endif
 </p>
 <p>
-@foreach($batch->get_varying_strategy_options() as $strategy_option)
-    <strong>{{ $strategy_option->name }}</strong>: {{ $batch->get_recommendation_for_option($strategy_option) }}<br> 
-@endforeach
+    <div class="col-md-6">
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Step</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($batch->get_varying_strategy_options() as $strategy_option)
+                <tr>                
+                    <?php $rec = $batch->get_recommendation_for_option($strategy_option) ?>    
+                    <td>{{ $strategy_option->name }}</td>
+                    <td>{{ $rec->min }}</td>
+                    <td>{{ $rec->max }}</td>
+                    <td>{{ $rec->step }}</td> 
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </p>
 <p>
+    @if($batch->child_batch)
     Warning! A child batch already exists.<br>
+    @endif
     <span class="text-small text-muted">
-        Click <a href="#">here</a> to create a new batch based on the above recommendation.
+        Click <a href="/sim-run-batches/spawn-child-from/{{ $batch->id }}">here</a> to create a new batch based on the above recommendation.
     </span>
 </p>
