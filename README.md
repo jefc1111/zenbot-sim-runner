@@ -90,10 +90,13 @@ Zenbot itself has disclaimers that should suffice, but just to be sure the messa
 
 ### Built With
 
-This project leverages the excellent PHP framework Laravel. In particular, it uses Laravel's job queue functionality to allow queueing up controlled submission of many simulation runs in one batch. 
+This project is basded on the PHP framework Laravel. In particular, it uses Laravel's job queue functionality to allow queueing up controlled submission of many simulation runs in one batch. 
 * [Laravel](https://laravel.com)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
+* [Datatables](https://datatables.net/manual/)
+* [Highcharts](https://www.highcharts.com/)
+
 
 <!-- GETTING STARTED -->
 ## Getting Started
