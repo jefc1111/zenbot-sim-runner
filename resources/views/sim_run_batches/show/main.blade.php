@@ -44,7 +44,9 @@
                 </div>          
                 <div class="row">
                     <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
-                    <span class="text-muted">Copy basic batch info only. Strategies can be selected and refined after copying.</class>
+                    <span style="padding: 16px 0 0 4px; " class="text-muted">
+                        Copy basic batch info only. Strategies can be selected and refined after copying.
+                    </class>
                 </div>
             </div>
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">

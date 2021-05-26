@@ -37,7 +37,8 @@ class SimRunBatchController extends Controller
             'exchanges' => Exchange::all(),
             'initial_name' => "Sim run batch ".\Str::random(4),
             'initial_start_date' => date($date_format, strtotime('-13 days')),
-            'initial_end_date' => date($date_format, strtotime('-12 days'))
+            'initial_end_date' => date($date_format, strtotime('-12 days')),
+            'autospawn_checkbox_enabled' => env('AUTO_SPAWN_BATCHES', false)
         ]);
     }
 

@@ -32,6 +32,11 @@ class SimRunBatch extends Model
         'deleted_at'
     ];
 
+    public function setAllowAutospawnAttribute($value)
+    {
+        $this->attributes['allow_autospawn'] = $value === 'on' || $value == 1 || $value === 'true';
+    }
+
     public function truncated_name($qty_chars = 30): string
     {
         return Str::limit($this->name, $qty_chars, ' (...)'); 
@@ -258,7 +263,7 @@ class SimRunBatch extends Model
         $that = $this;
 
         // Maybe also want to check if best vs_buy_hold is an improvement on last time
-        $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false);
+        $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false) && $this->allow_autospawn;
 
         $batch = Bus::batch(
             $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
