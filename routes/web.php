@@ -7,6 +7,7 @@ use App\Http\Controllers\StrategyOptionController;
 use App\Http\Controllers\SimRunBatchController;
 use App\Http\Controllers\SimRunController;
 use App\Http\Controllers\ImportFromZenbotController;
+use App\Http\Controllers\Auth\LogoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +22,8 @@ use App\Http\Controllers\ImportFromZenbotController;
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('logout', [LogoutController::class, 'index']);
 
 Route::get('import-all', [ImportFromZenbotController::class, 'import_all']);
 
