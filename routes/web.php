@@ -44,3 +44,6 @@ Route::resource('sim-run-batches', SimRunBatchController::class);
 
 Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);
 Route::resource('sim-runs', SimRunController::class);
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
