@@ -19,7 +19,7 @@ use App\Http\Controllers\Auth\LogoutController;
 |
 */
 
-Route::group(['middleware' => ['auth']], function () { 
+Route::group(['middleware' => ['auth', 'verified']], function () { 
 
     Route::get('/', function () {
         return view('home');
