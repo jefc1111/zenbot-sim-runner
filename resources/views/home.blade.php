@@ -1,6 +1,9 @@
 <x-layout>
     <ul class="list-group">
         <li class="list-group-item">
+            <a href="/sim-run-batches/create">Create sim run batch</a>
+        </li>
+        <li class="list-group-item">
             <a href="/strategies">List strategies</a>
         </li>
         <li class="list-group-item">
@@ -9,10 +12,8 @@
         <li class="list-group-item">
             <a href="/sim-run-batches">List sim run batches</a>
         </li>
-        <li class="list-group-item">
-            <a href="/sim-run-batches/create">Create sim run batch</a>
-        </li>
     </ul>
+    @if (Auth::user()->hasRole('admin'))
     <hr />
     <h4>Import data from Zenbot</h4>
     <ul class="list-group">
@@ -26,4 +27,12 @@
             <a href="/import-exchanges">Import exchanges</a>
         </li>
     </ul>
+    <hr />
+    <h4>Admin</h4>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="/admin">Admin</a>
+        </li>
+    </ul>    
+    @endif
 </x-layout>
