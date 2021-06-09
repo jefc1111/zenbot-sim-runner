@@ -57,3 +57,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 Auth::routes();
 
 
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
