@@ -10004,6 +10004,6 @@ h3 {
     border-color: #dee2e6;
   }
 }
-body a, body a:visited {
+body a:not(.btn), body a:visited:not(.btn) {
   color: blue !important;
 }

@@ -54,11 +54,36 @@
                 <input value="75" type="number" id="sell_pct" name="sell_pct" class="form-control">
             </div>    
         </div>
+        <div class="mb-3 row">
+            <label for="name" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input 
+                        {{ $autospawn_checkbox_enabled ? 'checked' : 'disabled' }} 
+                        name="allow_autospawn" 
+                        type="checkbox" 
+                        class="form-check-input" 
+                        id="exampleCheck1"
+                    >
+                    <label 
+                        title="This feature is disabled" 
+                        data-placement="bottom" 
+                        data-toggle="tooltip" 
+                        class="form-check-label" 
+                        for="exampleCheck1">Allow auto-spawning of child batches
+                    </label>
+                </div>
+            </div>
+        </div>
         <input class="btn btn-primary" type="submit" value="Select strategies">
     </form>    
 
     <script>
         $(document).ready(function() {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
             // https//stackoverflow.com/a/16654226
             (function($, window) {
                 $.fn.replaceOptions = function(options) {

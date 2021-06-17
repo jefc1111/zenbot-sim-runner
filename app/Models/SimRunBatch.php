@@ -9,10 +9,14 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use App\Models\NextBatchRecommendation;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SimRunBatch extends Model
 {
@@ -27,6 +31,16 @@ class SimRunBatch extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function setAllowAutospawnAttribute($value)
+    {
+        $this->attributes['allow_autospawn'] = $value === 'on' || $value == 1 || $value === 'true';
+    }
+
+    public function truncated_name($qty_chars = 30): string
+    {
+        return Str::limit($this->name, $qty_chars, ' (...)'); 
+    }
 
     public function sim_runs()
     {
@@ -43,6 +57,64 @@ class SimRunBatch extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function parent_batch()
+    {
+        return $this->belongsTo('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
+    public function child_batch()
+    {
+        return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
+    }
+
+    public function spawn_child()
+    {
+        $faked_input_data = [];
+
+        foreach ($this->get_varying_strategy_options() as $opt) {
+            $rec = $this->get_recommendation_for_option($opt);
+            
+            $faked_input_data[$opt->id.'-min'] = $rec->min;
+            $faked_input_data[$opt->id.'-max'] = $rec->max;
+            $faked_input_data[$opt->id.'-step'] = $rec->step;
+        }
+
+        $child_batch = SimRunBatch::create(array_merge(
+            \Arr::except($this->attributesToArray(), ['name', 'created_at', 'updated_at']),             
+            [ 
+                'name' => '1st child of '.$this->name, 
+                'parent_batch_id' => $this->id 
+            ]
+        ));
+        
+        // We're only ever going to actually get one strategy here because as it stands,
+        // auto-spawned batches are based only on the most succesful strategy from the seed
+        // batch ($this)
+        $strategies_with_unsaved_sim_runs = $child_batch->make_sim_runs($faked_input_data);
+
+        foreach ($strategies_with_unsaved_sim_runs as $strategy) {
+            foreach ($strategy->sim_runs as $sim_run) {                
+                $prepped_data = [];
+
+                foreach ($sim_run->unsaved_strategy_option_data as $opt_id => $value) {
+                    $prepped_data[$opt_id] = ['value' => $value];
+                }
+
+                SimRun::create([
+                    'strategy_id' => $strategy->id,
+                    'sim_run_batch_id' => $child_batch->id
+                ])->strategy_options()->sync($prepped_data);
+            }
+        }
+
+        return $child_batch;
+    }
+
+    public function humanised_date_range(): string 
+    {
+        return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
+    } 
+
     public function qty_strategies()
     {
         return $this->get_all_strategies_used()->count();
@@ -53,17 +125,24 @@ class SimRunBatch extends Model
         return $this->sim_runs->map(fn($sr) => $sr->strategy)->unique();
     }
 
+    public function get_pair_name(): string 
+    {
+        return $this->product->asset."-".$this->product->currency;
+    }
+
     public function get_selector(): string
     {
-        return $this->exchange->name.".".$this->product->asset."-".$this->product->currency;
+        return $this->exchange->name.".".$this->get_pair_name();
     }
 
     public static function make_sim_runs(array $input_data)
-    {
-        function contains_only_nulls(array $arr): bool 
-        {
-            return empty(array_filter($arr, fn($i) => ! is_null($i)));
-        }                
+    {        
+        if (! function_exists('contains_only_nulls')) {
+            function contains_only_nulls(array $arr): bool 
+            {
+                return empty(array_filter($arr, fn($i) => ! is_null($i)));
+            }   
+        }             
 
         $by_option_id = [];
 
@@ -179,31 +258,174 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
+    public function run()
+    {
+        $that = $this;
+
+        // Maybe also want to check if best vs_buy_hold is an improvement on last time
+        $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false) && $this->allow_autospawn;
+
+        $batch = Bus::batch(
+            $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
+        )->then(function(Batch $batch) {
+            $success = true;
+            // All jobs completed successfully...
+        })->catch(function(Batch $batch, Throwable $e) {
+            $success = false;
+            // First batch job failure detected...
+        })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
+            // The batch has finished executing...           
+            if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
+                // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
+                // attributes that 'lead on' from those in the batch that just compoleted. 
+                $new_batch = $that->spawn_child(); 
+
+                $new_batch->run();
+            }
+        })->dispatch();
+        
+        return [
+            'success' => true,
+            'error' => 'error'
+        ];
+    }
+
+    public function qty_complete(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->result || $sr->log)->count();
+    }
+
+    public function qty_errored(): int
+    {
+        return $this->sim_runs->filter(fn($sr) => $sr->log)->count();
+    }
+
+    public function percent_complete(): int
+    {
+        return $this->sim_runs->isEmpty() ? 0 : ($this->qty_complete() / $this->sim_runs->count()) * 100;
+    }
+
     public function best_vs_buy_hold()
     {
         return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
     }
 
-    public function run()
-    {
-        \Log::error('About to submit batch.');
+    private function winning_sim_run(): SimRun
+    {   
+        return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
+    }
 
-        $batch = Bus::batch(
-            $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
-        )->then(function (Batch $batch) {
-            $success = true;
-            // All jobs completed successfully...
-        })->catch(function (Batch $batch, Throwable $e) {
-            $success = false;
-            // First batch job failure detected...
-        })->finally(function (Batch $batch) {
-            // The batch has finished executing...
-        })->dispatch();
+    public function winning_strategy(): Strategy
+    {
+        return $this->winning_sim_run()->strategy;
+    }
+
+    public function all_sim_runs_for_strategy(Strategy $strategy, string $sort_by_result_attr = null): Collection
+    {
+        $sim_runs = $this->sim_runs->where('strategy_id', $strategy->id);
+
+        return $sort_by_result_attr ? $sim_runs->sortBy(fn($sr) => $sr->result('vs_buy_hold')) : $sim_runs;
+    }
+
+    // $sim_runs all need to have the same strategy so need to probably check that
+    public function get_varying_strategy_options()
+    {
+        $winning_strategy = $this->winning_strategy();
+
+        $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($winning_strategy);
+
+        return $winning_strategy->options->filter(function($opt) use($runs_for_winning_strategy) {
+            $all_values_for_opt = $runs_for_winning_strategy->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
         
-        return [
-            'success' => true,
-            'error' => 'error',
-            'output' => 'COCKS'
-        ];
+            // We only want to return strategy options where the set of sim runs given has more than 
+            // one distinct value (i.e. the user did select a range for interpolation)
+            return count($all_values_for_opt->unique()) > 1;
+        });
+    }
+
+    public function option_values(StrategyOption $opt)
+    {
+        return $this->all_sim_runs_for_strategy($opt->strategy)
+            ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))
+            ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
+            ->values();
+    }
+
+    public function first_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[1] - $vals[0] : 'unknown';   
+    }
+
+    public function last_step_interval_for_option(StrategyOption $opt)
+    {
+        $vals = $this->option_values($opt)->unique()->sort()->values();
+
+        return count($vals) > 2 ? $vals[count($vals) - 1] - $vals[count($vals) - 2] : 'unknown';   
+    }
+
+    // Returns a score between -1 and 1 which reflects the 'decisiveness' of the trend.
+    // -1 meaning there is clearly a decisive downward trend and +1 meaning a decisive uptrend.
+    // 0 means no obvious trend
+    public function trend_score_for_option(StrategyOption $opt): float
+    {
+        // The view calls this method a few times as it stands, so I'm caching the result on the 
+        // StrategyOption instance in case I never get round to improving the view side of things. 
+        if ($opt->weighted_score) {
+            return $opt->weighted_score;
+        }
+
+        $opt_vals = $this->option_values($opt); // These come sorted by vs_buy_hold
+
+        $score = 0;
+
+        $i = 0;
+
+        while ($i < count($opt_vals) - 1) {
+            // Score 0.5 for a 'flat' move, and -1 for a move down or 1 for a move up. 
+            $score_for_move = $opt_vals[$i + 1] === $opt_vals[$i] ? 0.5 : $opt_vals[$i + 1] <=> $opt_vals[$i];
+            
+            $score += $score_for_move;            
+
+            $i++;
+        }
+
+        $opt->weighted_score = $score / $opt_vals->count();
+
+        return $opt->weighted_score;
+    }
+
+    public function get_recommendation_for_option(StrategyOption $opt)
+    {
+        return new NextBatchRecommendation($this, $opt);
+    }
+
+    public function no_recommendation_possible()
+    {
+        $that = $this; 
+
+        return $this->get_varying_strategy_options()->filter(function($opt) use($that) {
+            $that->trend_score_for_option($opt);
+
+            return $opt->effect_on_trend() !== 0;  
+        })->isEmpty();
+    }
+
+    private function batch_ancestry_list(): \Illuminate\Support\Collection
+    {
+        return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
+    }
+
+    private function batch_descendant_list(): \Illuminate\Support\Collection
+    {
+        return $this->child_batch ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) : collect([]);
+    }
+
+    public function batch_ancestry_and_descendants(): \Illuminate\Support\Collection
+    {
+        return $this->batch_ancestry_list()->reverse()
+            ->merge(collect([$this]))
+            ->merge($this->batch_descendant_list());
     }
 }

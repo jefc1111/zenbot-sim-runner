@@ -34,5 +34,9 @@
             <td>Sell %</td>
             <td>{{ $batch->sell_pct }}</td>
         </tr>
+        <tr>
+            <td>Autospawn children</td>
+            <td>{{ $batch->allow_autospawn ? 'yes' : 'no' }}</td>
+        </tr>
     </tbody>
 </table>

@@ -3,14 +3,19 @@
         <title>{{ $title ?? 'Zenbot sim runner' }}</title>
         <script src="{{ asset('js/app.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">  
+        <script src="https://code.highcharts.com/highcharts.js"></script>
     </head>
     <body>
         <div class="container">
-            <h1>
-                <a href="/">Zenbot sim runner</a>
-            </h1>
+            <div class="row">
+                <h1>
+                    <a href="/">Zenbot sim runner</a>
+                </h1>
+            </div>
             <hr />        
             {{ $slot }}
             <hr />

@@ -8,6 +8,7 @@ use App\Models\StrategyOption;
 use App\Models\SimRunBatch;
 use App\Models\SimRun;
 use App\Models\Exchange;
+use Illuminate\Support\Arr;
 
 class SimRunBatchController extends Controller
 {
@@ -36,7 +37,8 @@ class SimRunBatchController extends Controller
             'exchanges' => Exchange::all(),
             'initial_name' => "Sim run batch ".\Str::random(4),
             'initial_start_date' => date($date_format, strtotime('-13 days')),
-            'initial_end_date' => date($date_format, strtotime('-12 days'))
+            'initial_end_date' => date($date_format, strtotime('-12 days')),
+            'autospawn_checkbox_enabled' => env('AUTO_SPAWN_BATCHES', false)
         ]);
     }
 
@@ -107,12 +109,21 @@ class SimRunBatchController extends Controller
     {
         $batch = SimRunBatch::findOrFail($id);
 
-        \Log::error($batch->attributesToArray());
-
-        request()->session()->put('form_data', $batch->attributesToArray());
+        request()->session()->put('form_data', array_merge(
+            \Arr::except($batch->attributesToArray(), [
+                'name', 
+                'created_at', 
+                'updated_at', 
+                'parent_batch_id'
+            ]),
+            [
+                'name' => $batch->name.' (copy)'
+            ]
+        ));
 
         return view('sim_run_batches.create.select_strategies', [
-            'strategies' => Strategy::all()
+            'strategies' => Strategy::all(),
+            'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);
     }
 
@@ -124,8 +135,10 @@ class SimRunBatchController extends Controller
      */
     public function show($id)
     {
-        return view('sim_run_batches.show', [
-            'batch' => SimRunBatch::findOrFail($id)
+        $batch = SimRunBatch::findOrFail($id);
+
+        return view('sim_run_batches.show.main', [
+            'batch' => $batch
         ]);
     }
 
@@ -168,5 +181,14 @@ class SimRunBatchController extends Controller
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
         $sim_run_batch->run();
+    }
+
+    public function spawn_child_from($id)
+    {
+        $source_batch = SimRunBatch::findOrFail($id);
+
+        $child_batch = $source_batch->spawn_child();
+
+        return redirect('/sim-run-batches/'.$child_batch->id);
     }
 }
