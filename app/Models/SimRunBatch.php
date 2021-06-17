@@ -9,6 +9,7 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\NextBatchRecommendation;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
@@ -17,6 +18,7 @@ use App\Jobs\ProcessSimRun;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class SimRunBatch extends Model
 {
@@ -40,6 +42,11 @@ class SimRunBatch extends Model
     public function truncated_name($qty_chars = 30): string
     {
         return Str::limit($this->name, $qty_chars, ' (...)'); 
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function sim_runs()

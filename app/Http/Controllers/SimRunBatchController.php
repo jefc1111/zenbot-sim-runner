@@ -9,6 +9,7 @@ use App\Models\SimRunBatch;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class SimRunBatchController extends Controller
 {
@@ -20,7 +21,7 @@ class SimRunBatchController extends Controller
     public function index()
     {
         return view('sim_run_batches.list', [
-            'sim_run_batches' => SimRunBatch::all()
+            'sim_run_batches' => Auth::user()->sim_run_batches
         ]);
     }
 
@@ -44,7 +45,6 @@ class SimRunBatchController extends Controller
 
     public function select_strategies()
     {
-        \Log::error(request()->all());
         request()->session()->put('form_data', request()->all());
 
         return view('sim_run_batches.create.select_strategies', [
@@ -81,7 +81,11 @@ class SimRunBatchController extends Controller
      */
     public function store(Request $request)
     {      
-        $sim_run_batch = SimRunBatch::create(request()->session()->get('form_data')); // Now save it to the db
+        $sim_run_batch_data = request()->session()->get('form_data');
+
+        $sim_run_batch_data['user_id'] = Auth::user()->id;
+
+        $sim_run_batch = SimRunBatch::create($sim_run_batch_data); // Now save it to the db
 
         $input_data = request()->except('_token');
 
@@ -108,6 +112,10 @@ class SimRunBatchController extends Controller
     public function copy($id)
     {
         $batch = SimRunBatch::findOrFail($id);
+
+        if ($batch->user_id != Auth::user()->id) {
+            abort(403);
+        }
 
         request()->session()->put('form_data', array_merge(
             \Arr::except($batch->attributesToArray(), [
@@ -136,6 +144,10 @@ class SimRunBatchController extends Controller
     public function show($id)
     {
         $batch = SimRunBatch::findOrFail($id);
+
+        if ($batch->user_id != Auth::user()->id) {
+            abort(403);
+        }
 
         return view('sim_run_batches.show.main', [
             'batch' => $batch
@@ -180,12 +192,20 @@ class SimRunBatchController extends Controller
     {
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
+        if ($sim_run_batch->user_id != Auth::user()->id) {
+            abort(403);
+        }
+
         $sim_run_batch->run();
     }
 
     public function spawn_child_from($id)
     {
         $source_batch = SimRunBatch::findOrFail($id);
+
+        if ($source_batch->user_id != Auth::user()->id) {
+            abort(403);
+        }
 
         $child_batch = $source_batch->spawn_child();
 

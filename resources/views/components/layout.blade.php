@@ -28,6 +28,12 @@
             <a href="/strategy-options">List strategy options</a>     
             <small class="text-secondary">|</small>
             <a href="/sim-run-batches">List sim run batches</a>
+
+            <span class="float-right">
+                Hello {{ Auth::user()->name }}
+                <small class="text-secondary">|</small>
+                <a href="/logout">Logout</a>
+            </span>            
         </div>        
     </body>
 </html>
