@@ -9,5 +9,13 @@ RUN chown -R www-data:www-data /var/www/html * \
     && chmod -R 777 /var/www/html/storage \
     && a2enmod rewrite \
     && docker-php-ext-install pdo pdo_mysql pcntl
+RUN apt-get update && apt-get install -y \
+    software-properties-common \    
+    npm \
+    git
+RUN npm install npm@latest -g && \
+    npm install n -g && \
+    n lts
+
 
 CMD ["/usr/local/bin/start"]
