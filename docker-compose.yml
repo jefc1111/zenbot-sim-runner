@@ -1,6 +1,6 @@
 version: "3"
 services:
-  app:
+  app: # connect to cmd line with `docker exec -ti laravel-www /bin/bash`
     image: laravel-www
     container_name: laravel-www
     build:
@@ -71,6 +71,12 @@ services:
       MYSQL_ROOT_PASSWORD: password 
       MYSQL_USER: zsr
       MYSQL_PASSWORD: zsrpw
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - ./database:/data/db
+    command: mongod --bind_ip=0.0.0.0 --logpath=/dev/null
 
 volumes:
   redis:
