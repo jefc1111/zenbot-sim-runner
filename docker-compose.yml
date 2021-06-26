@@ -77,7 +77,7 @@ services:
   mongodb:
     image: mongo:latest
     volumes:
-      - ./database:/data/db
+      - ./mongodb:/data/db
     command: mongod --bind_ip=0.0.0.0 --logpath=/dev/null
 
 volumes:
