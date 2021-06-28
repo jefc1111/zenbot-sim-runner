@@ -76,16 +76,20 @@ class SimRun extends Model
         return implode(' ', $this->cmd_components());
     }
 
+    private function cmd_primary_components(): array
+    {
+        return [
+            config('zenbot.node_executable'), 
+            config('zenbot.location').'/zenbot.js'
+        ]; 
+    }
+
     private function cmd_common_components(): array
     {
         $components = [
-            config('zenbot.node_executable'), 
-            config('zenbot.location').'/zenbot.js', 
             'sim',
             $this->sim_run_batch->get_selector(),
             "--strategy={$this->strategy->name}",
-            "--start={$this->sim_run_batch->start->format('Y-m-d')}", 
-            "--end={$this->sim_run_batch->end->format('Y-m-d')}",
             "--buy_pct={$this->sim_run_batch->buy_pct}",
             "--sell_pct={$this->sim_run_batch->sell_pct}",
             "--filename=none",
@@ -93,6 +97,14 @@ class SimRun extends Model
         ];
 
         return $components;
+    }
+
+    private function cmd_date_components(): array
+    {
+        return [
+            "--start={$this->sim_run_batch->start->format('Y-m-d')}", 
+            "--end={$this->sim_run_batch->end->format('Y-m-d')}"
+        ];
     }
 
     private function cmd_option_components(): array
@@ -108,7 +120,9 @@ class SimRun extends Model
     private function cmd_components(): array
     {
         return array_merge(
+            $this->cmd_primary_components(), 
             $this->cmd_common_components(), 
+            $this->cmd_date_components(),
             $this->cmd_option_components()
         );
     }
@@ -144,12 +158,32 @@ class SimRun extends Model
         
             $this->save();
         } else {
-            $this->log = implode($errored_output);    
+            $str_error_output = implode($errored_output);
+            
+            if (substr_count($str_error_output, "no trades found!") > 0) {                
+                // Need to backfill!
+                // ./zenbot.sh backfill binance.ADA-ETH --start=2021-06-15 --end=2021-06-16
+                $this->log = implode(' ', $this->backfill_cmd());
+            } else {
+                $this->log = $str_error_output;
+            }                
         
             $this->save();
-
+            
             throw new ProcessFailedException($process);
         }         
+    }
+
+    private function backfill_cmd(): array
+    {
+        return array_merge(
+            $this->cmd_primary_components(), 
+            [ 
+                "backfill", 
+                $this->sim_run_batch->get_selector() 
+            ],
+            $this->cmd_date_components()
+        );
     }
 
     private function extract_json_result(string $raw_cmd_output): object
