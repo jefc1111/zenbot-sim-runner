@@ -14,3 +14,4 @@ npm-debug.log
 yarn-error.log
 
 /hooks/hooks.json
+zenbot-conf.js
