@@ -15,14 +15,19 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
+use App\Jobs\Backfill;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\InvokesZenbot;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SimRunBatch extends Model
 {
     use HasFactory;
+    use InvokesZenbot;
 
     protected $guarded = ['id'];
 
@@ -265,6 +270,45 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
+    private function backfill_cmd_components(): array
+    {
+        return array_merge(
+            $this->cmd_primary_components(), 
+            [ 
+                "backfill", 
+                $this->get_selector() 
+            ],
+            $this->cmd_date_components($this, as_epoch: true)
+        );
+    }
+    
+    public function do_backfill()
+    {
+        $errored_output = [];
+
+        set_time_limit(900);
+        
+        $process = new Process($this->backfill_cmd_components());
+
+        $process->setWorkingDirectory(config('zenbot.location'));
+
+        $process->run(function($type, $buffer) use(&$errored_output) {
+            if (Process::ERR === $type) {
+                $errored_output[] = $buffer;
+            } else {
+                //$success_output[] = $buffer;
+            }
+        });
+
+        $success = $process->isSuccessful();
+
+        if ($success) {
+
+        } else {
+            throw new ProcessFailedException($process);
+        }
+    }
+
     public function run()
     {
         $that = $this;
@@ -272,25 +316,30 @@ class SimRunBatch extends Model
         // Maybe also want to check if best vs_buy_hold is an improvement on last time
         $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false) && $this->allow_autospawn;
 
-        $batch = Bus::batch(
-            $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
-        )->then(function(Batch $batch) {
-            $success = true;
-            // All jobs completed successfully...
-        })->catch(function(Batch $batch, Throwable $e) {
-            $success = false;
-            // First batch job failure detected...
-        })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
-            // The batch has finished executing...           
-            if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
-                // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
-                // attributes that 'lead on' from those in the batch that just compoleted. 
-                $new_batch = $that->spawn_child(); 
-
-                $new_batch->run();
-            }
-        })->dispatch();
+        Bus::chain([
+            new Backfill($this),
+            function () use($that, $auto_spawn_new_batch) {
+                Bus::batch(
+                    $that->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
+                )->then(function(Batch $batch) {
+                    $success = true;
+                    // All jobs completed successfully...
+                })->catch(function(Batch $batch, Throwable $e) {
+                    $success = false;
+                    // First batch job failure detected...
+                })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
+                    // The batch has finished executing...           
+                    if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
+                        // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
+                        // attributes that 'lead on' from those in the batch that just compoleted. 
+                        $new_batch = $that->spawn_child(); 
         
+                        $new_batch->run();
+                    }
+                })->dispatch();
+            },
+        ])->dispatch();
+
         return [
             'success' => true,
             'error' => 'error'

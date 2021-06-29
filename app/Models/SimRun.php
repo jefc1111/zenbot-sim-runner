@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\StrategyOption;
 use App\Models\Strategy;
 use App\Models\SimRunBatch;
-
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Traits\InvokesZenbot;
 
 class SimRun extends Model
 {
     use HasFactory;
+    use InvokesZenbot;
 
     protected $guarded = [
         'id'
@@ -45,6 +46,11 @@ class SimRun extends Model
         return $this->result ? $this->result['simresults'][$attr] : null;
     }
 
+    public function get_selector(): string
+    {
+        return $this->sim_run_batch->get_selector();
+    }
+
     public function result(string $attr): ?string
     {
         $res = $this->get_simresult_attr($attr);
@@ -71,40 +77,14 @@ class SimRun extends Model
         : $strategy_option->default;
     }
 
-    public function cmd(): string
+    private function cmd_components(): array
     {
-        return implode(' ', $this->cmd_components());
-    }
-
-    private function cmd_primary_components(): array
-    {
-        return [
-            config('zenbot.node_executable'), 
-            config('zenbot.location').'/zenbot.js'
-        ]; 
-    }
-
-    private function cmd_common_components(): array
-    {
-        $components = [
-            'sim',
-            $this->sim_run_batch->get_selector(),
-            "--strategy={$this->strategy->name}",
-            "--buy_pct={$this->sim_run_batch->buy_pct}",
-            "--sell_pct={$this->sim_run_batch->sell_pct}",
-            "--filename=none",
-            "--silent",
-        ];
-
-        return $components;
-    }
-
-    private function cmd_date_components(): array
-    {
-        return [
-            "--start={$this->sim_run_batch->start->format('Y-m-d')}", 
-            "--end={$this->sim_run_batch->end->format('Y-m-d')}"
-        ];
+        return array_merge(
+            $this->cmd_primary_components(), 
+            $this->cmd_common_components(), 
+            $this->cmd_date_components($this->sim_run_batch),
+            $this->cmd_option_components()
+        );
     }
 
     private function cmd_option_components(): array
@@ -117,14 +97,24 @@ class SimRun extends Model
         ->map(fn($o) => "--$o->name={$o->value}")->toArray();
     }
 
-    private function cmd_components(): array
+    public function cmd(): string
     {
-        return array_merge(
-            $this->cmd_primary_components(), 
-            $this->cmd_common_components(), 
-            $this->cmd_date_components(),
-            $this->cmd_option_components()
-        );
+        return implode(' ', $this->cmd_components());
+    }
+
+    private function cmd_common_components(): array
+    {
+        $components = [
+            'sim',
+            $this->get_selector(),
+            "--strategy={$this->strategy->name}",
+            "--buy_pct={$this->sim_run_batch->buy_pct}",
+            "--sell_pct={$this->sim_run_batch->sell_pct}",
+            "--filename=none",
+            "--silent",
+        ];
+
+        return $components;
     }
 
     public function run()
@@ -160,30 +150,22 @@ class SimRun extends Model
         } else {
             $str_error_output = implode($errored_output);
             
+            /*
             if (substr_count($str_error_output, "no trades found!") > 0) {                
                 // Need to backfill!
                 // ./zenbot.sh backfill binance.ADA-ETH --start=2021-06-15 --end=2021-06-16
                 $this->log = implode(' ', $this->backfill_cmd());
             } else {
                 $this->log = $str_error_output;
-            }                
+            } 
+            */
+
+            $this->log = $str_error_output;
         
             $this->save();
             
             throw new ProcessFailedException($process);
         }         
-    }
-
-    private function backfill_cmd(): array
-    {
-        return array_merge(
-            $this->cmd_primary_components(), 
-            [ 
-                "backfill", 
-                $this->sim_run_batch->get_selector() 
-            ],
-            $this->cmd_date_components()
-        );
     }
 
     private function extract_json_result(string $raw_cmd_output): object
