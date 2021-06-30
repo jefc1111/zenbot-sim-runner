@@ -119,12 +119,11 @@ class SimRun extends Model
 
     public function run()
     {
-        $errored_output = [];
-
-        set_time_limit(900);
+        $errored_output = [];        
 
         $process = new Process($this->cmd_components());
 
+        set_time_limit(900);
         $process->setTimeout(900);
 
         $process->setWorkingDirectory(config('zenbot.location'));

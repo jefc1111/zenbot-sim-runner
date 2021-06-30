@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserIdToSimRunBatchesTable extends Migration
+class AddStatusToSimRunBatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddUserIdToSimRunBatchesTable extends Migration
     public function up()
     {
         Schema::table('sim_run_batches', function (Blueprint $table) {
-            $table->integer('user_id')->after('id');
+            $table->string('status')->after('user_id')->default('ready');
         });
     }
 
@@ -26,7 +26,7 @@ class AddUserIdToSimRunBatchesTable extends Migration
     public function down()
     {
         Schema::table('sim_run_batches', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropColumn('status');
         });
     }
 }

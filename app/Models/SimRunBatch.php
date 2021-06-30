@@ -39,6 +39,29 @@ class SimRunBatch extends Model
         'deleted_at'
     ];
 
+    public $statuses = [
+        'ready' => [
+            'label' => 'ready to run',
+            'style' => 'secondary'
+        ],
+        'backfilling' => [
+            'label' => 'backfilling',
+            'style' => 'primary'
+        ],
+        'running' => [
+            'label' => 'running simulations',
+            'style' => 'primary'
+        ],
+        'complete' => [
+            'label' => 'complete',
+            'style' => 'success'
+        ],
+        'error' => [
+            'label' => 'error',
+            'style' => 'danger'
+        ],
+    ];
+
     public function setAllowAutospawnAttribute($value)
     {
         $this->attributes['allow_autospawn'] = $value === 'on' || $value == 1 || $value === 'true';
@@ -282,13 +305,27 @@ class SimRunBatch extends Model
         );
     }
     
+    private function set_status(string $status): void
+    {
+        if (array_key_exists($status, $this->statuses)) {
+            $this->status = $status;
+
+            $this->save();
+        } else {
+            \Log::error("Sim run batch status {$status} not found.");
+        }
+    }
+
     public function do_backfill()
     {
-        $errored_output = [];
+        $this->set_status('backfilling');
 
-        set_time_limit(900);
+        $errored_output = [];
         
         $process = new Process($this->backfill_cmd_components());
+
+        set_time_limit(900);
+        $process->setTimeout(900);
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
@@ -319,6 +356,8 @@ class SimRunBatch extends Model
         Bus::chain([
             new Backfill($this),
             function () use($that, $auto_spawn_new_batch) {
+                $that->set_status('running');
+
                 Bus::batch(
                     $that->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
                 )->then(function(Batch $batch) {
@@ -326,8 +365,12 @@ class SimRunBatch extends Model
                     // All jobs completed successfully...
                 })->catch(function(Batch $batch, Throwable $e) {
                     $success = false;
+
+                    $that->set_status('error');
                     // First batch job failure detected...
                 })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
+                    $that->set_status('complete');
+
                     // The batch has finished executing...           
                     if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
                         // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
@@ -359,6 +402,11 @@ class SimRunBatch extends Model
     public function percent_complete(): int
     {
         return $this->sim_runs->isEmpty() ? 0 : ($this->qty_complete() / $this->sim_runs->count()) * 100;
+    }
+
+    public function is_complete(): bool
+    {
+        return $this->qty_complete() === $this->sim_runs->count();
     }
 
     public function best_vs_buy_hold()
