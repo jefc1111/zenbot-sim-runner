@@ -50,7 +50,14 @@
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
                 <div class="row">
-                    <button style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">Run</button>    
+                    <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">
+                        Run
+                    </button>
+                    @if(! Auth::user()->has_sim_time())
+                    <span style="padding: 16px 0 0 4px; " class="text-danger">                        
+                        You do not have enough sim time to run simulations.
+                    </class>
+                    @endif
                 </div>          
                 <div class="row">
                     <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
@@ -91,7 +98,7 @@
                 if (! res.success) {
                     
                 } else {
-                    //location.reload();
+                    
                 }                
             });
         });

@@ -25,12 +25,17 @@
             <small class="text-secondary">|</small>
             <a href="/exchanges">List exchanges</a>  
             <small class="text-secondary">|</small>
-            <a href="/strategy-options">List strategy options</a>     
+            <a href="/strategy-options">List strategy options</a>
             <small class="text-secondary">|</small>
             <a href="/sim-run-batches">List sim run batches</a>
 
             <span class="float-right">
-                Hello {{ Auth::user()->name }}
+                Hello {{ Auth::user()->name }} 
+                (available sim time 
+                <span class="{{ Auth::user()->available_sim_time_class() }}">
+                    {{ Auth::user()->available_sim_time() }}
+                </span>
+                )
                 <small class="text-secondary">|</small>
                 <a href="/logout">Logout</a>
             </span>            

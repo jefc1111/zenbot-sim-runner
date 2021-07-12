@@ -46,4 +46,28 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasMany(SimRunBatch::class);
     }
+
+    public function available_sim_time()
+    {
+        return ($this->available_seconds < 0 ? '-' : null)
+        .gmdate("H:i:s", abs($this->available_seconds));
+    }
+
+    public function available_sim_time_class()
+    {
+        if ($this->available_seconds < 0) {
+            return 'text-danger';
+        }
+
+        if ($this->available_seconds >= 0 && $this->available_seconds < 60) {
+            return 'text-danger';
+        }
+
+        return 'text-success';
+    }
+
+    public function has_sim_time()
+    {
+        return $this->available_seconds > 60;
+    }
 }

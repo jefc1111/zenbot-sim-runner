@@ -119,6 +119,8 @@ class SimRun extends Model
 
     public function run()
     {
+        $start_time = time();
+
         $errored_output = [];        
 
         $process = new Process($this->cmd_components());
@@ -142,6 +144,12 @@ class SimRun extends Model
 
         $success = $process->isSuccessful();
 
+        $this->runtime = time() - $start_time;
+
+        $this->sim_run_batch->user->available_seconds = $this->sim_run_batch->user->available_seconds - $this->runtime;
+
+        $this->sim_run_batch->user->save();
+
         if ($success) {
             $this->result = $this->extract_json_result($process->getOutput());    
         
@@ -149,16 +157,6 @@ class SimRun extends Model
         } else {
             $str_error_output = implode($errored_output);
             
-            /*
-            if (substr_count($str_error_output, "no trades found!") > 0) {                
-                // Need to backfill!
-                // ./zenbot.sh backfill binance.ADA-ETH --start=2021-06-15 --end=2021-06-16
-                $this->log = implode(' ', $this->backfill_cmd());
-            } else {
-                $this->log = $str_error_output;
-            } 
-            */
-
             $this->log = $str_error_output;
         
             $this->save();
