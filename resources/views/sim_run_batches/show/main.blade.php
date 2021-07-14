@@ -51,12 +51,14 @@
                 </div>      
                 <div class="row">
                     <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">
-                        Initiate batch
+                        Initiate batch <ion-icon name="play"></ion-icon>
                     </button>                    
                     @include('shared.no_sim_time_warning')                    
                 </div>          
                 <div class="row">
-                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
+                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">
+                        Copy <ion-icon name="copy"></ion-icon>
+                    </a>
                     <span style="padding: 16px 0 0 4px; " class="text-muted">
                         Copy basic batch info only. Strategies can be selected and refined after copying.
                     </class>
