@@ -383,9 +383,11 @@ class SimRunBatch extends Model
             },
         ])->dispatch();
 
+        $queue_size = \Queue::size();
+
         return [
             'success' => true,
-            'error' => 'error'
+            'msg' => "Submitted to queue ($queue_size jobs in queue)"
         ];
     }
 

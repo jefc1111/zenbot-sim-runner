@@ -51,13 +51,9 @@
                 </div>      
                 <div class="row">
                     <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">
-                        Run
-                    </button>
-                    @if(! Auth::user()->has_sim_time())
-                    <span style="padding: 16px 0 0 4px; " class="text-danger">                        
-                        You do not have enough sim time to run simulations.
-                    </class>
-                    @endif
+                        Initiate batch
+                    </button>                    
+                    @include('shared.no_sim_time_warning')                    
                 </div>          
                 <div class="row">
                     <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
@@ -95,11 +91,7 @@
     <script>
         $("#run").click(function() {
             $.get("/sim-run-batches/run/{{ $batch->id }}", function(res) {
-                if (! res.success) {
-                    
-                } else {
-                    
-                }                
+                alert(res.msg)          
             });
         });
 

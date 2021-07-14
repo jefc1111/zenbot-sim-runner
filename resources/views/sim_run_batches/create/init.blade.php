@@ -79,13 +79,8 @@
     </form>    
 
     <script>
-        $(document).ready(function() {
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
-
-            // https//stackoverflow.com/a/16654226
-            (function($, window) {
+                    // https//stackoverflow.com/a/16654226
+                    (function($, window) {
                 $.fn.replaceOptions = function(options) {
                     var self, $option;
 
@@ -100,6 +95,13 @@
                     });
                 };
             })($, window);
+
+        $(document).ready(function() {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
+
 
             $("select#exchange_id").change(function() {
                 const exchangeId = $(this).val();

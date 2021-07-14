@@ -190,13 +190,20 @@ class SimRunBatchController extends Controller
 
     public function run($id)
     {
+        if (! \Auth::user()->has_sim_time()) {
+            return [
+                'success' => false,
+                'msg' => "You do not have sufficient sim time available"
+            ];
+        }
+        
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
         if ($sim_run_batch->user_id != Auth::user()->id) {
             abort(403);
         }
 
-        $sim_run_batch->run();
+        return $sim_run_batch->run();
     }
 
     public function spawn_child_from($id)
