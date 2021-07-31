@@ -102,6 +102,27 @@ class SimRunBatch extends Model
         return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
     }
 
+    private function auto_generate_name(): string
+    {
+        function ordinal($number) {
+            $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+            
+            return $number.(
+                ((($number % 100) >= 11) && (($number%100) <= 13))
+                ? 'th'
+                : $ends[$number % 10]
+            );
+        }
+
+        $batch_ancestry_list = $this->batch_ancestry_list();
+
+        $original_name = $batch_ancestry_list->isEmpty() 
+        ? $this->name 
+        : $batch_ancestry_list->first()->name;
+
+        return ordinal($batch_ancestry_list->count() + 1).' child of '.$original_name;
+    }
+
     public function spawn_child()
     {
         $faked_input_data = [];
@@ -117,7 +138,7 @@ class SimRunBatch extends Model
         $child_batch = SimRunBatch::create(array_merge(
             \Arr::except($this->attributesToArray(), ['name', 'created_at', 'updated_at']),             
             [ 
-                'name' => '1st child of '.$this->name, 
+                'name' => $this->auto_generate_name(), 
                 'parent_batch_id' => $this->id 
             ]
         ));
@@ -520,12 +541,16 @@ class SimRunBatch extends Model
 
     private function batch_ancestry_list(): \Illuminate\Support\Collection
     {
-        return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
+        return $this->parent_batch 
+        ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) 
+        : collect([]);
     }
 
     private function batch_descendant_list(): \Illuminate\Support\Collection
     {
-        return $this->child_batch ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) : collect([]);
+        return $this->child_batch 
+        ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) 
+        : collect([]);
     }
 
     public function batch_ancestry_and_descendants(): \Illuminate\Support\Collection
