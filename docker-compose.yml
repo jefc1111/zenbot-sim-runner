@@ -56,8 +56,8 @@ services:
   redis:
     container_name: laravel-redis
     image: redis:4-alpine
-    ports:
-      - 16379:6379
+    expose:
+      - 6379
     volumes:
       - redis:/data
 
