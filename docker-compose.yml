@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      APP_ENV: local
+      #APP_ENV: local
       CONTAINER_ROLE: app
       CACHE_DRIVER: redis
       SESSION_DRIVER: redis
@@ -30,7 +30,7 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      APP_ENV: local
+      #APP_ENV: local
       CONTAINER_ROLE: scheduler
       CACHE_DRIVER: redis
       SESSION_DRIVER: redis
@@ -45,7 +45,7 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      APP_ENV: local
+      #APP_ENV: local
       CONTAINER_ROLE: queue
       CACHE_DRIVER: redis
       SESSION_DRIVER: redis
