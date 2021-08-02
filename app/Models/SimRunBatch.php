@@ -345,8 +345,8 @@ class SimRunBatch extends Model
         
         $process = new Process($this->backfill_cmd_components());
 
-        set_time_limit(900);
-        $process->setTimeout(900);
+        set_time_limit(1800);
+        $process->setTimeout(1800);
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
