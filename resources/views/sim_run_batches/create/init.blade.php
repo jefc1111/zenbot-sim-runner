@@ -19,7 +19,7 @@
             <div class="col-sm-4">
                 <select name="exchange_id" id="exchange_id" class="form-control">
                     @foreach($exchanges as $exchange)
-                    <option value="{{ $exchange->id }}">{{ $exchange->name }}</option>
+                    <option {{ $exchange->enabled ? null : 'disabled' }} value="{{ $exchange->id }}">{{ $exchange->name }}</option>
                     @endforeach
                 </select>
             </div>
