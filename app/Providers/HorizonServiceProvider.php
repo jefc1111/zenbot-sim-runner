@@ -39,4 +39,16 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
             ]);
         });
     }
+
+    // Overrides fucntion in vendor/laravel/horizon/src/HorizonApplicationServiceProvider.php
+    protected function authorization()
+    {        
+        $this->gate();
+        
+        Horizon::auth(function ($request) {
+            return //app()->environment('local') ||
+                   //Gate::check('viewHorizon', [$request->user()]);
+                   \Auth::user()->hasRole('admin');
+        });
+    }
 }
