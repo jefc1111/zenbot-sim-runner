@@ -18,6 +18,7 @@
                     <a href="/">Zenbot sim runner</a>
                 </h1>
             </div>
+            @include('shared.private_beta_warning')
             <hr />        
             {{ $slot }}
             <hr />
@@ -41,6 +42,6 @@
                 <small class="text-secondary">|</small>
                 <a href="/logout">Logout</a>
             </span>            
-        </div>        
+        </div>       
     </body>
 </html>
