@@ -22,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        \Log::error($this->app->environment());
-        //if ($this->app->environment('production')) {
+    {   
+        \Log::error(env('APP_URL'));
+        if (str_contains(env('APP_URL'), 'https')) {
             \URL::forceScheme('https');
-        //}
+        }
     }
 }
