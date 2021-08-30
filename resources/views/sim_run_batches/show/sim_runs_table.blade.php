@@ -4,7 +4,8 @@
             <th>id</th>
             <th>Strategy</th>
             <th>Qty trades</th>
-            <th>Profit</th>                
+            <th>Profit</th>  
+            <!-- <th>Buy hold Profit</th> -->
             <th>vs. buy hold</th>
         </tr>
     </thead>
@@ -18,7 +19,8 @@
                 <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
             </td>
             <td>{{ $sim_run->result('total_trades') }}</td>
-            <td>{{ $sim_run->result_pct('profit', 4) }}</td>
+            <td>{{ $sim_run->result_conv_pct('profit', 4) }}</td>
+            <!-- <td>{{ $sim_run->result_conv_pct('buy_hold_profit', 4) }}</td> -->
             <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
         </tr>
         @endforeach
