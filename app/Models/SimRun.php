@@ -58,6 +58,13 @@ class SimRun extends Model
 
         return ! is_null($res) ? round($res, $precision)."%" : null;
     }
+    
+    public function result_conv_pct(string $attr, int $precision = 2): ?string 
+    {
+        $res = $this->get_simresult_attr($attr) * 100;
+
+        return ! is_null($res) ? round($res, $precision)."%" : null;
+    }
 
     public function set_unsaved_strategy_option_data(array $strategy_option_data): void
     {
