@@ -115,7 +115,7 @@ class SimRunBatchController extends Controller
     {
         $batch = SimRunBatch::findOrFail($id);
 
-        if ($batch->user_id != Auth::user()->id) {
+        if (! Auth::user()->hasRole('admin') && $batch->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -201,7 +201,7 @@ class SimRunBatchController extends Controller
         
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
-        if ($sim_run_batch->user_id != Auth::user()->id) {
+        if (! Auth::user()->hasRole('admin') && $sim_run_batch->user_id != Auth::user()->id) {
             abort(403);
         }
 
@@ -212,7 +212,7 @@ class SimRunBatchController extends Controller
     {
         $source_batch = SimRunBatch::findOrFail($id);
 
-        if ($source_batch->user_id != Auth::user()->id) {
+        if (! Auth::user()->hasRole('admin') && $source_batch->user_id != Auth::user()->id) {
             abort(403);
         }
 
