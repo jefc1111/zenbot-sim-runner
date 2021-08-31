@@ -20,7 +20,7 @@
         yAxis: [                    
             {
                 title: {
-                    text: 'Vs buy & hold'
+                    text: 'Profit / Vs buy & hold'
                 },
                 opposite: true
             },
@@ -39,17 +39,24 @@
             @endforeach
         ],
         series: [{
+            name: 'Profit',
+            yAxis: 0,
+            type: 'area',                    
+            opacity: 0.2,
+            data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (float) $sr->result('profit')*100)->values()) !!}
+        },
+        {
             name: 'Vs by hold',
             yAxis: 0,
             type: 'area',                    
             opacity: 0.2,
             data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
-        }, 
+        } 
         {
             name: 'Qty trades',
             yAxis: 1,
             type: 'column',
-            opacity: 0.2,
+            opacity: 0.5,
             data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
         }, 
         @foreach($batch->get_varying_strategy_options()->values() as $k => $opt)
