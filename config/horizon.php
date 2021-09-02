@@ -170,7 +170,7 @@ return [
             'queue' => ['default'],
             'balance' => 'auto',
             'maxProcesses' => 1,
-            'memory' => 4096,
+            'memory' => 2048,
             'tries' => 1,
             'nice' => 0,
             'timeout' => 14400
