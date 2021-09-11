@@ -19,7 +19,7 @@
             <div class="col-sm-4">
                 <select name="exchange_id" id="exchange_id" class="form-control">
                     @foreach($exchanges as $exchange)
-                    <option value="{{ $exchange->id }}">{{ $exchange->name }}</option>
+                    <option {{ $exchange->enabled ? null : 'disabled' }} value="{{ $exchange->id }}">{{ $exchange->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -49,7 +49,7 @@
             <div class="col-sm-4">
                 <input value="75" type="number" id="buy_pct" name="buy_pct" class="form-control">            
             </div>
-            <label for="end" class="col-sm-2 col-form-label"">Sell % </label>
+            <label for="end" class="col-sm-2 col-form-label">Sell % </label>
             <div class="col-sm-4">
                 <input value="75" type="number" id="sell_pct" name="sell_pct" class="form-control">
             </div>    
@@ -59,33 +59,35 @@
             <div class="col-sm-10">
                 <div class="form-check">
                     <input 
-                        {{ $autospawn_checkbox_enabled ? 'checked' : 'disabled' }} 
+                        {{ $autospawn_checkbox_enabled ? '' : 'disabled' }} 
                         name="allow_autospawn" 
                         type="checkbox" 
                         class="form-check-input" 
-                        id="exampleCheck1"
-                    >
-                    <label 
+                        id="allow_autospawn"
+                        autocomplete="off"
+                    >                    
+                    <label
+                        @if(! $autospawn_checkbox_enabled) 
                         title="This feature is disabled" 
                         data-placement="bottom" 
-                        data-toggle="tooltip" 
+                        data-toggle="tooltip"
+                        @endif 
                         class="form-check-label" 
-                        for="exampleCheck1">Allow auto-spawning of child batches
-                    </label>
+                        for="allow_autospawn">Allow auto-spawning of child batches
+                    </label>                    
                 </div>
+                <p class="text-danger">
+                    <ion-icon name="warning-outline"></ion-icon>
+                    If selected, Zenbot Sim Runner will attempt to auto-create new batches using the results of the previous batch. This is an expermimental feature and can lead to unpredictable consunmption of available sim time.
+                </p>
             </div>
         </div>
         <input class="btn btn-primary" type="submit" value="Select strategies">
     </form>    
 
     <script>
-        $(document).ready(function() {
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
-
-            // https//stackoverflow.com/a/16654226
-            (function($, window) {
+                    // https//stackoverflow.com/a/16654226
+                    (function($, window) {
                 $.fn.replaceOptions = function(options) {
                     var self, $option;
 
@@ -100,6 +102,13 @@
                     });
                 };
             })($, window);
+
+        $(document).ready(function() {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
+
 
             $("select#exchange_id").change(function() {
                 const exchangeId = $(this).val();

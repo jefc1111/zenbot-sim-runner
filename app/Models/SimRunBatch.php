@@ -9,18 +9,25 @@ use App\Models\StrategyOption;
 use App\Models\SimRun;
 use App\Models\Exchange;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\NextBatchRecommendation;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Jobs\ProcessSimRun;
+use App\Jobs\Backfill;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\InvokesZenbot;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SimRunBatch extends Model
 {
     use HasFactory;
+    use InvokesZenbot;
 
     protected $guarded = ['id'];
 
@@ -32,6 +39,29 @@ class SimRunBatch extends Model
         'deleted_at'
     ];
 
+    public $statuses = [
+        'ready' => [
+            'label' => 'ready to run',
+            'style' => 'secondary'
+        ],
+        'backfilling' => [
+            'label' => 'backfilling',
+            'style' => 'primary'
+        ],
+        'running' => [
+            'label' => 'running simulations',
+            'style' => 'primary'
+        ],
+        'complete' => [
+            'label' => 'complete',
+            'style' => 'success'
+        ],
+        'error' => [
+            'label' => 'error',
+            'style' => 'danger'
+        ],
+    ];
+
     public function setAllowAutospawnAttribute($value)
     {
         $this->attributes['allow_autospawn'] = $value === 'on' || $value == 1 || $value === 'true';
@@ -40,6 +70,11 @@ class SimRunBatch extends Model
     public function truncated_name($qty_chars = 30): string
     {
         return Str::limit($this->name, $qty_chars, ' (...)'); 
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function sim_runs()
@@ -67,6 +102,27 @@ class SimRunBatch extends Model
         return $this->hasOne('App\Models\SimRunBatch', 'parent_batch_id');
     }
 
+    private function auto_generate_name(): string
+    {
+        function ordinal($number) {
+            $ends = array('th','st','nd','rd','th','th','th','th','th','th');
+            
+            return $number.(
+                ((($number % 100) >= 11) && (($number%100) <= 13))
+                ? 'th'
+                : $ends[$number % 10]
+            );
+        }
+
+        $batch_ancestry_list = $this->batch_ancestry_list();
+
+        $original_name = $batch_ancestry_list->isEmpty() 
+        ? $this->name 
+        : $batch_ancestry_list->first()->name;
+
+        return ordinal($batch_ancestry_list->count() + 1).' child of '.$original_name;
+    }
+
     public function spawn_child()
     {
         $faked_input_data = [];
@@ -82,7 +138,7 @@ class SimRunBatch extends Model
         $child_batch = SimRunBatch::create(array_merge(
             \Arr::except($this->attributesToArray(), ['name', 'created_at', 'updated_at']),             
             [ 
-                'name' => '1st child of '.$this->name, 
+                'name' => $this->auto_generate_name(), 
                 'parent_batch_id' => $this->id 
             ]
         ));
@@ -258,6 +314,59 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
+    private function backfill_cmd_components(): array
+    {
+        return array_merge(
+            $this->cmd_primary_components(), 
+            [ 
+                "backfill", 
+                $this->get_selector() 
+            ],
+            $this->cmd_date_components($this, as_epoch: true)
+        );
+    }
+    
+    private function set_status(string $status): void
+    {
+        if (array_key_exists($status, $this->statuses)) {
+            $this->status = $status;
+
+            $this->save();
+        } else {
+            \Log::error("Sim run batch status {$status} not found.");
+        }
+    }
+
+    public function do_backfill()
+    {
+        $this->set_status('backfilling');
+
+        $errored_output = [];
+        
+        $process = new Process($this->backfill_cmd_components());
+
+        set_time_limit(1800);
+        $process->setTimeout(1800);
+
+        $process->setWorkingDirectory(config('zenbot.location'));
+
+        $process->run(function($type, $buffer) use(&$errored_output) {
+            if (Process::ERR === $type) {
+                $errored_output[] = $buffer;
+            } else {
+                //$success_output[] = $buffer;
+            }
+        });
+
+        $success = $process->isSuccessful();
+
+        if ($success) {
+
+        } else {
+            throw new ProcessFailedException($process);
+        }
+    }
+
     public function run()
     {
         $that = $this;
@@ -265,28 +374,41 @@ class SimRunBatch extends Model
         // Maybe also want to check if best vs_buy_hold is an improvement on last time
         $auto_spawn_new_batch = env('AUTO_SPAWN_BATCHES', false) && $this->allow_autospawn;
 
-        $batch = Bus::batch(
-            $this->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
-        )->then(function(Batch $batch) {
-            $success = true;
-            // All jobs completed successfully...
-        })->catch(function(Batch $batch, Throwable $e) {
-            $success = false;
-            // First batch job failure detected...
-        })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
-            // The batch has finished executing...           
-            if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
-                // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
-                // attributes that 'lead on' from those in the batch that just compoleted. 
-                $new_batch = $that->spawn_child(); 
+        Bus::chain([
+            new Backfill($this),
+            function () use($that, $auto_spawn_new_batch) {
+                $that->set_status('running');
 
-                $new_batch->run();
-            }
-        })->dispatch();
+                Bus::batch(
+                    $that->sim_runs->map(fn($sr) => new ProcessSimRun($sr))
+                )->then(function(Batch $batch) {
+                    $success = true;
+                    // All jobs completed successfully...
+                })->catch(function(Batch $batch, Throwable $e) {
+                    $success = false;
+
+                    $that->set_status('error');
+                    // First batch job failure detected...
+                })->finally(function(Batch $batch) use($that, $auto_spawn_new_batch) {
+                    $that->set_status('complete');
+
+                    // The batch has finished executing...           
+                    if ($auto_spawn_new_batch && ! $that->no_recommendation_possible()) {
+                        // Analyses the batch that just completed and attempts to create a new batch of sim runs with 
+                        // attributes that 'lead on' from those in the batch that just compoleted. 
+                        $new_batch = $that->spawn_child(); 
         
+                        $new_batch->run();
+                    }
+                })->dispatch();
+            },
+        ])->dispatch();
+
+        $queue_size = \Queue::size();
+
         return [
             'success' => true,
-            'error' => 'error'
+            'msg' => "Submitted to queue ($queue_size jobs in queue)"
         ];
     }
 
@@ -303,6 +425,11 @@ class SimRunBatch extends Model
     public function percent_complete(): int
     {
         return $this->sim_runs->isEmpty() ? 0 : ($this->qty_complete() / $this->sim_runs->count()) * 100;
+    }
+
+    public function is_complete(): bool
+    {
+        return $this->qty_complete() === $this->sim_runs->count();
     }
 
     public function best_vs_buy_hold()
@@ -414,12 +541,16 @@ class SimRunBatch extends Model
 
     private function batch_ancestry_list(): \Illuminate\Support\Collection
     {
-        return $this->parent_batch ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) : collect([]);
+        return $this->parent_batch 
+        ? collect([$this->parent_batch])->merge($this->parent_batch->batch_ancestry_list()) 
+        : collect([]);
     }
 
     private function batch_descendant_list(): \Illuminate\Support\Collection
     {
-        return $this->child_batch ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) : collect([]);
+        return $this->child_batch 
+        ? collect([$this->child_batch])->merge($this->child_batch->batch_descendant_list()) 
+        : collect([]);
     }
 
     public function batch_ancestry_and_descendants(): \Illuminate\Support\Collection

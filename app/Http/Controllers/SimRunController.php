@@ -90,6 +90,20 @@ class SimRunController extends Controller
     {
         $sim_run = SimRun::findOrFail($id);
 
+        if (! \Auth::user()->has_sim_time()) {
+            return [
+                'success' => false,
+                'msg' => "You do not have sufficient sim time available"
+            ];
+        }
+        
         ProcessSimRun::dispatch($sim_run);
+        
+        $queue_size = \Queue::size();
+
+        return [
+            'success' => true,
+            'msg' => "Sim run submitted to queue in position $queue_size"
+        ];
     }
 }

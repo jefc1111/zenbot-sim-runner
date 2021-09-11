@@ -10,7 +10,7 @@ class StrategyOptionController extends Controller
 {
     public function index()
     {
-        return view('list_strategy_options', ['strategy_options' => StrategyOption::all()]);
+        return view('strategies.list_strategy_options', ['strategy_options' => StrategyOption::all()]);
     }
 
     /*
