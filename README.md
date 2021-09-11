@@ -8,11 +8,10 @@
 
   <p align="center">
     A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and subsequent analysis of results.
-    <br />
-    <a href="https://discord.com/channels/880347822854115328/880347822854115331">
-      Discord
-    </a>
   </p>
+  <h3>
+    If you are interested in this project please contact me here in Github or hit me up on <a href="https://discord.com/channels/880347822854115328/880347822854115331">Discord</a>.
+  </h3>
 </p>
 
 
