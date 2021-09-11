@@ -1,21 +1,4 @@
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-<!--
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
--->
-<!-- PROJECT LOGO -->
-<br />
+
 <p align="center">
   <a href="https://github.com/jefc1111/zenbot-sim-runner">
     <img src="readme_images/logo_200x200.png" alt="Logo" width="200" height="200">
@@ -61,22 +44,7 @@
   </ol>
 </details>
 
-
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
-
-![product-screenshot][product-screenshot]
-![product-screenshot-1][product-screenshot-1]
-![product-screenshot-2][product-screenshot-2]
-![product-screenshot-3][product-screenshot-3]
-![product-screenshot-4][product-screenshot-4]
-![product-screenshot-5][product-screenshot-5]
-![product-screenshot-6][product-screenshot-6]
-![product-screenshot-7][product-screenshot-7]
-![product-screenshot-7][product-screenshot-8]
-![product-screenshot-7][product-screenshot-9]
-
 This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import various data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
 
 I built this because:
@@ -98,67 +66,22 @@ This project is basded on the PHP framework Laravel. In particular, it uses Lara
 * [Highcharts](https://www.highcharts.com/)
 
 
-<!-- GETTING STARTED -->
 ## Getting Started
 
-This section is a work in progress :)
-
-I am running this on Manjaro Linux but it doesn't have any very exotic dependencies so it should run on any mainstream OS.  
-
-in a nutshell, you need to install the dependencies, tell it where your working instance of Zenbot is, import some data from Zenbot and away you go!
+`docker-compose up` then work through all the issues that arise! (seriously, if you are trying this then just give me a shout if you get stuck)
 
 ### Prerequisites
 
 * Zenbot  
   This project is meaningless without it!  
   https://github.com/DeviaVir/zenbot
-* npm  
-  You probably already have npm installed if you have a working copy of Zenbot!
-* composer (PHP dependency manager)  
-  https://getcomposer.org/download/
-* MySQL / MariaDB  
-  I installed MariaDB on Manjaro. You may prefer to use a db in the cloud, or MySQL on Ubuntu etc etc. You could probably use MSSQL Server and maybe others because Laravel provides a layer of abstraction between the DB and the app code. I have only tested wiyth MariaDB.  
+* MySQL
 * Redis  
-  https://redis.io/topics/quickstart
-
-*Note:* Zenbot Sim Runner does not deal with backfilling - you need to do this directly from Zenbot before running any relevant sim runs.
-
+  
 ### Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/jefc1111/zenbot-sim-runner.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Install composer packages 
-   ```sh
-   composer install
-   ```
-4. Build front end bundle  
-   ```sh
-   npm run dev
-   ```
-5. Create database tables
-   ```sh
-   php artisan migrate
-   ```
-6. Set your queue connection to 'redis'. In Laravel's `.env` by adding `QUEUE_CONNECTION=redis`. In the absence of that line it will default to `sync` (which can be more convenient for troubleshooting etc).
- 
-7. Start the app using PHP's built in web server (alternatively you could run it on an Apache or nginx web server)
-   ```sh
-   php artisan serve
-   ```
-In my own dev environment right now I have to run three commands to get things working;
-```sh
-redis-server
-php artisan horizon
-php artisan serve
-```
+See 'Getting Started'
 
-<!-- USAGE EXAMPLES -->
 ## Usage
 
 Work in progress
@@ -170,23 +93,14 @@ Work in progress
 5. View results
 6. Copy batch details
 
-
-
-<!-- ROADMAP -->
 ## Roadmap
 
 [Project Trello board](https://trello.com/b/xlTinWNf/zenbot-sim-runner)
 
-
-
-<!-- LICENSE -->
 ## License
 
 Distributed under the MIT License.
 
-
-
-<!-- CONTACT -->
 ## Contact
 
 Geoff - jefc_uk@hotmail.com
