@@ -9,10 +9,7 @@
   <p align="center">
     A sim run batch aggregator / automator for <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Eases the process of backtesting and subsequent analysis of results.
     <br />
-    ·
-    <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/jefc1111/zenbot-sim-runner/issues">Request Feature</a>
+    [https://discord.com/channels/880347822854115328/880347822854115331](Discord)
   </p>
 </p>
 
@@ -36,7 +33,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a><strong> - work in progress</strong></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -48,7 +44,7 @@
 This application is a companion to the cryptocurrency trading bot <a href="https://github.com/DeviaVir/zenbot">Zenbot</a>. Zenbot Sim Runner is able to import various data from Zenbot and then automate the running of simulations across multiple variations of multiple strategies.
 
 I built this because:
-* Testing and refining strategies is key to profitable use of a trading bot.
+* Testing and refining strategies might be a key component in an individual's journey towards any kind of live trading.
 * Zenbot's built in default functionality allows running of only simulation at a time, so tweaking parameters for comparison is laborious.
 * Zenbot stores simulation results in a format which does not easily allow comparison across multiple simulations. 
 
@@ -93,18 +89,13 @@ Work in progress
 5. View results
 6. Copy batch details
 
-## Roadmap
-
-[Project Trello board](https://trello.com/b/xlTinWNf/zenbot-sim-runner)
-
 ## License
 
 Distributed under the MIT License.
 
 ## Contact
 
-Geoff - jefc_uk@hotmail.com
-
+Discord: [https://discord.com/channels/880347822854115328/880347822854115331](https://discord.com/channels/880347822854115328/880347822854115331)
 Project Link: [https://github.com/jefc1111/zenbot-sim-runner](https://github.com/jefc1111/zenbot-sim-runner)
 
 
