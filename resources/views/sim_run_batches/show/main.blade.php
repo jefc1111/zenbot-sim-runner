@@ -14,7 +14,15 @@
             
         </div>
         <div style="text-align: right; " class="text-muted col-md-6">
-            <small><span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">{{ $batch->percent_complete() }}% complete</span> ({{ $batch->qty_errored() }} errored)</small>
+            <small>
+                status: <span class="text-{{ $batch->statuses[$batch->status]['style'] }}">{{ $batch->status }}</span> 
+                @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))
+                |
+                <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
+                    {{ $batch->percent_complete() }}% complete
+                </span> ({{ $batch->qty_errored() }} errored)
+                @endif
+            </small>
         </div>
     </div>
     <div class="">
@@ -26,7 +34,9 @@
                 <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">Sim runs ({{ $batch->sim_runs->count() }})</a>
             </li>
             <li class="nav-item">
-                <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">Analysis</a>
+                <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">
+                    Analysis
+                </a>
             </li>
             <li class="nav-item">
                 <a id="family-tree-tab" data-toggle="tab" class="nav-link" href="#family-tree">Family tree ({{ $batch->batch_ancestry_and_descendants()->count() }})</a>
@@ -40,10 +50,15 @@
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
                 <div class="row">
-                    <button style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">Run</button>    
+                    <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">
+                        Initiate batch <ion-icon name="play"></ion-icon>
+                    </button>                    
+                    @include('shared.no_sim_time_warning')                    
                 </div>          
                 <div class="row">
-                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">Copy</a>
+                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">
+                        Copy <ion-icon name="copy"></ion-icon>
+                    </a>
                     <span style="padding: 16px 0 0 4px; " class="text-muted">
                         Copy basic batch info only. Strategies can be selected and refined after copying.
                     </class>
@@ -57,9 +72,14 @@
                 </div>
             </div>
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
-                @if(! $batch->sim_runs->isEmpty())
+                @if(! $batch->sim_runs->isEmpty() && $batch->is_complete())
                 @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
                 @include('sim_run_batches.show.analysis_text', ['strategy' => $batch->winning_strategy()])
+                @else
+                <br>
+                <p>
+                    Analysis will be available when the batch is complete
+                </p>
                 @endif
             </div>
             <div class="tab-pane" id="family-tree" role="tabpanel" aria-labelledby="family-tree-tab">
@@ -73,11 +93,7 @@
     <script>
         $("#run").click(function() {
             $.get("/sim-run-batches/run/{{ $batch->id }}", function(res) {
-                if (! res.success) {
-                    
-                } else {
-                    //location.reload();
-                }                
+                alert(res.msg)          
             });
         });
 

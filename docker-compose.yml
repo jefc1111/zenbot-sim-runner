@@ -1,0 +1,88 @@
+version: "3"
+services:
+  app: # connect to cmd line with `docker exec -ti laravel-www /bin/bash`
+    image: laravel-www
+    container_name: laravel-www
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    depends_on:
+      - redis
+      - mysql
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html
+    environment:
+      #APP_ENV: local
+      CONTAINER_ROLE: app
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: redis
+      ZENBOT_MONGODB_HOST: mongodb
+
+  scheduler:
+    image: laravel-www
+    container_name: laravel-scheduler
+    depends_on:
+      - app
+    volumes:
+      - .:/var/www/html
+    environment:
+      #APP_ENV: local
+      CONTAINER_ROLE: scheduler
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: redis
+ 
+  queue:
+    image: laravel-www
+    container_name: laravel-queue
+    depends_on:
+      - app
+    volumes:
+      - .:/var/www/html
+    environment:
+      #APP_ENV: local
+      CONTAINER_ROLE: queue
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: redis
+      ZENBOT_MONGODB_HOST: mongodb
+  
+  redis:
+    container_name: laravel-redis
+    image: redis:4-alpine
+    expose:
+      - 6379
+    volumes:
+      - redis:/data
+
+  mysql:
+    container_name: laravel-mysql
+    image: mysql:5.7
+    ports:
+      - 13306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: zenbot_sim_runner
+      MYSQL_ROOT_PASSWORD: password 
+      MYSQL_USER: zsr
+      MYSQL_PASSWORD: zsrpw
+
+  mongodb:
+    image: mongo:latest
+    container_name: zenbot-mongodb
+    volumes:
+      - /var/lib/mongodb:/data/db
+    command: mongod --bind_ip=0.0.0.0 --logpath=/dev/null
+
+volumes:
+  redis:
+    driver: "local"
+  mysql:
+    driver: "local"

@@ -13,6 +13,7 @@
                 <th>Qty strategies</th>
                 <th>Best vs. buy hold</th>
                 <th>Status</th>
+                <th>User</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +30,8 @@
                 <td>{{ $sim_run_batch->sim_runs->count() }}</td>
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
                 <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
-                <td>status</td>
+                <td>{{ $sim_run_batch->status }}</td>
+                <td>{{ $sim_run_batch->user->email }}</td>
             </tr>
             @endforeach
         </tbody>

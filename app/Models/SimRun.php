@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\StrategyOption;
 use App\Models\Strategy;
 use App\Models\SimRunBatch;
-
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Traits\InvokesZenbot;
 
 class SimRun extends Model
 {
     use HasFactory;
+    use InvokesZenbot;
 
     protected $guarded = [
         'id'
@@ -45,6 +46,11 @@ class SimRun extends Model
         return $this->result ? $this->result['simresults'][$attr] : null;
     }
 
+    public function get_selector(): string
+    {
+        return $this->sim_run_batch->get_selector();
+    }
+
     public function result(string $attr): ?string
     {
         $res = $this->get_simresult_attr($attr);
@@ -55,6 +61,13 @@ class SimRun extends Model
     public function result_pct(string $attr, int $precision = 2): ?string 
     {
         $res = $this->get_simresult_attr($attr);
+
+        return ! is_null($res) ? round($res, $precision)."%" : null;
+    }
+    
+    public function result_conv_pct(string $attr, int $precision = 2): ?string 
+    {
+        $res = $this->get_simresult_attr($attr) * 100;
 
         return ! is_null($res) ? round($res, $precision)."%" : null;
     }
@@ -71,28 +84,14 @@ class SimRun extends Model
         : $strategy_option->default;
     }
 
-    public function cmd(): string
+    private function cmd_components(): array
     {
-        return implode(' ', $this->cmd_components());
-    }
-
-    private function cmd_common_components(): array
-    {
-        $components = [
-            config('zenbot.node_executable'), 
-            config('zenbot.location').'/zenbot.js', 
-            'sim',
-            $this->sim_run_batch->get_selector(),
-            "--strategy={$this->strategy->name}",
-            "--start={$this->sim_run_batch->start->format('Y-m-d')}", 
-            "--end={$this->sim_run_batch->end->format('Y-m-d')}",
-            "--buy_pct={$this->sim_run_batch->buy_pct}",
-            "--sell_pct={$this->sim_run_batch->sell_pct}",
-            "--filename=none",
-            "--silent",
-        ];
-
-        return $components;
+        return array_merge(
+            $this->cmd_primary_components(), 
+            $this->cmd_common_components(), 
+            $this->cmd_date_components($this->sim_run_batch),
+            $this->cmd_option_components()
+        );
     }
 
     private function cmd_option_components(): array
@@ -105,23 +104,36 @@ class SimRun extends Model
         ->map(fn($o) => "--$o->name={$o->value}")->toArray();
     }
 
-    private function cmd_components(): array
+    public function cmd(): string
     {
-        return array_merge(
-            $this->cmd_common_components(), 
-            $this->cmd_option_components()
-        );
+        return implode(' ', $this->cmd_components());
+    }
+
+    private function cmd_common_components(): array
+    {
+        $components = [
+            'sim',
+            $this->get_selector(),
+            "--strategy={$this->strategy->name}",
+            "--buy_pct={$this->sim_run_batch->buy_pct}",
+            "--sell_pct={$this->sim_run_batch->sell_pct}",
+            "--filename=none",
+            "--silent",
+        ];
+
+        return $components;
     }
 
     public function run()
     {
-        $errored_output = [];
+        $start_time = time();
 
-        set_time_limit(900);
+        $errored_output = [];        
 
         $process = new Process($this->cmd_components());
 
-        $process->setTimeout(900);
+        set_time_limit(14400);
+        $process->setTimeout(14400);
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
@@ -139,15 +151,23 @@ class SimRun extends Model
 
         $success = $process->isSuccessful();
 
+        $this->runtime = time() - $start_time;
+
+        $this->sim_run_batch->user->available_seconds = $this->sim_run_batch->user->available_seconds - $this->runtime;
+
+        $this->sim_run_batch->user->save();
+
         if ($success) {
             $this->result = $this->extract_json_result($process->getOutput());    
         
             $this->save();
         } else {
-            $this->log = implode($errored_output);    
+            $str_error_output = implode($errored_output);
+            
+            $this->log = $str_error_output;
         
             $this->save();
-
+            
             throw new ProcessFailedException($process);
         }         
     }
