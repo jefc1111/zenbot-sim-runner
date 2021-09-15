@@ -46,12 +46,12 @@
             data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (float) $sr->result('profit')*100)->values()) !!}
         },
         {
-            name: 'Vs by hold',
+            name: 'Vs buy hold',
             yAxis: 0,
             type: 'area',                    
             opacity: 0.2,
             data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (float) $sr->result('vs_buy_hold'))->values()) !!}
-        } 
+        },
         {
             name: 'Qty trades',
             yAxis: 1,

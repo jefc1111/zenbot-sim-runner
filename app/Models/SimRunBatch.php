@@ -559,4 +559,17 @@ class SimRunBatch extends Model
             ->merge(collect([$this]))
             ->merge($this->batch_descendant_list());
     }
+
+    public function reset(): void
+    {
+        SimRun::where('sim_run_batch_id', $this->id)->update([
+            'result' => null,
+            'log' => null,
+            'runtime' => 0
+        ]);
+
+        $this->status = 'ready';
+
+        $this->save();
+    }
 }

@@ -137,6 +137,24 @@ class SimRunBatchController extends Controller
         ]);
     }
 
+    public function prune($id)
+    {
+        $batch = SimRunBatch::findOrFail($id);
+
+        // Delete all sim runs where `result` is empty or `log` is not empty
+        $batch->sim_runs->whereNull('result')->each(fn($sr) => $sr->delete());
+        $batch->sim_runs->whereNotNull('log')->each(fn($sr) => $sr->delete());
+
+        return back()->with('success', "Pruned incomplete and errored sim runs for batch \"$batch->name\".");
+    }
+
+    public function reset($id)
+    {
+        SimRunBatch::findOrFail($id)->reset();
+
+        return back()->with('success', "Reset batch \"$batch->name\".");
+    }
+
     /**
      * Display the specified resource.
      *
@@ -187,7 +205,17 @@ class SimRunBatchController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $batch = SimRunBatch::findOrFail($id);
+
+        $msg = "Deleted batch \"$batch->name\"";
+
+        SimRun::where('sim_run_batch_id', $id)->delete();
+
+        SimRunBatch::where('id', $id)->delete();
+
+        return redirect()
+        ->action([SimRunBatchController::class, 'index'])
+        ->with('success', $msg); 
     }
 
     public function run($id)

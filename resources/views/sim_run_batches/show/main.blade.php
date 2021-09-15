@@ -28,10 +28,14 @@
     <div class="">
         <ul id="sim-run-batch-tab-header" class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a id="overview-tab" data-toggle="tab" class="nav-link active" href="#overview">Overview</a>
+                <a id="overview-tab" data-toggle="tab" class="nav-link active" href="#overview">
+                    Overview
+                </a>
             </li>
             <li class="nav-item">
-                <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">Sim runs ({{ $batch->sim_runs->count() }})</a>
+                <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">
+                    Sim runs ({{ $batch->sim_runs->count() }})
+                </a>
             </li>
             <li class="nav-item">
                 <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">
@@ -39,10 +43,18 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a id="family-tree-tab" data-toggle="tab" class="nav-link" href="#family-tree">Family tree ({{ $batch->batch_ancestry_and_descendants()->count() }})</a>
+                <a id="family-tree-tab" data-toggle="tab" class="nav-link" href="#family-tree">
+                    Family tree ({{ $batch->batch_ancestry_and_descendants()->count() }})
+                </a>
+            </li>
+            <li class="nav-item">
+                <a id="batch-admin-tab" data-toggle="tab" class="nav-link" href="#batch-admin">
+                    Batch admin
+                </a>
             </li>
         </ul>
     </div>
+    <br>
     <div class="">
         <div class="tab-content" id="sim-run-batch-tab-content">
             <div class="tab-pane show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
@@ -50,19 +62,11 @@
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
                 <div class="row">
-                    <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-2" id="run">
+                    <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-3" id="run">
                         Initiate batch <ion-icon name="play"></ion-icon>
                     </button>                    
                     @include('shared.no_sim_time_warning')                    
                 </div>          
-                <div class="row">
-                    <a style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-2" href="copy/{{ $batch->id }}">
-                        Copy <ion-icon name="copy"></ion-icon>
-                    </a>
-                    <span style="padding: 16px 0 0 4px; " class="text-muted">
-                        Copy basic batch info only. Strategies can be selected and refined after copying.
-                    </class>
-                </div>
             </div>
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
                 <div class="row">
@@ -87,6 +91,9 @@
                     'batches' => $batch->batch_ancestry_and_descendants(),
                     'subject_batch' => $batch,
                 ])
+            </div>
+            <div class="tab-pane" id="batch-admin" role="tabpanel" aria-labelledby="batch-admin-tab">
+                @include('sim_run_batches.show.admin')
             </div>
         </div>            
     </div>

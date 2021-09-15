@@ -18,6 +18,14 @@
                     <a href="/">Zenbot sim runner</a>
                 </h1>
             </div>
+            @if (\Session::has('success'))
+            <div class="alert alert-success">
+                <h3>
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                </h3>
+                {!! \Session::get('success') !!}
+            </div>
+            @endif
             @include('shared.private_beta_warning')
             <hr />        
             {{ $slot }}
