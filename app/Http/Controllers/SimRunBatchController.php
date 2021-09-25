@@ -150,7 +150,9 @@ class SimRunBatchController extends Controller
 
     public function reset($id)
     {
-        SimRunBatch::findOrFail($id)->reset();
+        $batch = SimRunBatch::findOrFail($id);
+
+        $batch->reset();
 
         return back()->with('success', "Reset batch \"$batch->name\".");
     }

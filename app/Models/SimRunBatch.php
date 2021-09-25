@@ -354,14 +354,18 @@ class SimRunBatch extends Model
             if (Process::ERR === $type) {
                 $errored_output[] = $buffer;
             } else {
+                //\Log::error($buffer);
                 //$success_output[] = $buffer;
             }
         });
 
+        // Don't need the return value
+        $this->write_log_file_and_get_last_msg($process, "zenbot-logs/$this->id-backfill.log");
+
         $success = $process->isSuccessful();
 
         if ($success) {
-
+            // Yay
         } else {
             throw new ProcessFailedException($process);
         }
@@ -384,7 +388,7 @@ class SimRunBatch extends Model
                 )->then(function(Batch $batch) {
                     $success = true;
                     // All jobs completed successfully...
-                })->catch(function(Batch $batch, Throwable $e) {
+                })->catch(function(Batch $batch, Throwable $e) use($that) {
                     $success = false;
 
                     $that->set_status('error');

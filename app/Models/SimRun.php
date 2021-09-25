@@ -10,6 +10,7 @@ use App\Models\SimRunBatch;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Traits\InvokesZenbot;
+use Illuminate\Support\Facades\Storage;
 
 class SimRun extends Model
 {
@@ -117,8 +118,7 @@ class SimRun extends Model
             "--strategy={$this->strategy->name}",
             "--buy_pct={$this->sim_run_batch->buy_pct}",
             "--sell_pct={$this->sim_run_batch->sell_pct}",
-            "--filename=none",
-            "--silent",
+            "--filename=none"
         ];
 
         return $components;
@@ -145,20 +145,22 @@ class SimRun extends Model
             }
         });
 
+        $last_msg = $this->write_log_file_and_get_last_msg($process, $this->get_log_path());
+
         if ($process->getExitCode() !== 0) {
             //\Log::error("Exit code was not zero. It was {$process->getExitCode()}.");
         }
 
         $success = $process->isSuccessful();
 
-        $this->runtime = time() - $start_time;
-
-        $this->sim_run_batch->user->available_seconds = $this->sim_run_batch->user->available_seconds - $this->runtime;
-
         $this->sim_run_batch->user->save();
 
         if ($success) {
-            $this->result = $this->extract_json_result($process->getOutput());    
+            $this->runtime = time() - $start_time;
+
+            $this->sim_run_batch->user->available_seconds = $this->sim_run_batch->user->available_seconds - $this->runtime;
+
+            $this->result = $this->extract_json_result($this->get_log_file());    
         
             $this->save();
         } else {
@@ -172,10 +174,24 @@ class SimRun extends Model
         }         
     }
 
+    private function get_log_path()
+    {
+        return "zenbot-logs/$this->sim_run_batch_id-sim-run-$this->id.log";
+    }
+
+    private function get_log_file()
+    {
+        return Storage::disk('local')->get($this->get_log_path());
+    }
+
+    // Extracts the chunk of JSON from the entire log output for a sim run
     private function extract_json_result(string $raw_cmd_output): object
     {
-        // The third argument to `explode()` is to make it only split on the first occurence of '{'
-        // Also, the split removes the '{' so we have to reinstate it.
-        return json_decode('{'.explode('{', $raw_cmd_output, 2)[1]);
+        $start = strpos($raw_cmd_output, "{");
+        $end = strrpos($raw_cmd_output, "}", -1);
+        
+        return json_decode(
+            substr($raw_cmd_output, $start, $end - $start + 1)
+        );
     }
 }

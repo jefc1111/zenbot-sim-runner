@@ -4,6 +4,8 @@ namespace App\Traits;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Process;
 
 trait InvokesZenbot {
     private function cmd_primary_components(): array
@@ -28,5 +30,20 @@ trait InvokesZenbot {
             "--start={$start_str}", 
             "--end={$end_str}"
         ];
+    }
+
+    private function write_log_file_and_get_last_msg(Process $process, string $path): string
+    {
+        $last_msg = '';
+
+        Storage::disk('local')->put($path, '');
+        
+        foreach ($process as $type => $data) {
+            Storage::disk('local')->append($path, $data);
+
+            $last_msg = $data;
+        }
+
+        return $last_msg;
     }
 }
