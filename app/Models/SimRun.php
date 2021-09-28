@@ -137,13 +137,13 @@ class SimRun extends Model
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
-        $process->run(function($type, $buffer) use(&$errored_output) {
+        $process->start();/*function($type, $buffer) use(&$errored_output) {
             if (Process::ERR === $type) {
                 $errored_output[] = $buffer;
             } else {
                 //$success_output[] = $buffer;
             }
-        });
+        });*/
 
         $last_msg = $this->write_log_file_and_get_last_msg($process, $this->get_log_path());
 

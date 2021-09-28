@@ -350,17 +350,17 @@ class SimRunBatch extends Model
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
-        $process->run(function($type, $buffer) use(&$errored_output) {
+        $process->start();/*function($type, $buffer) use(&$errored_output) {
             if (Process::ERR === $type) {
                 $errored_output[] = $buffer;
             } else {
                 //\Log::error($buffer);
                 //$success_output[] = $buffer;
             }
-        });
+        });*/
 
         // Don't need the return value
-        $this->write_log_file_and_get_last_msg($process, "zenbot-logs/$this->id-backfill.log");
+        $this->write_log_file_and_get_last_msg($process, $this->backfill_log_path());
 
         $success = $process->isSuccessful();
 
@@ -369,6 +369,11 @@ class SimRunBatch extends Model
         } else {
             throw new ProcessFailedException($process);
         }
+    }
+
+    private function backfill_log_path()
+    {
+        return "zenbot-logs/$this->id-backfill.log";
     }
 
     public function run()
@@ -575,5 +580,14 @@ class SimRunBatch extends Model
         $this->status = 'ready';
 
         $this->save();
+    }
+
+    public function get_backfill_log_lines()
+    {
+        if (\Storage::disk('local')->exists($this->backfill_log_path())) {
+            return explode("\n", \Storage::disk('local')->get($this->backfill_log_path()));
+        } else {
+            return [];
+        }
     }
 }

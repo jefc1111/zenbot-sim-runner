@@ -27,31 +27,31 @@
     </div>
     <div class="">
         <ul id="sim-run-batch-tab-header" class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a id="overview-tab" data-toggle="tab" class="nav-link active" href="#overview">
-                    Overview
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="sim-runs-tab" data-toggle="tab" class="nav-link" href="#sim-runs">
-                    Sim runs ({{ $batch->sim_runs->count() }})
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="analysis-tab" data-toggle="tab" class="nav-link" href="#analysis">
-                    Analysis
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="family-tree-tab" data-toggle="tab" class="nav-link" href="#family-tree">
-                    Family tree ({{ $batch->batch_ancestry_and_descendants()->count() }})
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="batch-admin-tab" data-toggle="tab" class="nav-link" href="#batch-admin">
-                    Batch admin
-                </a>
-            </li>
+            @include('sim_run_batches.show.tab_header_item', [
+                'active' => true, 
+                'id' => 'overview', 
+                'label' => 'Overview'
+            ])
+            @include('sim_run_batches.show.tab_header_item', [ 
+                'id' => 'sim-runs', 
+                'label' => 'Sim runs ('.$batch->sim_runs->count().')'
+            ])
+            @include('sim_run_batches.show.tab_header_item', [
+                'id' => 'analysis', 
+                'label' => 'Analysis'
+            ])
+            @include('sim_run_batches.show.tab_header_item', [
+                'id' => 'family-tree', 
+                'label' => 'Family tree ('.$batch->batch_ancestry_and_descendants()->count().')'
+            ])
+            @include('sim_run_batches.show.tab_header_item', [
+                'id' => 'batch-admin', 
+                'label' => 'Batch admin'
+            ])
+            @include('sim_run_batches.show.tab_header_item', [
+                'id' => 'backfill', 
+                'label' => 'Backfill log'
+            ])
         </ul>
     </div>
     <br>
@@ -95,6 +95,9 @@
             <div class="tab-pane" id="batch-admin" role="tabpanel" aria-labelledby="batch-admin-tab">
                 @include('sim_run_batches.show.admin')
             </div>
+            <div class="tab-pane" id="backfill" role="tabpanel" aria-labelledby="backfill-tab">
+                @include('sim_run_batches.show.backfill')
+            </div>
         </div>            
     </div>
     <script>
@@ -118,5 +121,31 @@
         if (hash) {
             $('.nav-link[href="' + hash + '"]').tab('show');
         }
+        
+        function populateBackfillLog() {
+            const qtyCurrentLines = $("#backfill-log ul li").length;
+
+            $.get("backfill-log/{{ $batch->id }}", function(rdata) {
+                if (rdata.lines.length) {
+                    $("#backfill-log h4").empty();
+                    
+                    rdata.lines.slice(qtyCurrentLines).forEach(function(line, i) {
+                        $("#backfill-log ul").append(`<li>${line}</li>`);
+                    });
+                } else {
+                    $("#backfill-log h4").text("No log found")
+                }
+            });
+        }
+
+        function poll() {
+            if (window.location.hash === "#backfill") {
+                populateBackfillLog()
+            }
+            
+            setTimeout(poll, 1000);
+        }
+
+        setTimeout(poll, 1000);
     </script>
 </x-layout>

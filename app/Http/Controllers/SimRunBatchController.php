@@ -153,7 +153,9 @@ class SimRunBatchController extends Controller
         $batch = SimRunBatch::findOrFail($id);
 
         $batch->reset();
-
+        
+        // @todo: Remove zenbot log files
+        
         return back()->with('success', "Reset batch \"$batch->name\".");
     }
 
@@ -215,6 +217,8 @@ class SimRunBatchController extends Controller
 
         SimRunBatch::where('id', $id)->delete();
 
+        // @todo: Remove zenbot log files
+
         return redirect()
         ->action([SimRunBatchController::class, 'index'])
         ->with('success', $msg); 
@@ -249,5 +253,15 @@ class SimRunBatchController extends Controller
         $child_batch = $source_batch->spawn_child();
 
         return redirect('/sim-run-batches/'.$child_batch->id);
+    }
+
+    public function get_backfill_log($id)
+    {
+        $batch = SimRunBatch::findOrFail($id);
+
+        return [
+            'success' => true,
+            'lines' => $batch->get_backfill_log_lines()
+        ];
     }
 }
