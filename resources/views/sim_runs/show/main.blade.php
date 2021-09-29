@@ -1,12 +1,16 @@
 <x-layout>
     <div class="row">
-        <h4>Sim run {{ $sim_run->id }}</h4>
-    </div>
-    <div class="row">    
-        <p>
-            From batch: <a href="/sim-run-batches/{{ $sim_run->sim_run_batch->id }}">{{ $sim_run->sim_run_batch->name }}</a><br>
-            Strategy: <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a><br>
-        </p>
+        <div class="col-md-6">
+            <h3>
+                Sim run {{ $sim_run->id }}
+            </h3>                
+        </div>
+        <div style="text-align: right; " class="text-muted col-md-6">
+            <p>
+                From batch: <a href="/sim-run-batches/{{ $sim_run->sim_run_batch->id }}">{{ $sim_run->sim_run_batch->name }}</a><br>
+                Strategy: <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a><br>
+            </p>
+        </div>
     </div>
     <div class="">
         <ul id="sim-run-tab-header" class="nav nav-tabs" role="tablist">
