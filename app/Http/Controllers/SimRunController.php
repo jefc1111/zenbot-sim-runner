@@ -47,7 +47,7 @@ class SimRunController extends Controller
      */
     public function show($id)
     {
-        return view('sim_runs.show', [
+        return view('sim_runs.show.main', [
             'sim_run' => SimRun::findOrFail($id)
         ]);
     }

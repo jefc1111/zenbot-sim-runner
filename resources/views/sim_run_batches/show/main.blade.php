@@ -27,28 +27,28 @@
     </div>
     <div class="">
         <ul id="sim-run-batch-tab-header" class="nav nav-tabs" role="tablist">
-            @include('sim_run_batches.show.tab_header_item', [
+            @include('shared.tab_header_item', [
                 'active' => true, 
                 'id' => 'overview', 
                 'label' => 'Overview'
             ])
-            @include('sim_run_batches.show.tab_header_item', [ 
+            @include('shared.tab_header_item', [ 
                 'id' => 'sim-runs', 
                 'label' => 'Sim runs ('.$batch->sim_runs->count().')'
             ])
-            @include('sim_run_batches.show.tab_header_item', [
+            @include('shared.tab_header_item', [
                 'id' => 'analysis', 
                 'label' => 'Analysis'
             ])
-            @include('sim_run_batches.show.tab_header_item', [
+            @include('shared.tab_header_item', [
                 'id' => 'family-tree', 
                 'label' => 'Family tree ('.$batch->batch_ancestry_and_descendants()->count().')'
             ])
-            @include('sim_run_batches.show.tab_header_item', [
+            @include('shared.tab_header_item', [
                 'id' => 'batch-admin', 
                 'label' => 'Batch admin'
             ])
-            @include('sim_run_batches.show.tab_header_item', [
+            @include('shared.tab_header_item', [
                 'id' => 'backfill', 
                 'label' => 'Backfill log'
             ])
@@ -107,6 +107,7 @@
             });
         });
 
+        /* ----- Duplicated for sim runs too ------ */
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             var hash = $(e.target).attr('href');
             if (history.pushState) {
@@ -121,6 +122,7 @@
         if (hash) {
             $('.nav-link[href="' + hash + '"]').tab('show');
         }
+        /* ---------------- */
         
         function populateBackfillLog() {
             const qtyCurrentLines = $("#backfill-log ul li").length;
