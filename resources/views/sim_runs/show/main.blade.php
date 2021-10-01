@@ -43,7 +43,7 @@
                 @include('sim_runs.show.options')
             </div>
             <div class="tab-pane" id="log" role="tabpanel" aria-labelledby="log-tab">
-                @include('sim_runs.show.log')
+                @include('shared.live_log')
             </div>
             <div class="tab-pane show" id="result" role="tabpanel" aria-labelledby="result-tab">
                 @include('sim_runs.show.result')
@@ -73,6 +73,32 @@
         if (hash) {
             $('.nav-link[href="' + hash + '"]').tab('show');
         }       
-        /* --------- */ 
+
+        function populateLiveLog() {
+            const qtyCurrentLines = $("#live-log ul li").length;
+
+            $.get("log/{{ $sim_run->id }}", function(rdata) {
+                if (rdata.lines.length) {
+                    $("#live-log h4").empty();
+                    
+                    rdata.lines.slice(qtyCurrentLines).forEach(function(line, i) {
+                        $("#live-log ul").append(`<li>${line}</li>`);
+                    });
+                } else {
+                    $("#live-log h4").text("No log found")
+                }
+            });
+        }
+
+        function poll() {
+            if (window.location.hash === "#log") {
+                populateLiveLog()
+            }
+            
+            setTimeout(poll, 1000);
+        }
+
+        setTimeout(poll, 1000);
+        /* ---------------- */
     </script>
 </x-layout>

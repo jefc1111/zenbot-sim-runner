@@ -106,4 +106,14 @@ class SimRunController extends Controller
             'msg' => "Sim run submitted to queue in position $queue_size"
         ];
     }
+
+    public function get_log($id)
+    {
+        $sim_run = SimRun::findOrFail($id);
+
+        return [
+            'success' => true,
+            'lines' => $sim_run->get_log_lines()
+        ];
+    }
 }

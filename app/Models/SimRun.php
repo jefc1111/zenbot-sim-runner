@@ -184,6 +184,34 @@ class SimRun extends Model
         return Storage::disk('local')->get($this->get_log_path());
     }
 
+    public function get_log_lines()
+    {
+        //
+        // Converts Bashoutput to colored HTML
+        //
+        function convertBash($code) {
+            $dictionary = array(
+                '[1;30m' => '<span style="color:black">',
+                '[1;31m' => '<span style="color:red">', 
+                '[1;32m' => '<span style="color:green">',   
+                '[1;33m' => '<span style="color:yellow">',
+                '[1;34m' => '<span style="color:blue">',
+                '[1;35m' => '<span style="color:purple">',
+                '[1;36m' => '<span style="color:cyan">',
+                '[1;37m' => '<span style="color:white">',
+                '[m'   => '</span>'
+            );
+            $htmlString = str_replace(array_keys($dictionary), $dictionary, $code);
+            return $htmlString;
+        }
+        
+        if (\Storage::disk('local')->exists($this->get_log_path())) {
+            return explode("\n", convertBash($this->get_log_file()));
+        } else {
+            return [];
+        }
+    }
+
     // Extracts the chunk of JSON from the entire log output for a sim run
     private function extract_json_result(string $raw_cmd_output): object
     {

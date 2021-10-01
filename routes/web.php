@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('sim-run-batches', SimRunBatchController::class);
     
     Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);
+    Route::get('sim-runs/log/{id}', [SimRunController::class, 'get_log']);
     Route::resource('sim-runs', SimRunController::class);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

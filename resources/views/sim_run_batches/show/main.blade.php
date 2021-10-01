@@ -96,7 +96,7 @@
                 @include('sim_run_batches.show.admin')
             </div>
             <div class="tab-pane" id="backfill" role="tabpanel" aria-labelledby="backfill-tab">
-                @include('sim_run_batches.show.backfill')
+                @include('shared.live_log')
             </div>
         </div>            
     </div>
@@ -122,32 +122,32 @@
         if (hash) {
             $('.nav-link[href="' + hash + '"]').tab('show');
         }
-        /* ---------------- */
         
-        function populateBackfillLog() {
-            const qtyCurrentLines = $("#backfill-log ul li").length;
+        function populateLiveLog() {
+            const qtyCurrentLines = $("#live-log ul li").length;
 
             $.get("backfill-log/{{ $batch->id }}", function(rdata) {
                 if (rdata.lines.length) {
-                    $("#backfill-log h4").empty();
+                    $("#live-log h4").empty();
                     
                     rdata.lines.slice(qtyCurrentLines).forEach(function(line, i) {
-                        $("#backfill-log ul").append(`<li>${line}</li>`);
+                        $("#live-log ul").append(`<li>${line}</li>`);
                     });
                 } else {
-                    $("#backfill-log h4").text("No log found")
+                    $("#live-log h4").text("No log found")
                 }
             });
         }
 
         function poll() {
             if (window.location.hash === "#backfill") {
-                populateBackfillLog()
+                populateLiveLog()
             }
             
             setTimeout(poll, 1000);
         }
 
         setTimeout(poll, 1000);
+        /* ---------------- */        
     </script>
 </x-layout>
