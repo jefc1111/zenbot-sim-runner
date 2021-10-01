@@ -85,7 +85,9 @@
                         $("#live-log ul").append(`<li>${line}</li>`);
                     });
                 } else {
-                    $("#live-log h4").text("No log found")
+                    $("#live-log h4").text("No log found");
+
+                    $("#live-log ul").empty();
                 }
             });
         }
