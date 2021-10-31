@@ -176,16 +176,21 @@ return [
             'timeout' => 14400
         ],
     ],
-
     'environments' => [
-        'production' => [
+        'prod_main' => [
             'supervisor-1' => [
-                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 1),
-                'balanceMaxShift' => 1,
+                'maxProcesses' => 0,
+                'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
         ],
-
+        'prod_worker' => [
+            'supervisor-1' => [
+                'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 0),
+                'balanceMaxShift' => 0,
+                'balanceCooldown' => 3,
+            ],
+        ],
         'local' => [
             'supervisor-1' => [
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
