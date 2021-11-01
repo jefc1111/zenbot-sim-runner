@@ -35,6 +35,11 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'zenbot-logs' => [
+            'driver' => 'local',
+            'root' => env('ZENBOT_LOG_LOCATION', storage_path('app')),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

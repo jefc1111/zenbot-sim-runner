@@ -177,7 +177,7 @@ class SimRun extends Model
 
     private function get_log_file()
     {
-        return Storage::disk('local')->get($this->get_log_path());
+        return Storage::disk('zenbot-logs')->get($this->get_log_path());
     }
 
     public function get_log_lines()
@@ -209,7 +209,7 @@ class SimRun extends Model
         
         $converter = new AnsiToHtmlConverter($theme);
                 
-        if (\Storage::disk('local')->exists($this->get_log_path())) {
+        if (\Storage::disk('zenbot-logs')->exists($this->get_log_path())) {
             return explode("\n", $converter->convert($this->get_log_file()));
         } else {
             return [];

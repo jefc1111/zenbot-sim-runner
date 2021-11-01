@@ -36,10 +36,10 @@ trait InvokesZenbot {
     {
         $last_msg = '';
 
-        Storage::disk('local')->put($path, '');
+        Storage::disk('zenbot-logs')->put($path, '');
         
         foreach ($process as $type => $data) {
-            Storage::disk('local')->append($path, $data);
+            Storage::disk('zenbot-logs')->append($path, $data);
 
             $last_msg = $data;
         }
