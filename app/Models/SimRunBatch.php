@@ -350,7 +350,7 @@ class SimRunBatch extends Model
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
-        DB::disconnect('mysql'); // Prevent excess sleeping connections
+        \DB::disconnect('mysql'); // Prevent excess sleeping connections
 
         $process->start();
 
