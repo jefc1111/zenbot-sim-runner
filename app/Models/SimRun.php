@@ -151,8 +151,6 @@ class SimRun extends Model
 
         $success = $process->isSuccessful();
 
-        $this->sim_run_batch->user->save();
-
         if ($success) {
             $this->runtime = time() - $start_time;
 
@@ -169,7 +167,9 @@ class SimRun extends Model
             $this->save();
             
             throw new ProcessFailedException($process);
-        }         
+        }
+
+        $this->sim_run_batch->user->save();    
     }
 
     private function get_log_path()
