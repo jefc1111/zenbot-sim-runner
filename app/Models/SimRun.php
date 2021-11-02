@@ -139,6 +139,8 @@ class SimRun extends Model
 
         $process->setWorkingDirectory(config('zenbot.location'));
 
+        DB::disconnect('mysql'); // Prevent excess sleeping connections
+        
         $process->start();
 
         $last_msg = $this->write_log_file_and_get_last_msg($process, $this->get_log_path());

@@ -186,7 +186,7 @@ return [
         ],
         'prod_worker' => [
             'supervisor-1' => [
-                'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 0),
+                'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
