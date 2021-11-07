@@ -182,6 +182,11 @@ class SimRun extends Model
         return Storage::disk('zenbot-logs')->get($this->get_log_path());
     }
 
+    public function delete_log()
+    {
+        Storage::disk('zenbot-logs')->delete($this->get_log_path());
+    }
+
     public function get_log_lines()
     {
         $theme = new Class() extends Theme {                        

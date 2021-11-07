@@ -575,6 +575,26 @@ class SimRunBatch extends Model
         $this->status = 'ready';
 
         $this->save();
+
+        $this->delete_all_logs();
+    }
+
+    private function delete_all_logs()
+    {
+        $this->delete_backfill_log();
+
+        $this->delete_sim_run_logs();
+    }
+
+    private function delete_backfill_log()
+    {
+        \Log::error($this->backfill_log_path());
+        \Storage::disk('zenbot-logs')->delete($this->backfill_log_path());
+    }
+
+    private function delete_sim_run_logs()
+    {
+        $this->sim_runs->each(fn($sr) => $sr->delete_log());
     }
 
     public function get_backfill_log_lines()
