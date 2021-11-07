@@ -585,4 +585,9 @@ class SimRunBatch extends Model
             return [];
         }
     }
+
+    public function run_time()
+    {
+        return $this->sim_runs->sum('runtime');
+    }
 }

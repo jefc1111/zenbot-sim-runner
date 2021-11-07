@@ -3,6 +3,7 @@
         <tr>
             <th>id</th>
             <th>Strategy</th>
+            <th>Run time</th>
             <th>Qty trades</th>
             <th>Buy & hold Profit</th>
             <th>Profit</th>              
@@ -18,10 +19,15 @@
             <td>
                 <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
             </td>
+            @if($sim_run->result || $sim_run->log)
+            <td>{{ $sim_run->runtime }}s.</td>            
             <td>{{ $sim_run->result('total_trades') }}</td>
             <td>{{ $sim_run->result_conv_pct('buy_hold_profit', 4) }}</td>
             <td>{{ $sim_run->result_conv_pct('profit', 4) }}</td>            
             <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
+            @else
+            <td></td><td></td><td></td><td></td><td></td>
+            @endif
         </tr>
         @endforeach
     </tbody>

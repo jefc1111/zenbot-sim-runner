@@ -38,5 +38,13 @@
             <td>Autospawn children</td>
             <td>{{ $batch->allow_autospawn ? 'yes' : 'no' }}</td>
         </tr>
+        <tr>
+            <td>Backfill time</td>
+            <td>NOT IMPLEMENTED</td>
+        </tr>
+        <tr>
+            <td>Run time (aggregate)</td>
+            <td>{{ $batch->run_time() }}s. ({{ gmdate("H\h i\m s\s", $batch->run_time()) }})</td>
+        </tr>
     </tbody>
 </table>
