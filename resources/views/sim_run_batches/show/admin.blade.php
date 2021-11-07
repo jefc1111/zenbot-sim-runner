@@ -5,7 +5,7 @@
 ])
 @include('sim_run_batches.show.admin_btn', [
     'href' => "prune/$batch->id",
-    'btn_text' => 'Prune errors / incomplete',
+    'btn_text' => 'Prune',
     'description' => 'Soft deletes any sim runs that are incomplete or errored (so that partially complete batches can be analysed).'
 ])
 @include('sim_run_batches.show.admin_btn', [
@@ -15,6 +15,6 @@
 ])
 @include('sim_run_batches.show.admin_btn', [
     'href' => "destroy/$batch->id",
-    'btn_text' => 'Delete batch',
+    'btn_text' => 'Delete',
     'description' => 'Deletes the entire batch and all sim runs (No confirm screen!).'
 ])
