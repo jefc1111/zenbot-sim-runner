@@ -56,6 +56,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('sim-runs', SimRunController::class);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+    Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index']);
 });
 
 
