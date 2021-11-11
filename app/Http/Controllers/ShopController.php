@@ -9,6 +9,7 @@ use BTCPayServer\Client\InvoiceCheckoutOptions;
 use BTCPayServer\Util\PreciseNumber;
 
 use App\Models\Shop\SimTimeBundle;
+use App\Models\Shop\SimTimeOrder;
 
 class ShopController extends Controller
 {
@@ -33,6 +34,27 @@ class ShopController extends Controller
             'sim_time_bundles' => SimTimeBundle::all()
         ]);
     }
+
+    public function buy_sim_time_bundle($id)
+    {
+        $bundle = SimTimeBundle::findOrFail($id);
+
+        $order = SimTimeOrder::create([
+            'user_id' => \Auth::id(),
+            'sim_time_bundle_id' => $bundle->id
+        ]);
+
+        $order->generate_invoice();
+
+
+
+
+        return view('shop.make_payment', [
+            'bundle' => $bundle,
+            'invoice_url' => $order->get_invoice_url()
+        ]);
+    }
+
 
     /**
      * Show the application dashboard.

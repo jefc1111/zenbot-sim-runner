@@ -3,19 +3,21 @@
         <thead>
             <th>Cost</th>
             <th>Sim time</th>
+            <th>Cost per hour</th>
             <th>Discount</th>
             <th></th>
         </thead>
         <tbody>
             @foreach ($sim_time_bundles as $bundle)
             <tr>
-                <td>${{ $bundle->cost }}</td>
+                <td>{{ $bundle->currency_symbol }}{{ $bundle->cost }}</td>
                 <td>{{ $bundle->qty_hours }} hours</td>
-                <td>{{ $bundle->get_discount() }}%</td>
+                <td>{{ $bundle->currency_symbol }}{{ round($bundle->cost_per_hour(), 4) }}</td>
+                <td>{{ round($bundle->get_discount(), 2) }}%</td>
                 <td>
-                    <span class="btn btn-primary btn-md">
+                    <a href="/shop/buy-sim-time-bundle/{{ $bundle->id }}" class="btn btn-primary btn-md">
                         Buy {{ $bundle->qty_hours }} hours of sim time for ${{ $bundle->cost }}
-                    </span>
+                    </a>
                 </td>
             </tr>
             @endforeach
