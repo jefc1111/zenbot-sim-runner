@@ -52,6 +52,10 @@ class ShopController extends Controller
         ]);
     }
 
+    public function payment_webhook()
+    {
+        return 'Hello!';
+    }
 
 
 

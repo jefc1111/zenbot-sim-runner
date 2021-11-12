@@ -58,8 +58,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index']);
-    Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);
+    Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);    
 });
+
+Route::get('/shop/payment-webhook', [App\Http\Controllers\ShopController::class, 'payment_webhook']);
 
 
 Auth::routes();
