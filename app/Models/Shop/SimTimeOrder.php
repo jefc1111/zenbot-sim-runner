@@ -45,7 +45,13 @@ class SimTimeOrder extends Model
                 PreciseNumber::parseString($amount),
                 $order_id,
                 \Auth::user()->email
-            );            
+            ); 
+            
+            $this->invoice_id = $this->invoice->offsetGet('id');
+
+            $this->status = 'invoice-created';
+
+            $this->save();
         } catch (\Throwable $e) {
             echo "Error: " . $e->getMessage();
         }

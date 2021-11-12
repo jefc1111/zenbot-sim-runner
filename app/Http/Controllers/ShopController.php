@@ -44,16 +44,18 @@ class ShopController extends Controller
             'sim_time_bundle_id' => $bundle->id
         ]);
 
-        $order->generate_invoice();
-
-
-
+        $order->generate_invoice();        
 
         return view('shop.make_payment', [
             'bundle' => $bundle,
             'invoice_url' => $order->get_invoice_url()
         ]);
     }
+
+
+
+
+
 
 
     /**
