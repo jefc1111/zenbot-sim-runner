@@ -35,12 +35,11 @@ class SimTimeOrder extends Model
         $currency = $this->sim_time_bundle->currency;
         $order_id = $this->id;
         
-        // Create a basic invoice.
         try {
-            $client = new Invoice($host, $apiKey);
+            $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
             
             $this->invoice = $client->createInvoice(
-                $storeId,
+                env('BTCPAY_STORE_ID'),
                 $currency,
                 PreciseNumber::parseString($amount),
                 $order_id,
