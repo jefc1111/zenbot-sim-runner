@@ -30,9 +30,7 @@ class SimTimeOrder extends Model
         
         $currency = $this->sim_time_bundle->currency;
         $order_id = $this->id;
-     \Log::error(env('BTCPAY_HOST'));
-     \Log::error(env('BTCPAY_API_KEY'));
-     \Log::error(env('BTCPAY_STORE_ID'));
+
         try {
             $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
             \Log::error('poi');
@@ -43,7 +41,7 @@ class SimTimeOrder extends Model
                 $order_id,
                 \Auth::user()->email
             );             
-     \Log::error($this->invoice);   
+   
             $this->invoice_id = $this->invoice->offsetGet('id');
 
             $this->status = 'invoice-created';

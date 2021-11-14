@@ -24,4 +24,9 @@ class SimTimeBundle extends Model
     {
         return $this->cost / $this->qty_hours;
     }
+
+    public function get_bundle_time_as_seconds() 
+    {
+        return $this->qty_hours * 60 * 60;
+    }
 }
