@@ -20,6 +20,7 @@
         "laravel/ui": "^3.2",
         "predis/predis": "^1.1",
         "sensiolabs/ansi-to-html": "^1.2",
+        "spatie/laravel-webhook-client": "^3.0",
         "symfony/process": "^5.2",
         "tcg/voyager": "^1.4"
     },

@@ -54,6 +54,7 @@ class ShopController extends Controller
 
     public function payment_webhook()
     {
+        \Log::error('qwe');
         return 'Hello!';
     }
 

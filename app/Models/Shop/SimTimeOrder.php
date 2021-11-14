@@ -25,34 +25,32 @@ class SimTimeOrder extends Model
     }
 
     public function generate_invoice()
-    {
-        $apiKey = '71bbe655ea2ae4b1856616dd1f86b0ae67434ee4';
-        $host = 'https://payments.zsr-app.com'; // e.g. https://your.btcpay-server.tld
-        $storeId = '4ZzaQhcbdSTHYTYKhDhHjsFsCkuKtGofpDRwgchJfmPR';
-        
+    {   
         $amount = $this->sim_time_bundle->cost;
         
         $currency = $this->sim_time_bundle->currency;
         $order_id = $this->id;
-        
+     \Log::error(env('BTCPAY_HOST'));
+     \Log::error(env('BTCPAY_API_KEY'));
+     \Log::error(env('BTCPAY_STORE_ID'));
         try {
             $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
-            
+            \Log::error('poi');
             $this->invoice = $client->createInvoice(
                 env('BTCPAY_STORE_ID'),
                 $currency,
                 PreciseNumber::parseString($amount),
                 $order_id,
                 \Auth::user()->email
-            ); 
-            
+            );             
+     \Log::error($this->invoice);   
             $this->invoice_id = $this->invoice->offsetGet('id');
 
             $this->status = 'invoice-created';
 
             $this->save();
         } catch (\Throwable $e) {
-            echo "Error: " . $e->getMessage();
+            \Log::error("Error: " . $e->getMessage());
         }
     }
 

@@ -19,6 +19,8 @@ use App\Http\Controllers\Auth\LogoutController;
 |
 */
 
+Route::webhooks('shop/payment-webhook');
+
 Route::group(['middleware' => ['auth', 'verified']], function () { 
 
     Route::get('/', function () {
@@ -61,7 +63,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);    
 });
 
-Route::post('/shop/payment-webhook', [App\Http\Controllers\ShopController::class, 'payment_webhook']);
 
 
 Auth::routes();
