@@ -7,6 +7,8 @@ use App\Models\Shop\SimTimeOrder;
 
 class ProcessWebhookJob extends SpatieProcessWebhookJob
 {
+    public $queue = 'webhook';
+
     public function handle()
     {
         $payload = json_decode($this->webhookCall)->payload;

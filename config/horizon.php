@@ -165,11 +165,25 @@ return [
     */
 
     'defaults' => [
-        'supervisor-1' => [
+        'supervisor-sim' => [
             'connection' => 'redis',
-            'queue' => ['default'],
             'balance' => 'auto',
-            'maxProcesses' => 1,
+            'memory' => env('HORIZON_MAX_MEMORY', 1024),
+            'tries' => 1,
+            'nice' => 0,
+            'timeout' => 14400
+        ],
+        'supervisor-backfill' => [
+            'connection' => 'redis',
+            'balance' => 'auto',
+            'memory' => env('HORIZON_MAX_MEMORY', 1024),
+            'tries' => 1,
+            'nice' => 0,
+            'timeout' => 14400
+        ],
+        'supervisor-webhook' => [
+            'connection' => 'redis',
+            'balance' => 'auto',
             'memory' => env('HORIZON_MAX_MEMORY', 1024),
             'tries' => 1,
             'nice' => 0,
@@ -178,21 +192,38 @@ return [
     ],
     'environments' => [
         'prod_main' => [
-            'supervisor-1' => [
-                'maxProcesses' => 0,
+            'supervisor-webhook' => [
+                'queue' => ['webhook'],
+                'maxProcesses' => 5,
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
         ],
         'prod_worker' => [
-            'supervisor-1' => [
+            'supervisor-sim' => [
+                'queue' => ['sim'],
+                'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
+                'balanceMaxShift' => 0,
+                'balanceCooldown' => 3,
+            ],
+            'supervisor-backfill' => [
+                'queue' => ['backfill'],
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
         ],
         'local' => [
-            'supervisor-1' => [
+            'supervisor-sim' => [
+                'queue' => ['sim'],
+                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
+            ],
+            'supervisor-backfill' => [
+                'queue' => ['backfill'],
+                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
+            ],
+            'supervisor-webhook' => [
+                'queue' => ['webhook'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
         ],

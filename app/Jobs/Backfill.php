@@ -16,6 +16,8 @@ class Backfill implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $sim_run_batch;
+    
+    public $queue = 'backfill';
 
     /**
      * Create a new job instance.
