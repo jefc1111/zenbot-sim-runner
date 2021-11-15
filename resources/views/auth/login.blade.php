@@ -2,9 +2,14 @@
 
 @section('content')
 <div class="container">
+    <div class="row">    
+    @include('shared.platform_summary')
+    </div>
+    <div class="row">    
+        Please visit &nbsp;<a href="https://discord.com/channels/880347822854115328/880347822854115331" target="_blank">Discord</a> &nbsp;to discuss anything to do with this platform. 
+    </div>
     <div class="row justify-content-center">
-        <div class="col-md-8">        
-            @include('shared.private_beta_warning')
+        <div class="col-md-8">   
             <div class="card">            
                 <div class="card-header">{{ __('Login') }}</div>                
                 <div class="card-body">
