@@ -1,6 +1,6 @@
 <x-layout>
     <h4>Available bundles</h4>
-    <table class="table">
+    <table class="table table-dark">
         <thead>
             <th>Cost</th>
             <th>Sim time</th>
@@ -27,7 +27,7 @@
         </tfoot>
     </table>
     <h4>Previous orders</h4>
-    <table class="table">
+    <table class="table table-sm table-bordered">
         <thead>
             <th>Order number</th>
             <th>Invoice id</th>

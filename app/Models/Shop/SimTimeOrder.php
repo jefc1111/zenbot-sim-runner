@@ -33,7 +33,7 @@ class SimTimeOrder extends Model
 
         try {
             $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
-            \Log::error('poi');
+
             $this->invoice = $client->createInvoice(
                 env('BTCPAY_STORE_ID'),
                 $currency,
