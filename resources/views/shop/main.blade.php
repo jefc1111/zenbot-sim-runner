@@ -1,4 +1,5 @@
 <x-layout>
+    <h4>Available bundles</h4>
     <table class="table">
         <thead>
             <th>Cost</th>
@@ -19,6 +20,29 @@
                         Buy {{ $bundle->qty_hours }} hours of sim time for ${{ $bundle->cost }}
                     </a>
                 </td>
+            </tr>
+            @endforeach
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <h4>Previous orders</h4>
+    <table class="table">
+        <thead>
+            <th>Order number</th>
+            <th>Invoice id</th>
+            <th>Cost</th>
+            <th>Status</th>
+            <th>Date / time</th>
+        </thead>
+        <tbody>
+            @foreach ($sim_time_orders->reverse() as $order)
+            <tr>
+                <td>{{ $order->id }}</td>
+                <td>{{ $order->invoice_id }}</td>
+                <td>{{ $order->sim_time_bundle->currency_symbol }}{{ $order->sim_time_bundle->cost }}</td>
+                <td>{{ $order->status }}</td>
+                <td>{{ $order->created_at }}</td>
             </tr>
             @endforeach
         </tbody>

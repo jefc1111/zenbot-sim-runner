@@ -16,9 +16,7 @@ class ProcessWebhookJob extends SpatieProcessWebhookJob
         if ($payload->type === "InvoiceSettled") {
             $sim_time_order = SimTimeOrder::where('invoice_id', '=', $payload->invoiceId)->firstOrFail();
 
-            $sim_time_order->user->available_seconds += $sim_time_order->sim_time_bundle->get_bundle_time_as_seconds();
-
-            $sim_time_order->user->save();
+            $sim_time_order->mark_invoice_settled();
         } else {
             \Log::error("Webhook \"$payload->type\" type has not been implemented");
         }

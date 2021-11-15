@@ -56,4 +56,15 @@ class SimTimeOrder extends Model
     {
         return $this->invoice->offsetGet('checkoutLink');
     }
+
+    public function mark_invoice_settled()
+    {
+        $this->user->available_seconds += $this->sim_time_bundle->get_bundle_time_as_seconds();
+
+        $this->user->save();
+
+        $this->status = 'complete';
+
+        $this->save();
+    }
 }

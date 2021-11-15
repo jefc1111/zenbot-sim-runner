@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\SimRunBatch;
+use App\Models\Shop\SimTimeOrder;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -45,6 +46,11 @@ class User extends \TCG\Voyager\Models\User
     public function sim_run_batches()
     {
         return $this->hasMany(SimRunBatch::class);
+    }
+
+    public function sim_time_orders()
+    {
+        return $this->hasMany(SimTimeOrder::class);
     }
 
     public function available_sim_time()

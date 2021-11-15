@@ -31,7 +31,8 @@ class ShopController extends Controller
     public function index()
     {    
         return view('shop.main', [
-            'sim_time_bundles' => SimTimeBundle::all()
+            'sim_time_bundles' => SimTimeBundle::all(),
+            'sim_time_orders' => \Auth::user()->sim_time_orders
         ]);
     }
 
@@ -52,11 +53,6 @@ class ShopController extends Controller
         ]);
     }
 
-    public function payment_webhook()
-    {
-        \Log::error('qwe');
-        return 'Hello!';
-    }
 
 
 
