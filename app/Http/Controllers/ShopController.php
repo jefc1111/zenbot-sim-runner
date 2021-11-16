@@ -43,10 +43,7 @@ class ShopController extends Controller
 
         $order->generate_invoice();        
 
-        return view('shop.make_payment', [
-            'bundle' => $bundle,
-            'invoice_url' => $order->get_invoice_url()
-        ]);
+        return redirect($order->get_invoice_url());
     }
 
 
