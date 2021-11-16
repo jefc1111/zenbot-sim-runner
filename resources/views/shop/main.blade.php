@@ -1,5 +1,13 @@
 <x-layout>
     <h4>Available bundles</h4>
+    <div class="alert alert-danger" role="alert">
+        <h5 class="alert-heading">Important information about sim time bundles</h5>
+        - BTC is the only payment method currently accepted.</span>
+        <br>
+        - Simulations run in parallel, and sime time is used up <em>per simulation</em>, not for the overall run time of the batch.
+        <br>
+        <strong>Example</strong>: A batch has 96 simulations, each lasts 15 minutes. This will consume 24 hours of sim time.
+    </div>    
     <table class="table table-dark">
         <thead>
             <th>Cost</th>
@@ -26,11 +34,6 @@
         <tfoot>
         </tfoot>
     </table>
-    <div class="alert alert-warning" role="alert">
-        <h4 class="alert-heading">Important information about sim time bundles</h4>
-        <p>Simulations run in parallel, and sime time is used up per simulation, not for the overall run time of the batch.</p>
-        <p>Example: A batch has 96 simulations, each lasts 15 minutes. This will consume 24 hours of sim time.</p>
-    </div>    
     <h4>Previous orders</h4>
     <table class="table table-sm table-bordered">
         <thead>

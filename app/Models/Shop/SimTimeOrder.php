@@ -33,13 +33,18 @@ class SimTimeOrder extends Model
 
         try {
             $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
+            
+            $checkout_options = new InvoiceCheckoutOptions();
+            $checkout_options->setRedirectURL(route('shop'));
 
             $this->invoice = $client->createInvoice(
                 env('BTCPAY_STORE_ID'),
                 $currency,
                 PreciseNumber::parseString($amount),
                 $order_id,
-                \Auth::user()->email
+                \Auth::user()->email,
+                [],
+                $checkout_options
             );             
    
             $this->invoice_id = $this->invoice->offsetGet('id');

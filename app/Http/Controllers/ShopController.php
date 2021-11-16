@@ -4,10 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use BTCPayServer\Client\Invoice;
-use BTCPayServer\Client\InvoiceCheckoutOptions;
-use BTCPayServer\Util\PreciseNumber;
-
 use App\Models\Shop\SimTimeBundle;
 use App\Models\Shop\SimTimeOrder;
 
@@ -54,16 +50,12 @@ class ShopController extends Controller
     }
 
 
-
-
-
-
-
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    /*
     public function test_stuff()
     {
         // Fill in with your BTCPay Server data.
@@ -153,4 +145,5 @@ class ShopController extends Controller
             echo "Error: " . $e->getMessage();
         }
     }
+    */
 }
