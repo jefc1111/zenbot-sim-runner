@@ -1,21 +1,21 @@
 <div id="zsr-is" class="zsr-characteristics col-md-6">    
-    <h5>Zenbot Sim Runner is</h5>
+    <h5>Zenbot Sim Runner is...</h5>
     <ul class="list-unstyled">
-        <li>A backtesting framework based on <a target="_blank" href="https://github.com/DeviaVir/zenbot">Zenbot</a></li>
-        <li>A hobby project (for now)</li>
-        <li>Intended for techincally-minded individuals</li>
-        <li>Has no recurring payment (yet) - you pay for the simulation time you use</li>
-        <li>Clever</li>
+        <li>a backtesting framework based on <a target="_blank" href="https://github.com/DeviaVir/zenbot">Zenbot</a></li>
+        <li>a hobby project (for now)</li>
+        <li>intended for techincally-minded individuals</li>
+        <li>not based on a subscription model (yet) - you pay for the simulation time you use</li>
+        <li>clever</li>
     </ul>
 </div>
 <div id="zsr-is-not" class="zsr-characteristics col-md-6">    
-    <h5>Zenbot Sim Runner <strong>is not</strong></h5>
+    <h5>Zenbot Sim Runner <strong>is not</strong>...</h5>
     <ul class="list-unstyled">
-        <li>A commercial enterprise</li>
-        <li>Free for me to run</li>
-        <li>A magic money machine</li>
-        <li>Free to use</li>
-        <li>Pretty</li>
+        <li>a commercial enterprise</li>
+        <li>free for me to run</li>
+        <li>a magic money machine</li>
+        <li>free to use</li>
+        <li>pretty</li>
     </ul>
 </div>
 
