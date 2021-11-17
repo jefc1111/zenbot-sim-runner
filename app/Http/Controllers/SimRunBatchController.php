@@ -69,7 +69,11 @@ class SimRunBatchController extends Controller
         // Give sim run batch the input data
         $strategies = SimRunBatch::make_sim_runs(request()->except('_token'));
 
+        $sim_run_qty = $strategies->flatMap(fn($s) => $s->sim_runs)->count();
+
         return view('sim_run_batches.create.confirm', [ 
+            'max_sim_run_qty' => env('max_sim_run_qty', 128),
+            'sim_run_qty' => $sim_run_qty,
             'strategies' => $strategies,
             'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);

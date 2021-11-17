@@ -34,6 +34,7 @@
             </li>
             @endforeach
         </ul>
+        @if ($sim_run_qty <= $max_sim_run_qty)
         <h2>Sim run detail</h2>
         @foreach($strategies as $strategy)
         <h3>{{ $strategy->name }}</h3>
@@ -64,5 +65,9 @@
         </table>
         @endforeach
         <input type="submit" value="Save">
+        @else
+        <h5>{{ $sim_run_qty }} sim runs generated. Maximum allowed is {{ $max_sim_run_qty }}.</h5>
+        <a href="#" onclick="history.go(-1)">Please go back and edit your parameters</a>
+        @endif
     </form>    
 </x-layout>
