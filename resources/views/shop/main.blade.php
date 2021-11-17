@@ -1,7 +1,7 @@
 <x-layout>
     <h4>Available bundles</h4>
     <div class="alert alert-danger" role="alert">
-        <h5 class="alert-heading">Important information about sim time bundles</h5>
+        <h5 class="alert-heading"><strong>Important information about sim time bundles</strong></h5>
         - BTC is the only payment method currently accepted.</span>
         <br>
         - Simulations run in parallel, and sime time is used up <em>per simulation</em>, not for the overall run time of the batch.
