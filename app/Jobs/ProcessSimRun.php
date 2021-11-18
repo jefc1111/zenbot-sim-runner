@@ -16,8 +16,6 @@ class ProcessSimRun implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $sim_run;
-    
-    public $queue = 'sim';
 
     /**
      * Create a new job instance.
@@ -26,6 +24,8 @@ class ProcessSimRun implements ShouldQueue
      */
     public function __construct(SimRun $sim_run)
     {
+        $this->queue = 'sim';
+
         $this->sim_run = $sim_run;
     }
 
