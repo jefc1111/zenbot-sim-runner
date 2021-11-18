@@ -15,10 +15,11 @@ class CreateSimTimeBundlesTable extends Migration
     {
         Schema::create('sim_time_bundles', function (Blueprint $table) {
             $table->id();
-            $table->integer('cost');
+            $table->decimal('cost', $precision = 8, $scale = 2);
             $table->string('currency')->default('USD');
             $table->string('currency_symbol')->default('$');
             $table->integer('qty_hours');
+            $table->boolean('active')->default(0);
             $table->boolean('base_option')->default(0);
             $table->timestamps();
         });
