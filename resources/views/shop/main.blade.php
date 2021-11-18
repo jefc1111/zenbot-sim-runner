@@ -6,6 +6,8 @@
         <br>
         - Simulations run in parallel, and sim time is used up <em>per simulation</em>, not for the overall run time of the batch.
         <br>
+        - Prices are subject to change at any time.
+        <br>
         <strong>Example</strong>: A batch has 96 simulations, each lasts 15 minutes. This will consume 24 hours of sim time.
     </div>    
     <table class="table table-dark">

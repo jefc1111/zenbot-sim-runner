@@ -1,14 +1,14 @@
 <x-layout>
     <style>
-        table {
+        table#option-list {
             width: 100%;            
         }
 
-        table tr td {
+        table#option-list tr td {
             
         }
 
-        table tr td, input[type=text] {
+        table#option-list tr td, input[type=text] {
             background: #ddd;
         }
 
@@ -22,7 +22,7 @@
         }
     </style>
     @include('sim_run_batches.create.progress_bar', ['progress_pct' => 75])
-    @include('sim_run_batches.metadata_snippet')
+    @include('sim_run_batches.metadata_snippet', ['compact' => true])
     <form method="post" action="/sim-run-batches">
         <h2>Confirm sim runs for batch</h2>
         @csrf
@@ -38,7 +38,7 @@
         <h2>Sim run detail</h2>
         @foreach($strategies as $strategy)
         <h3>{{ $strategy->name }}</h3>
-        <table>
+        <table id="option-list">
             <thead>
                 <tr>
                     @foreach($strategy->options as $strategy_option)

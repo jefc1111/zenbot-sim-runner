@@ -26,6 +26,7 @@
             <td>End date</td>
             <td>{{ $batch->end }}</td>
         </tr>
+        @if(! ($compact ?? false))
         <tr>
             <td>Buy %</td>
             <td>{{ $batch->buy_pct }}</td>
@@ -46,5 +47,6 @@
             <td>Run time (aggregate)</td>
             <td>{{ $batch->run_time() }}s. ({{ gmdate("H\h i\m s\s", $batch->run_time()) }})</td>
         </tr>
+        @endif
     </tbody>
 </table>

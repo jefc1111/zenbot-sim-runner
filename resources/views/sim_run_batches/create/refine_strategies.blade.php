@@ -22,7 +22,7 @@
         }
     </style>
     @include('sim_run_batches.create.progress_bar', ['progress_pct' => 50])
-    @include('sim_run_batches.metadata_snippet')
+    @include('sim_run_batches.metadata_snippet', ['compact' => true])
     <form method="post" action="/sim-run-batches/create/confirm">
         @csrf  
         <ul>
