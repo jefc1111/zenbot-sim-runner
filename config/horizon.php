@@ -165,6 +165,14 @@ return [
     */
 
     'defaults' => [
+        'supervisor-default' => [
+            'connection' => 'redis',
+            'balance' => 'auto',
+            'memory' => env('HORIZON_MAX_MEMORY', 1024),
+            'tries' => 1,
+            'nice' => 0,
+            'timeout' => 14400
+        ],
         'supervisor-sim' => [
             'connection' => 'redis',
             'balance' => 'auto',
@@ -198,6 +206,12 @@ return [
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-default' => [
+                'queue' => ['default'],
+                'maxProcesses' => 5,
+                'balanceMaxShift' => 0,
+                'balanceCooldown' => 3,
+            ],
         ],
         'prod_worker' => [
             'supervisor-sim' => [
@@ -214,6 +228,10 @@ return [
             ],
         ],
         'local' => [
+            'supervisor-default' => [
+                'queue' => ['default'],
+                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
+            ],
             'supervisor-sim' => [
                 'queue' => ['sim'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
