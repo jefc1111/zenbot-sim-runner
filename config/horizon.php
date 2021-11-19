@@ -165,6 +165,7 @@ return [
     */
 
     'defaults' => [
+        /*
         'supervisor-default' => [
             'connection' => 'redis',
             'balance' => 'auto',
@@ -197,16 +198,29 @@ return [
             'nice' => 0,
             'timeout' => 14400
         ],
+        */
     ],
     'environments' => [
         'prod_main' => [
             'supervisor-webhook' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => 256,
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 60,
                 'queue' => ['webhook'],
                 'maxProcesses' => 5,
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
             'supervisor-default' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => 256,
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 60,
                 'queue' => ['default'],
                 'maxProcesses' => 5,
                 'balanceMaxShift' => 0,
@@ -215,12 +229,24 @@ return [
         ],
         'prod_worker' => [
             'supervisor-sim' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['sim'],
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
             ],
             'supervisor-backfill' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['backfill'],
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
@@ -229,18 +255,42 @@ return [
         ],
         'local' => [
             'supervisor-default' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['default'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
             'supervisor-sim' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['sim'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
             'supervisor-backfill' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['backfill'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
             'supervisor-webhook' => [
+                'connection' => 'redis',
+                'balance' => 'auto',
+                'memory' => env('HORIZON_MAX_MEMORY', 1024),
+                'tries' => 1,
+                'nice' => 0,
+                'timeout' => 14400,
                 'queue' => ['webhook'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
