@@ -404,7 +404,7 @@ class SimRunBatch extends Model
         
                         $new_batch->run();
                     }
-                })->dispatch();
+                })->onQueue('sim')->dispatch();
             },
         ])->dispatch();
 
