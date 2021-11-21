@@ -72,7 +72,7 @@ class SimRunBatchController extends Controller
         $sim_run_qty = $strategies->flatMap(fn($s) => $s->sim_runs)->count();
 
         return view('sim_run_batches.create.confirm', [ 
-            'max_sim_run_qty' => env('max_sim_run_qty', 128),
+            'max_sim_run_qty' => env('MAX_SIM_RUN_QTY', 384),
             'sim_run_qty' => $sim_run_qty,
             'strategies' => $strategies,
             'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
