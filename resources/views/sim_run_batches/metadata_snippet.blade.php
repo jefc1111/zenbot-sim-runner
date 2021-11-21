@@ -40,8 +40,8 @@
             <td>{{ $batch->allow_autospawn ? 'yes' : 'no' }}</td>
         </tr>
         <tr>
-            <td>Backfill time</td>
-            <td>NOT IMPLEMENTED</td>
+            <td>Backfill run time</td>
+            <td>{{ $batch->backfill_runtime }}s. ({{ gmdate("H\h i\m s\s", $batch->backfill_runtime) }})</td>
         </tr>
         <tr>
             <td>Run time (aggregate)</td>
