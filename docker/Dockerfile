@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     git
 RUN npm install npm@latest -g && \
     npm install n -g && \
-    n lts
+    n 12.22.7
 RUN /var/www/html/docker/zenbot-install.sh
 COPY zenbot-conf.js /home/zenbot/conf.js
 
