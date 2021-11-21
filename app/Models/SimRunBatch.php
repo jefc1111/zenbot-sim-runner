@@ -352,6 +352,8 @@ class SimRunBatch extends Model
 
         \DB::disconnect('mysql'); // Prevent excess sleeping connections
 
+        $start_time = time();
+
         $process->start();
 
         // Don't need the return value
@@ -360,7 +362,9 @@ class SimRunBatch extends Model
         $success = $process->isSuccessful();
 
         if ($success) {
-            // Yay
+            $this->backfill_runtime = time() - $start_time;
+
+            $this->save();
         } else {
             throw new ProcessFailedException($process);
         }
