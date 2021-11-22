@@ -555,6 +555,8 @@ class SimRunBatch extends Model
 
         $this->status = 'ready';
 
+        $this->backfill_runtime = 0;
+
         $this->save();
 
         $this->delete_all_logs();
