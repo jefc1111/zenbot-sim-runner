@@ -23,6 +23,10 @@
     </style>
     @include('sim_run_batches.create.progress_bar', ['progress_pct' => 50])
     @include('sim_run_batches.metadata_snippet', ['compact' => true])
+    <div class="alert alert-danger" role="alert">
+        <h6 class="alert-heading"><strong>Known issues with strategy options</strong></h6>
+        - Only numeric strategy options can currently be set up for interpolation. I am working on a way of dealing with alphanumeric values.  
+    </div>   
     <form method="post" action="/sim-run-batches/create/confirm">
         @csrf  
         <ul>
