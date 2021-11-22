@@ -9,15 +9,18 @@ use App\Models\Strategy;
 use App\Models\SimRunBatch;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use App\Traits\InvokesZenbot;
 use Illuminate\Support\Facades\Storage;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use SensioLabs\AnsiConverter\Theme\Theme;
+
+use App\Traits\HasStatus;
+use App\Traits\InvokesZenbot;
 
 class SimRun extends Model
 {
     use HasFactory;
     use InvokesZenbot;
+    use HasStatus;
 
     protected $guarded = [
         'id'
@@ -128,6 +131,8 @@ class SimRun extends Model
 
     public function run()
     {
+        $this->set_status('running');
+
         $start_time = time();
 
         $errored_output = [];        
@@ -158,13 +163,13 @@ class SimRun extends Model
 
             $this->result = $this->extract_json_result($this->get_log_file());    
         
-            $this->save();
-        } else {
+            $this->set_status('complete'); // This does a save
+        } else {            
             $str_error_output = implode($errored_output);
             
             $this->log = $str_error_output;
         
-            $this->save();
+            $this->set_status('error'); // This does a save
             
             throw new ProcessFailedException($process);
         }

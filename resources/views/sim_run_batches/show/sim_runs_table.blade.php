@@ -8,6 +8,7 @@
             <th>Buy & hold Profit</th>
             <th>Profit</th>              
             <th>vs. buy hold</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,9 @@
             @else
             <td></td><td></td><td></td><td></td><td></td>
             @endif
+            <td>
+                <span class="text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">{{ $sim_run->status }}</span>
+            </td>
         </tr>
         @endforeach
     </tbody>

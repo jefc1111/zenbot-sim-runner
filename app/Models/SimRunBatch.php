@@ -20,14 +20,17 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use App\Traits\InvokesZenbot;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+
+use App\Traits\InvokesZenbot;
+use App\Traits\HasStatus;
 
 class SimRunBatch extends Model
 {
     use HasFactory;
     use InvokesZenbot;
+    use HasStatus;
 
     protected $guarded = ['id'];
 
@@ -40,26 +43,10 @@ class SimRunBatch extends Model
     ];
 
     public $statuses = [
-        'ready' => [
-            'label' => 'ready to run',
-            'style' => 'secondary'
-        ],
         'backfilling' => [
             'label' => 'backfilling',
             'style' => 'primary'
-        ],
-        'running' => [
-            'label' => 'running simulations',
-            'style' => 'primary'
-        ],
-        'complete' => [
-            'label' => 'complete',
-            'style' => 'success'
-        ],
-        'error' => [
-            'label' => 'error',
-            'style' => 'danger'
-        ],
+        ]
     ];
 
     public function setAllowAutospawnAttribute($value)
@@ -325,17 +312,6 @@ class SimRunBatch extends Model
             $this->cmd_date_components($this, as_epoch: true)
         );
     }
-    
-    private function set_status(string $status): void
-    {
-        if (array_key_exists($status, $this->statuses)) {
-            $this->status = $status;
-
-            $this->save();
-        } else {
-            \Log::error("Sim run batch status {$status} not found.");
-        }
-    }
 
     public function do_backfill()
     {
@@ -573,7 +549,8 @@ class SimRunBatch extends Model
         SimRun::where('sim_run_batch_id', $this->id)->update([
             'result' => null,
             'log' => null,
-            'runtime' => 0
+            'runtime' => 0,
+            'status' => 'ready'
         ]);
 
         $this->status = 'ready';

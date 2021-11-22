@@ -15,7 +15,7 @@
         </div>
         <div style="text-align: right; " class="text-muted col-md-6">
             <small>
-                status: <span class="text-{{ $batch->statuses[$batch->status]['style'] }}">{{ $batch->status }}</span> 
+                status: <span class="text-{{ $batch->get_status_data($batch->status, 'style') }}">{{ $batch->status }}</span> 
                 @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))
                 |
                 <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
@@ -147,7 +147,6 @@
             setTimeout(poll, 1000);
         }
 
-        setTimeout(poll, 1000);
-        /* ---------------- */        
+        setTimeout(poll, 1000);  
     </script>
 </x-layout>
