@@ -35,8 +35,6 @@ trait InvokesZenbot {
     private function write_log_file_and_get_last_msg(Process $process, string $path): string
     {
         $last_msg = '';
-        \Log::error(Storage::disk('zenbot-logs')->path('/'));
-        \Log::error($path);
 
         Storage::disk('zenbot-logs')->put($path, '');
         
