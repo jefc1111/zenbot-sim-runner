@@ -15,13 +15,13 @@
         </div>
         <div style="text-align: right" class="text-muted col-md-6">
             <small>
-                status: <span id="batch-status" class="text-{{ $batch->get_status_data($batch->status, 'style') }}">{{ $batch->status }}</span> 
-                @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))                
+                status: <span id="batch-status" class="text-{{ $batch->get_status_data($batch->status, 'style') }}">
+                    {{ $batch->status }}
+                </span>                                
                 |
                 <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
                     <span id="percent-complete">{{ $batch->percent_complete() }}</span>% complete
-                </span> ({{ $batch->qty_errored() }} errored)
-                @endif
+                </span> (<span id="qty-errored">{{ $batch->qty_errored() }}</span> errored)
             </small>
         </div>
     </div>
@@ -173,6 +173,10 @@
 
                 if ($("span#percent-complete").text() != rdata.percent_complete) {
                     $("span#percent-complete").text(rdata.percent_complete);
+                }   
+
+                if ($("span#qty-errored").text() != rdata.qty_errored) {
+                    $("span#qty-errored").text(rdata.qty_errored);
                 }            
             });
         }        

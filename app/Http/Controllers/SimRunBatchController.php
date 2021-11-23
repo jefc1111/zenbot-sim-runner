@@ -168,6 +168,7 @@ class SimRunBatchController extends Controller
         return [
             'batch_status' => $batch->status,
             'percent_complete' => $batch->percent_complete(),
+            'qty_errored' => $batch->sim_runs->filter(fn($sr) => $sr->status === 'error')->count(),
             'sim_run_statuses' => $batch->sim_runs->map(function($sr) {
                 return [
                     'id' => $sr->id,
