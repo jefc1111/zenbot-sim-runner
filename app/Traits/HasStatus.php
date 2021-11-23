@@ -6,25 +6,29 @@ trait HasStatus {
     public $core_statuses = [
         'ready' => [
             'label' => 'ready to run',
-            'style' => 'secondary'
+            'style' => 'secondary',
+            'spinner' => false
         ],
         'running' => [
             'label' => 'running simulations',
-            'style' => 'primary'
+            'style' => 'primary',
+            'spinner' => true
         ],
         'complete' => [
             'label' => 'complete',
-            'style' => 'success'
+            'style' => 'success',
+            'spinner' => false
         ],
         'error' => [
             'label' => 'error',
-            'style' => 'danger'
+            'style' => 'danger',
+            'spinner' => false
         ],
     ];
 
     private function set_status(string $status): void
     {
-        if (array_key_exists($status, $this->all_statae())) {
+        if (array_key_exists($status, $this->all_statuses())) {
             $this->status = $status;
 
             $this->save();
@@ -33,7 +37,7 @@ trait HasStatus {
         }
     }
 
-    private function all_statae()
+    public function all_statuses()
     {
         return array_merge(
             isset($this->statuses) ? $this->statuses : [],
@@ -41,8 +45,12 @@ trait HasStatus {
         );
     }
 
-    public function get_status_data($status, $attr): string
+    public function get_status_data($status, $attr = null)
     {
-        return $this->all_statae()[$status][$attr]; // Should guard this, eh
+        if (is_null($attr)) {
+            return $this->all_statuses()[$status]; 
+        }
+
+        return $this->all_statuses()[$status][$attr]; // Should guard this, eh
     }
 }

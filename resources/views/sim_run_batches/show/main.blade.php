@@ -13,10 +13,10 @@
         <div class="col-md-6">
             
         </div>
-        <div style="text-align: right; " class="text-muted col-md-6">
+        <div style="text-align: right" class="text-muted col-md-6">
             <small>
-                status: <span class="text-{{ $batch->get_status_data($batch->status, 'style') }}">{{ $batch->status }}</span> 
-                @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))
+                status: <span id="batch-status" class="text-{{ $batch->get_status_data($batch->status, 'style') }}">{{ $batch->status }}</span> 
+                @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))                
                 |
                 <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
                     {{ $batch->percent_complete() }}% complete
@@ -62,7 +62,7 @@
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
                 <div class="row">
-                    <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-3" id="run">
+                    <button {{ Auth::user()->has_sim_time() && $batch->status === 'ready' ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-3" id="run">
                         Initiate batch <ion-icon name="play"></ion-icon>
                     </button>                    
                     @include('shared.no_sim_time_warning')                    
@@ -101,6 +101,15 @@
         </div>            
     </div>
     <script>
+         $.fn.removeClassStartingWith = function (filter) {
+            $(this).removeClass(function (index, className) {
+                return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
+            });
+            return this;
+        };
+
+        var allStatuses = {!! json_encode($batch->all_statuses()) !!};
+
         $("#run").click(function() {
             $.get("/sim-run-batches/run/{{ $batch->id }}", function(res) {
                 alert(res.msg)          
@@ -138,15 +147,68 @@
                 }
             });
         }
+         
+        function updateStatus(el, statusKey, force) {
+            if (force || ! el.text().includes(statusKey)) {                
+                el
+                .html(statusKey)                
+                .removeClassStartingWith("text-")
+                .addClass(`text-${allStatuses[statusKey].style}`);
+
+                if (allStatuses[statusKey].spinner) {
+                    el.append('<div class="animated-ellipsis">');
+                } else {
+                    el.removeClass("animated-ellipsis");
+                }
+            }
+        }
+
+        function populateStatus(force) {
+            $.get("status/{{ $batch->id }}", function(rdata) {                
+                updateStatus($("span#batch-status"), rdata.batch_status, force)
+            
+                rdata.sim_run_statuses.map(function(sr) {
+                    updateStatus($("span.sim-run-status[data-id=" + sr.id + "]"), sr.status, force)                        
+                });                    
+            });
+        }        
 
         function poll() {
+            var i = 0;
+            
             if (window.location.hash === "#backfill") {
                 populateLiveLog()
             }
-            
+
+            populateStatus(i === 0)
+
+            i++;
+
             setTimeout(poll, 1000);
         }
 
-        setTimeout(poll, 1000);  
+        setTimeout(poll, 1000);
     </script>
+
+    <style>
+        /* https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */
+        .animated-ellipsis {
+            margin: 0 4px;
+            display: inline-block;
+            width:24px;
+            height:6px;
+            background: 
+                radial-gradient(circle closest-side,currentColor 50%,#0000) 0%   50%,
+                radial-gradient(circle closest-side,currentColor 50%,#0000) 50%  50%,
+                radial-gradient(circle closest-side,currentColor 50%,#0000) 100% 50%;
+            background-size:calc(100%/3) 100%;
+            background-repeat: no-repeat;
+            animation:d7 1s infinite linear;
+        }
+        @keyframes d7 {
+            33%{background-size:calc(100%/3) 0%  ,calc(100%/3) 100%,calc(100%/3) 100%}
+            50%{background-size:calc(100%/3) 100%,calc(100%/3) 0%  ,calc(100%/3) 100%}
+            66%{background-size:calc(100%/3) 100%,calc(100%/3) 100%,calc(100%/3) 0%  }
+        }
+    </style>
 </x-layout>

@@ -158,9 +158,22 @@ class SimRunBatchController extends Controller
 
         $batch->reset();
         
-        // @todo: Remove zenbot log files
-        
         return back()->with('success', "Reset batch \"$batch->name\".");
+    }
+
+    public function get_status($id)
+    {
+        $batch = SimRunBatch::findOrFail($id);
+
+        return [
+            'batch_status' => $batch->status,
+            'sim_run_statuses' => $batch->sim_runs->map(function($sr) {
+                return [
+                    'id' => $sr->id,
+                    'status' => $sr->status
+                ];
+            }) 
+        ];
     }
 
     /**

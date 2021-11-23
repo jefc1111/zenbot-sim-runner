@@ -45,7 +45,8 @@ class SimRunBatch extends Model
     public $statuses = [
         'backfilling' => [
             'label' => 'backfilling',
-            'style' => 'primary'
+            'style' => 'primary',
+            'spinner' => true
         ]
     ];
 

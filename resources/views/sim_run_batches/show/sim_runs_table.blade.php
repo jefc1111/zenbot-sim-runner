@@ -30,7 +30,9 @@
             <td></td><td></td><td></td><td></td><td></td>
             @endif
             <td>
-                <span class="text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">{{ $sim_run->status }}</span>
+                <span data-id="{{ $sim_run->id }}" class="sim-run-status text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">
+                    {{ $sim_run->status }}
+                </span>
             </td>
         </tr>
         @endforeach
