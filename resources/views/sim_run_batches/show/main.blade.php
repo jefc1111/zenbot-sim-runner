@@ -19,7 +19,7 @@
                 @if(! ($batch->status === 'ready' || $batch->status === 'backfilling'))                
                 |
                 <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
-                    {{ $batch->percent_complete() }}% complete
+                    <span id="percent-complete">{{ $batch->percent_complete() }}</span>% complete
                 </span> ({{ $batch->qty_errored() }} errored)
                 @endif
             </small>
@@ -169,13 +169,17 @@
             
                 rdata.sim_run_statuses.map(function(sr) {
                     updateStatus($("span.sim-run-status[data-id=" + sr.id + "]"), sr.status, force)                        
-                });                    
+                });
+
+                if ($("span#percent-complete").text() != rdata.percent_complete) {
+                    $("span#percent-complete").text(rdata.percent_complete);
+                }            
             });
         }        
 
         function poll() {
             var i = 0;
-            
+
             if (window.location.hash === "#backfill") {
                 populateLiveLog()
             }
