@@ -167,6 +167,7 @@ class SimRunBatchController extends Controller
 
         return [
             'batch_status' => $batch->status,
+            'percent_complete' => $batch->percent_complete(),
             'sim_run_statuses' => $batch->sim_runs->map(function($sr) {
                 return [
                     'id' => $sr->id,
