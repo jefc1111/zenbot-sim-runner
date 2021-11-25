@@ -4,6 +4,11 @@ namespace App\Traits;
 
 trait HasStatus {
     public $core_statuses = [
+        'queued' => [
+            'label' => 'queued',
+            'style' => 'warning',
+            'spinner' => false
+        ],
         'ready' => [
             'label' => 'ready to run',
             'style' => 'secondary',
