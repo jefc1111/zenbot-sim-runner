@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\SimRunBatch;
 use App\Models\Shop\SimTimeOrder;
 
-class User extends \TCG\Voyager\Models\User
+class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
