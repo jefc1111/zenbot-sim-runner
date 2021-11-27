@@ -27,6 +27,8 @@ class ProcessSimRun implements ShouldQueue
         $this->queue = 'sim';
 
         $this->sim_run = $sim_run;
+
+        $this->sim_run->set_status('queued');
     }
 
     /**
@@ -35,9 +37,12 @@ class ProcessSimRun implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        $this->sim_run->set_status('queued');
-
+    {        
         $this->sim_run->run();        
+    }
+
+    public function failed(Throwable $exception)
+    {
+        $this->sim_run->set_status('error');
     }
 }

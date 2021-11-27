@@ -96,7 +96,7 @@ class SimRunController extends Controller
                 'msg' => "You do not have sufficient sim time available"
             ];
         }
-        
+
         ProcessSimRun::dispatch($sim_run);
         
         $queue_size = \Queue::size();

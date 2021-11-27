@@ -181,21 +181,17 @@
             });
         }        
 
-        function poll() {
-            var i = 0;
-
+        function poll(count) {            
             if (window.location.hash === "#backfill") {
                 populateLiveLog()
             }
 
-            populateStatus(i === 0)
+            populateStatus(count === 0)
 
-            i++;
-
-            setTimeout(poll, 1000);
+            setTimeout(function() { poll(count + 1); }, 1000);
         }
 
-        setTimeout(poll, 1000);
+        setTimeout(function() { poll(0); }, 1000);
     </script>
 
     <style>

@@ -6,7 +6,7 @@ trait HasStatus {
     public $core_statuses = [
         'queued' => [
             'label' => 'queued',
-            'style' => 'warning',
+            'style' => 'info',
             'spinner' => false
         ],
         'ready' => [
@@ -31,7 +31,7 @@ trait HasStatus {
         ],
     ];
 
-    private function set_status(string $status): void
+    public function set_status(string $status): void
     {
         if (array_key_exists($status, $this->all_statuses())) {
             $this->status = $status;

@@ -27,6 +27,8 @@ class Backfill implements ShouldQueue
         $this->queue = 'backfill';
 
         $this->sim_run_batch = $sim_run_batch;
+
+        $this->sim_run_batch->set_status('queued');
     }
 
     /**
@@ -35,9 +37,12 @@ class Backfill implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        $this->sim_run_batch->set_status('queued');
-
+    {        
         $this->sim_run_batch->do_backfill();        
+    }
+
+    public function failed(Throwable $exception)
+    {
+        $this->sim_run_batch->set_status('error');
     }
 }
