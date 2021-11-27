@@ -22,6 +22,7 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'available_seconds'
     ];
 
     /**
@@ -55,8 +56,10 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 
     public function available_sim_time()
     {
-        return ($this->available_seconds < 0 ? '-' : null)
-        .gmdate("H:i:s", abs($this->available_seconds));
+        $t = $this->available_seconds;
+        $f = ':';
+
+        return ($t< 0 ? '-' : '') . sprintf("%02d%s%02d%s%02d", floor(abs($t)/3600), $f, (abs($t)/60)%60, $f, abs($t)%60);
     }
 
     public function available_sim_time_class()

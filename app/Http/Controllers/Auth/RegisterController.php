@@ -68,6 +68,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'available_seconds' => env('SIGN_UP_AVAILABLE_SECONDS', 86400)
         ]);
     }
 }
