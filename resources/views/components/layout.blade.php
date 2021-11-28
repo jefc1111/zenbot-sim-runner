@@ -10,14 +10,34 @@
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
     </head>
     <body>
-        <div class="container">
-            <div class="row">
-                <h1>
-                    <a href="/">Zenbot sim runner</a>
-                </h1>
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Zenbot Sim Runner') }}
+                    <img height="22" class="" src="{{ asset('images/zsr-logo-no-text.png') }}" alt="ZSR logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
+
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        
+                    </ul>
+                </div>
             </div>
+        </nav>    
+        <br>
+        <div class="container">
             @if (\Session::has('success'))
             <div class="alert alert-success">
                 <span style="font-size: 1.2em; ">                    
@@ -52,6 +72,6 @@
                 <small class="text-secondary">|</small>
                 <a href="/logout">Logout</a>
             </span>            
-        </div>       
+        </div>
     </body>
 </html>
