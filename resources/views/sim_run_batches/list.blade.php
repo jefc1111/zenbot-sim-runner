@@ -31,7 +31,7 @@
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
                 <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
                 <td>{{ $sim_run_batch->status }}</td>
-                <td>{{ $sim_run_batch->user->email }}</td>
+                <td>{{ $sim_run_batch->user ? $sim_run_batch->user->email : 'unknown user' }}</td>
             </tr>
             @endforeach
         </tbody>
