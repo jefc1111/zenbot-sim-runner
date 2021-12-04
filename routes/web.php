@@ -7,6 +7,7 @@ use App\Http\Controllers\StrategyOptionController;
 use App\Http\Controllers\SimRunBatchController;
 use App\Http\Controllers\SimRunController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserApprovalController;
 use App\Http\Controllers\ImportFromZenbotController;
 use App\Http\Controllers\Auth\LogoutController;
 /*
@@ -23,12 +24,16 @@ use App\Http\Controllers\Auth\LogoutController;
 Route::webhooks('shop/payment-webhook');
 
 Route::group(['middleware' => ['auth', 'verified']], function () { 
+    Route::get('awaiting-approval', [UserApprovalController::class, 'awaiting_approval'])->name('awaiting-approval');
+
+    Route::get('logout', [LogoutController::class, 'index']);
+});
+
+Route::group(['middleware' => ['auth', 'verified', 'approved']], function () { 
 
     Route::get('/', function () {
         return view('home');
-    });
-    
-    Route::get('logout', [LogoutController::class, 'index']);
+    });    
     
     Route::get('import-all', [ImportFromZenbotController::class, 'import_all']);
     
