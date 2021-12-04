@@ -1,5 +1,9 @@
 <x-layout>        
     @include('sim_run_batches.create.progress_bar', ['progress_pct' => 10])
+    <div class="alert alert-danger" role="alert">
+        <h6 class="alert-heading"><strong>A note about date range</strong></h6>
+        - Backfilling is currently limited to running for one hour. For popular pairs such as BTC/USDT this means only date ranges of a few days are currently feasible. For less popular pairs it may be possible to backfill several weeks of data.  
+    </div>   
     <form method="post" action="/sim-run-batches/create/select-strategies">
         @csrf
         <div class="mb-3 row"> 
