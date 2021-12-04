@@ -17,11 +17,13 @@
             <small>
                 status: <span id="batch-status" class="text-{{ $batch->get_status_data($batch->status, 'style') }}">
                     {{ $batch->status }}
-                </span>                                
-                |
-                <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
-                    <span id="percent-complete">{{ $batch->percent_complete() }}</span>% complete
-                </span> (<span id="qty-errored">{{ $batch->qty_errored() }}</span> errored)
+                </span>
+                <span id="progress-indicator">
+                    |
+                    <span class="{{ $batch->percent_complete() === 100 ? 'text-success' : null }}">                    
+                        <span id="percent-complete">{{ $batch->percent_complete() }}</span>% complete
+                    </span> (<span id="qty-errored">{{ $batch->qty_errored() }}</span> errored)
+                </span>     
             </small>
         </div>
     </div>
