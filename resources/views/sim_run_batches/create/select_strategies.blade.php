@@ -7,7 +7,6 @@
         <table class="table table-sm table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>id</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Include</th>
@@ -15,7 +14,7 @@
             </thead>
             <tfoot>
                 <tr>
-                    <th colspan="3"></td>
+                    <th colspan="2"></td>
                     <th>
                         <input type="checkbox" id="check-all" />
                         all
@@ -25,7 +24,6 @@
             <tbody>
                 @foreach($strategies as $strategy)
                 <tr>
-                    <td>{{ $strategy->id }}</id>
                     <td>{{ $strategy->name }}</td>
                     <td>{{ $strategy->description }}</td>
                     <td>
@@ -40,12 +38,21 @@
                 @endforeach
             </tbody>
         </table>
-        <input type="submit" value="Submit">
+        <input disabled type="submit" value="Submit">
     </form>   
     <script>
         $("table tr").click(function() { 
             var checkbox = $(this).find("input[type='checkbox']");
             checkbox.attr('checked', !checkbox.attr('checked')); 
+
+            var submitBtn = $("input[type=submit]"); 
+
+            if ($("input[type='checkbox']").filter(":checked").length) {
+                submitBtn.removeAttr("disabled")
+            } else {
+                submitBtn.attr("disabled", true)
+            }
+
         });
 
         $("input#check-all").change(function() { 
