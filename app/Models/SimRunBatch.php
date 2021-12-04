@@ -422,7 +422,7 @@ class SimRunBatch extends Model
         return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
     }
 
-    private function winning_sim_run(): SimRun
+    public function winning_sim_run(): SimRun
     {   
         return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
     }

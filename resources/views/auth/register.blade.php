@@ -4,6 +4,12 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="alert alert-info" role="alert">
+                <h6 class="alert-heading"><strong>How to register for the closed beta</strong></h6>
+                Registration is currently by whitelist. If you want to register, first sign up using the form below and then <a href="https://discord.com/channels/880347822854115328/880347822854115331" target="_blank">contact me</a> and I will enable your account.                
+                <br><br>
+                For the time being I will be limiting sign-ups to around 10 users. 
+            </div>  
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
 
