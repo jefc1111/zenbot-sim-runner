@@ -46,7 +46,16 @@
                 </span>
             </div>
             @endif
+            @if (\Session::has('error'))
+            <div class="alert alert-danger">
+                <span style="font-size: 1.2em; ">                    
+                    <ion-icon name="information-circle-outline"></ion-icon>                                    
+                    {!! \Session::get('error') !!}
+                </span>
+            </div>
+            @else
             @include('shared.private_beta_warning')
+            @endif
             <hr />        
             {{ $slot }}
             <hr />

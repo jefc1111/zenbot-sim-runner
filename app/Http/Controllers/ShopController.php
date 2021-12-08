@@ -41,7 +41,9 @@ class ShopController extends Controller
             'sim_time_bundle_id' => $bundle->id
         ]);
 
-        $order->generate_invoice();        
+        if (! $order->generate_invoice()) {
+            return redirect('shop')->with('error', 'Problem creating invoice.');
+        }        
 
         return redirect($order->get_invoice_url());
     }

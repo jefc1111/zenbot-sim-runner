@@ -24,7 +24,7 @@ class SimTimeOrder extends Model
         return $this->belongsTo(\App\Models\Shop\SimTimeBundle::class);
     }
 
-    public function generate_invoice()
+    public function generate_invoice(): bool
     {   
         try {
             $client = new Invoice(
@@ -53,8 +53,10 @@ class SimTimeOrder extends Model
         } catch (\Throwable $e) {
             \Log::error("Error: " . $e->getMessage());
 
-            abort(500, 'Error creating invoice. '.$e->getMessage());
+            return false;
         }
+
+        return true;
     }
 
     public function get_invoice_url()
