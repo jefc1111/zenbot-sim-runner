@@ -7,7 +7,7 @@ use App\Models\Shop\SimTimeOrder;
 
 class ProcessWebhookJob extends SpatieProcessWebhookJob
 {
-    public function __construct(SimRun $sim_run)
+    public function __construct()
     {
         $this->queue = 'webhook';
     }
