@@ -419,12 +419,12 @@ class SimRunBatch extends Model
 
     public function best_vs_buy_hold()
     {
-        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
+        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max(); 
     }
 
     public function winning_sim_run(): SimRun
     {   
-        return $this->sim_runs->filter(fn($sr) => $sr->result('vs_buy_hold') == $this->best_vs_buy_hold())->first();
+        return $this->sim_runs->sortBy(fn($sr) => $sr->result('vs_buy_hold'))->last();
     }
 
     public function winning_strategy(): Strategy

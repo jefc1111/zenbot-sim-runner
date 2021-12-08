@@ -56,8 +56,8 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     }
 
     public function get_best_batch(): SimRunBatch
-    {
-        return $this->completed_sim_run_batches->sortBy(fn($b) => $b->best_vs_buy_hold())->first();
+    {        
+        return $this->completed_sim_run_batches->sortBy(fn($b) => $b->best_vs_buy_hold())->last();
     }
 
     public function get_best_sim_run(): SimRun
