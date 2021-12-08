@@ -12,7 +12,7 @@ trait InvokesZenbot {
     {
         return [
             config('zenbot.node_executable'), 
-            '--max-old-space-size='.env('NODE_MAX_OLD_SPACE_SIZE', 1024),
+            '--max-old-space-size='.config('zenbot.node_max_old_space_size'),
             config('zenbot.location').'/zenbot.js'
         ]; 
     }

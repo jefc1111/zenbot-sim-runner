@@ -27,13 +27,16 @@ class SimTimeOrder extends Model
     public function generate_invoice()
     {   
         try {
-            $client = new Invoice(env('BTCPAY_HOST'), env('BTCPAY_API_KEY'));
+            $client = new Invoice(
+                config('btcpay.host'), 
+                config('btcpay.api_key')
+            );
             
             $checkout_options = new InvoiceCheckoutOptions();
             $checkout_options->setRedirectURL(route("shop"));
 
             $this->invoice = $client->createInvoice(
-                env('BTCPAY_STORE_ID'),
+                config('btcpay.store_id'),
                 $this->sim_time_bundle->currency,
                 PreciseNumber::parseString($this->sim_time_bundle->cost),
                 $this->id,

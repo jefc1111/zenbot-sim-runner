@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()    
     {   
-        if (str_contains(env('APP_URL'), 'https')) {
+        if (str_contains(config('url'), 'https')) {
             \URL::forceScheme('https');
         }
     }
