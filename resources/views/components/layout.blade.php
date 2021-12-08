@@ -48,8 +48,8 @@
             @endif
             @if (\Session::has('error'))
             <div class="alert alert-danger">
-                <span style="font-size: 1.2em; ">                    
-                    <ion-icon name="information-circle-outline"></ion-icon>                                    
+                <span style="font-size: 2em; ">                    
+                    <ion-icon name="alert-outline"></ion-icon>                                    
                     {!! \Session::get('error') !!}
                 </span>
             </div>
