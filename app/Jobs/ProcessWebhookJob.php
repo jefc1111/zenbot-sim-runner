@@ -7,15 +7,10 @@ use App\Models\Shop\SimTimeOrder;
 
 class ProcessWebhookJob extends SpatieProcessWebhookJob
 {
-    public function __construct()
-    {
-        $this->queue = 'webhook';
-
-        parent::__construct();
-    }
+    public $queue = 'webhook';
 
     public function handle()
-    {
+    {        
         $payload = json_decode($this->webhookCall)->payload;
 
         if ($payload->type === "InvoiceSettled") {
@@ -24,8 +19,6 @@ class ProcessWebhookJob extends SpatieProcessWebhookJob
             $sim_time_order->mark_invoice_settled();
         } else {
             \Log::error("Webhook \"$payload->type\" type has not been implemented");
-        }
-        
-        // perform the work here
+        }        
     }
 }
