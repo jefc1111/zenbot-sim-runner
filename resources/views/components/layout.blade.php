@@ -53,9 +53,8 @@
                     {!! \Session::get('error') !!}
                 </span>
             </div>
-            @else
-            @include('shared.private_beta_warning')
             @endif
+            @include('shared.private_beta_warning')
             <hr />        
             {{ $slot }}
             <hr />

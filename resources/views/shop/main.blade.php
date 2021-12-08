@@ -1,6 +1,6 @@
 <x-layout>
     <h4>Available bundles</h4>
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-warning" role="alert">
         <h5 class="alert-heading"><strong>Important information about sim time bundles</strong></h5>
         - BTC is the only payment method currently accepted.</span>
         <br>
