@@ -10,6 +10,8 @@ class ProcessWebhookJob extends SpatieProcessWebhookJob
     public function __construct()
     {
         $this->queue = 'webhook';
+
+        parent::__construct();
     }
 
     public function handle()
