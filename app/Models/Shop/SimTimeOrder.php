@@ -52,6 +52,8 @@ class SimTimeOrder extends Model
             $this->save();
         } catch (\Throwable $e) {
             \Log::error("Error: " . $e->getMessage());
+
+            abort(500, 'Error creating invoice. '.$e->getMessage());
         }
     }
 
