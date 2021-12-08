@@ -42,6 +42,10 @@ class ShopController extends Controller
         ]);
 
         if (! $order->generate_invoice()) {
+            $order->status = 'invoice-create-failed';
+
+            $order->save();
+            
             return redirect('shop')->with('error', 'Problem creating invoice.');
         }        
 
