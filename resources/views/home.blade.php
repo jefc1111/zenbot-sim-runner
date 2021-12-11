@@ -25,7 +25,7 @@
                         @endif
                     </p>
                     <a href="/sim-run-batches/create" class="btn btn-primary">
-                        @if (\Auth::user()->sim_run_batches->count() === 0)
+                        @if (\Auth::user()->completed_sim_run_batches->count() === 0)
                         Create one
                         @else
                         Create another batch
