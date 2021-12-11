@@ -47,6 +47,10 @@
             <td>Run time (aggregate)</td>
             <td>{{ $batch->run_time() }}s. ({{ gmdate("H\h i\m s\s", $batch->run_time()) }})</td>
         </tr>
+        <tr>
+            <td>Owner</td>
+            <td>{{ $batch->user->email }}</td>
+        </tr>
         @endif
     </tbody>
 </table>
