@@ -227,7 +227,7 @@ return [
                 'balanceCooldown' => 3,
             ],
         ],
-        'prod_worker' => [
+        'prod_sim_runner' => [
             'supervisor-sim' => [
                 'connection' => 'redis',
                 'balance' => 'auto',
@@ -239,7 +239,9 @@ return [
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
                 'balanceCooldown' => 3,
-            ],
+            ]
+        ],
+        'prod_backfiller' => [
             'supervisor-backfill' => [
                 'connection' => 'redis',
                 'balance' => 'auto',
