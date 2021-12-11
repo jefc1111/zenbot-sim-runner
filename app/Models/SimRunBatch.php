@@ -302,6 +302,11 @@ class SimRunBatch extends Model
         return $strategy;
     }    
 
+    public function get_backfill_cmd(): string
+    {
+        return implode(' ', $this->backfill_cmd_components());
+    }
+
     private function backfill_cmd_components(): array
     {
         return array_merge(

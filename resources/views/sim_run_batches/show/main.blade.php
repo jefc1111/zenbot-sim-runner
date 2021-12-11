@@ -99,6 +99,9 @@
             </div>
             <div class="tab-pane" id="backfill" role="tabpanel" aria-labelledby="backfill-tab">
                 @include('shared.live_log')
+                <p>
+                    {{ $batch->get_backfill_cmd() }}
+                </p>
             </div>
         </div>            
     </div>
