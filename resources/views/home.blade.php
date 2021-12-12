@@ -16,16 +16,21 @@
                 <div class="card-body">
                     <h5 class="card-title">Sim run results</h5>
                     <p class="card-text">
-                        @if (\Auth::user()->completed_sim_run_batches->count() === 0)
-                        You don't have any completed batches yet.
-                        @else
-                        <?php $best_sim_run = \Auth::user()->get_best_sim_run(); ?>
-                        You have <a href="/sim-run-batches">{{ \Auth::user()->sim_run_batches->count() }} complete batch{{ \Auth::user()->sim_run_batches->count() > 1 ? 'es' : '' }}</a> with a 
-                        <a href="/sim-runs/{{ $best_sim_run->id }}">best vs. buy/hold</a> of {{ round($best_sim_run->result('vs_buy_hold'), 2) }}% 
+                        @if (\Auth::user()->sim_run_batches->count() === 0)
+                        You don't have any batches yet.
+                        @else 
+                        You have <a href="/sim-run-batches">{{ \Auth::user()->sim_run_batches->count() }} batch{{ \Auth::user()->sim_run_batches->count() > 1 ? 'es' : '' }}</a> 
+                            @if (\Auth::user()->completed_sim_run_batches->count() > 0)
+                            <?php $best_sim_run = \Auth::user()->get_best_sim_run(); ?>
+                            with a 
+                            <a href="/sim-runs/{{ $best_sim_run->id }}">best vs. buy/hold</a> of {{ round($best_sim_run->result('vs_buy_hold'), 2) }}% 
+                            @else
+                            (none completed) 
+                            @endif
                         @endif
                     </p>
                     <a href="/sim-run-batches/create" class="btn btn-primary">
-                        @if (\Auth::user()->completed_sim_run_batches->count() === 0)
+                        @if (\Auth::user()->sim_run_batches->count() === 0)
                         Create one
                         @else
                         Create another batch
