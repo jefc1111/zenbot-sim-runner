@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     Route::get('sim-run-batches/copy/{id}', [SimRunBatchController::class, 'copy']);
     Route::get('sim-run-batches/prune/{id}', [SimRunBatchController::class, 'prune']);
     Route::get('sim-run-batches/reset/{id}', [SimRunBatchController::class, 'reset']);
-    Route::get('sim-run-batches/destroy/{id}', [SimRunBatchController::class, 'destroy']);
+    //Route::get('sim-run-batches/destroy/{id}', [SimRunBatchController::class, 'destroy'])->can('delete', 'sim_run_batch');;
     Route::get('sim-run-batches/backfill-log/{id}', [SimRunBatchController::class, 'get_backfill_log']);
     Route::get('sim-run-batches/spawn-child-from/{id}', [SimRunBatchController::class, 'spawn_child_from']);
     Route::get('sim-run-batches/status/{id}', [SimRunBatchController::class, 'get_status']);
