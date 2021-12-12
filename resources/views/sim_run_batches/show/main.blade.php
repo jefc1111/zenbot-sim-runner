@@ -99,9 +99,11 @@
             </div>
             <div class="tab-pane" id="backfill" role="tabpanel" aria-labelledby="backfill-tab">
                 @include('shared.live_log')
+                @if (Auth::user()->hasRole('admin'))
                 <p>
                     {{ $batch->get_backfill_cmd() }}
                 </p>
+                @endif
             </div>
         </div>            
     </div>
