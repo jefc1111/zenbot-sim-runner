@@ -5,6 +5,7 @@
             <tr>
                 <th>id</th>
                 <th>Name</th>
+                <th>Enabled</th>
             </tr>
         </thead>
         <tbody>
@@ -14,6 +15,7 @@
                 <td>
                     <a href="/exchanges/{{ $exchange->id }}">{{ $exchange->name }}</a>
                 </td>
+                <td>{{ $exchange->enabled ? 'true' : 'false' }}</id>
             </tr>
             @endforeach
         </tbody>
