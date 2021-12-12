@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SimRunBatchController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(SimRunBatch::class, 'sim_run_batch');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,8 +26,8 @@ class SimRunBatchController extends Controller
     public function index()
     {
         return view('sim_run_batches.list', [
-            'sim_run_batches' => Auth::user()->hasRole('admin') 
-            ? SimRunBatch::all() 
+            'sim_run_batches' => Auth::user()->hasRole('admin')
+            ? SimRunBatch::all()
             : Auth::user()->sim_run_batches
         ]);
     }
@@ -119,10 +124,6 @@ class SimRunBatchController extends Controller
     {
         $batch = SimRunBatch::findOrFail($id);
 
-        if (! Auth::user()->hasRole('admin') && $batch->user_id != Auth::user()->id) {
-            abort(403);
-        }
-
         request()->session()->put('form_data', array_merge(
             \Arr::except($batch->attributesToArray(), [
                 'name', 
@@ -184,16 +185,10 @@ class SimRunBatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
-        if (! Auth::user()->hasRole('admin') && $batch->user_id != Auth::user()->id) {
-            abort(403);
-        }
-
         return view('sim_run_batches.show.main', [
-            'batch' => $batch
+            'batch' => $sim_run_batch
         ]);
     }
 
@@ -226,15 +221,14 @@ class SimRunBatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
+        \Log::error('ee');
+        $msg = "Deleted batch \"$sim_run_batch->name\"";
 
-        $msg = "Deleted batch \"$batch->name\"";
+        SimRun::where('sim_run_batch_id', $sim_run_batch->id)->delete();
 
-        SimRun::where('sim_run_batch_id', $id)->delete();
-
-        SimRunBatch::where('id', $id)->delete();
+        SimRunBatch::where('id', $sim_run_batch->id)->delete();
 
         // @todo: Remove zenbot log files
 
@@ -254,20 +248,12 @@ class SimRunBatchController extends Controller
         
         $sim_run_batch = SimRunBatch::findOrFail($id);
 
-        if (! Auth::user()->hasRole('admin') && $sim_run_batch->user_id != Auth::user()->id) {
-            abort(403);
-        }
-
         return $sim_run_batch->run();
     }
 
     public function spawn_child_from($id)
     {
         $source_batch = SimRunBatch::findOrFail($id);
-
-        if (! Auth::user()->hasRole('admin') && $source_batch->user_id != Auth::user()->id) {
-            abort(403);
-        }
 
         $child_batch = $source_batch->spawn_child();
 
