@@ -91,10 +91,8 @@ class SimRunController extends Controller
         //
     }
 
-    public function run($id)
+    public function run(SimRun $sim_run)
     {
-        $sim_run = SimRun::findOrFail($id);
-
         if (! \Auth::user()->has_sim_time()) {
             return [
                 'success' => false,
@@ -112,10 +110,8 @@ class SimRunController extends Controller
         ];
     }
 
-    public function get_log($id)
+    public function get_log(SimRun $sim_run)
     {
-        $sim_run = SimRun::findOrFail($id);
-
         return [
             'success' => true,
             'lines' => $sim_run->get_log_lines()

@@ -120,19 +120,17 @@ class SimRunBatchController extends Controller
         return redirect('/sim-run-batches/'.$sim_run_batch->id);
     }
 
-    public function copy($id)
+    public function copy(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
         request()->session()->put('form_data', array_merge(
-            \Arr::except($batch->attributesToArray(), [
+            \Arr::except($sim_run_batch->attributesToArray(), [
                 'name', 
                 'created_at', 
                 'updated_at', 
                 'parent_batch_id'
             ]),
             [
-                'name' => $batch->name.' (copy)'
+                'name' => $$sim_run_batch->name.' (copy)'
             ]
         ));
 
@@ -142,35 +140,29 @@ class SimRunBatchController extends Controller
         ]);
     }
 
-    public function prune($id)
+    public function prune(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
         // Delete all sim runs where `result` is empty or `log` is not empty
-        $batch->sim_runs->whereNull('result')->each(fn($sr) => $sr->delete());
-        $batch->sim_runs->whereNotNull('log')->each(fn($sr) => $sr->delete());
+        $sim_run_batch->sim_runs->whereNull('result')->each(fn($sr) => $sr->delete());
+        $sim_run_batch->sim_runs->whereNotNull('log')->each(fn($sr) => $sr->delete());
 
         return back()->with('success', "Pruned incomplete and errored sim runs for batch \"$batch->name\".");
     }
 
-    public function reset($id)
+    public function reset(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
-        $batch->reset();
+        $sim_run_batch->reset();
         
-        return back()->with('success', "Reset batch \"$batch->name\".");
+        return back()->with('success', "Reset batch \"$$sim_run_batch->name\".");
     }
 
-    public function get_status($id)
+    public function get_status(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
         return [
-            'batch_status' => $batch->status,
-            'percent_complete' => $batch->percent_complete(),
-            'qty_errored' => $batch->sim_runs->filter(fn($sr) => $sr->status === 'error')->count(),
-            'sim_run_statuses' => $batch->sim_runs->map(function($sr) {
+            'batch_status' => $sim_run_batch->status,
+            'percent_complete' => $sim_run_batch->percent_complete(),
+            'qty_errored' => $sim_run_batch->sim_runs->filter(fn($sr) => $sr->status === 'error')->count(),
+            'sim_run_statuses' => $sim_run_batch->sim_runs->map(function($sr) {
                 return [
                     'id' => $sr->id,
                     'status' => $sr->status
@@ -223,7 +215,6 @@ class SimRunBatchController extends Controller
      */
     public function destroy(SimRunBatch $sim_run_batch)
     {
-        \Log::error('ee');
         $msg = "Deleted batch \"$sim_run_batch->name\"";
 
         SimRun::where('sim_run_batch_id', $sim_run_batch->id)->delete();
@@ -237,7 +228,7 @@ class SimRunBatchController extends Controller
         ->with('success', $msg); 
     }
 
-    public function run($id)
+    public function run(SimRunBatch $sim_run_batch)
     {
         if (! \Auth::user()->has_sim_time()) {
             return [
@@ -245,28 +236,24 @@ class SimRunBatchController extends Controller
                 'msg' => "You do not have sufficient sim time available"
             ];
         }
-        
-        $sim_run_batch = SimRunBatch::findOrFail($id);
 
         return $sim_run_batch->run();
     }
 
-    public function spawn_child_from($id)
+    public function spawn_child_from(SimRunBatch $sim_run_batch)
     {
-        $source_batch = SimRunBatch::findOrFail($id);
+        $sim_run_batch = SimRunBatch::findOrFail($id);
 
-        $child_batch = $source_batch->spawn_child();
+        $child_batch = $sim_run_batch->spawn_child();
 
         return redirect('/sim-run-batches/'.$child_batch->id);
     }
 
-    public function get_backfill_log($id)
+    public function get_backfill_log(SimRunBatch $sim_run_batch)
     {
-        $batch = SimRunBatch::findOrFail($id);
-
         return [
             'success' => true,
-            'lines' => $batch->get_backfill_log_lines()
+            'lines' => $sim_run_batch->get_backfill_log_lines()
         ];
     }
 }

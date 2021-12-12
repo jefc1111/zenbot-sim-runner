@@ -50,17 +50,17 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     Route::post('sim-run-batches/create/refine-strategies', [SimRunBatchController::class, 'refine_strategies']);
     Route::post('sim-run-batches/create/confirm', [SimRunBatchController::class, 'confirm']);
     
-    Route::get('sim-run-batches/run/{id}', [SimRunBatchController::class, 'run']);
-    Route::get('sim-run-batches/copy/{id}', [SimRunBatchController::class, 'copy']);
-    Route::get('sim-run-batches/prune/{id}', [SimRunBatchController::class, 'prune']);
-    Route::get('sim-run-batches/reset/{id}', [SimRunBatchController::class, 'reset']);
-    Route::get('sim-run-batches/backfill-log/{id}', [SimRunBatchController::class, 'get_backfill_log']);
-    Route::get('sim-run-batches/spawn-child-from/{id}', [SimRunBatchController::class, 'spawn_child_from']);
-    Route::get('sim-run-batches/status/{id}', [SimRunBatchController::class, 'get_status']);
+    Route::get('sim-run-batches/run/{sim_run_batch}', [SimRunBatchController::class, 'run'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/copy/{sim_run_batch}', [SimRunBatchController::class, 'copy'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/prune/{sim_run_batch}', [SimRunBatchController::class, 'prune'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/reset/{sim_run_batch}', [SimRunBatchController::class, 'reset'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/backfill-log/{sim_run_batch}', [SimRunBatchController::class, 'get_backfill_log'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/spawn-child-from/{sim_run_batch}', [SimRunBatchController::class, 'spawn_child_from'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/status/{sim_run_batch}', [SimRunBatchController::class, 'get_status']);
     Route::resource('sim-run-batches', SimRunBatchController::class);
     
-    Route::get('sim-runs/run/{id}', [SimRunController::class, 'run']);
-    Route::get('sim-runs/log/{id}', [SimRunController::class, 'get_log']);
+    Route::get('sim-runs/run/{sim_run}', [SimRunController::class, 'run'])->can('view', 'sim_run');
+    Route::get('sim-runs/log/{sim_run}', [SimRunController::class, 'get_log'])->can('view', 'sim_run');
     Route::resource('sim-runs', SimRunController::class);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
