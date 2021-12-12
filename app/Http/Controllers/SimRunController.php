@@ -8,6 +8,11 @@ use App\Jobs\ProcessSimRun;
 
 class SimRunController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(SimRunBatch::class, 'sim_run');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,10 +50,10 @@ class SimRunController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SimRun $sim_run)
     {
         return view('sim_runs.show.main', [
-            'sim_run' => SimRun::findOrFail($id)
+            'sim_run' => $sim_run
         ]);
     }
 
