@@ -30,17 +30,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 });
 
 Route::group(['middleware' => ['auth', 'verified', 'approved']], function () { 
-
     Route::get('/', function () {
         return view('home');
     });    
     
-    Route::get('import-all', [ImportFromZenbotController::class, 'import_all']);
-    
-    Route::get('import-strategies', [StrategyController::class, 'import_strategies']);
     Route::resource('strategies', StrategyController::class);
     
-    Route::get('import-exchanges', [ExchangeController::class, 'import_exchanges']);
     Route::resource('exchanges', ExchangeController::class);
     
     Route::resource('strategy-options', StrategyOptionController::class);
@@ -69,12 +64,15 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);    
 });
 
+Route::group(['middleware' => ['auth', 'verified', 'approved', 'is-admin']], function () { 
+    Route::get('import-all', [ImportFromZenbotController::class, 'import_all']);
+    Route::get('import-strategies', [StrategyController::class, 'import_strategies']);
+    Route::get('import-exchanges', [ExchangeController::class, 'import_exchanges']);
+});
+
 Auth::routes(
     ['verify' => true]
 );
-
-
-
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
