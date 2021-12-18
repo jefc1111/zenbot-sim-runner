@@ -22,7 +22,8 @@
         "sensiolabs/ansi-to-html": "^1.2",
         "spatie/laravel-webhook-client": "^3.0",
         "symfony/process": "^5.2",
-        "tcg/voyager": "^1.4"
+        "tcg/voyager": "^1.4",
+        "aws/aws-sdk-php-laravel": "~3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
