@@ -37,10 +37,6 @@ class check_worker_clusters extends Command
      */
     public function handle()
     {
-        if (! config('aws-zsr.do_ecs_remote_control')) {
-            return false;
-        }
-
         $aws_ecs = \AWS::createClient('ecs');
 
         $ecs_cluster_name = config('aws-zsr.cluster_name');
