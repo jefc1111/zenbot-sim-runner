@@ -146,7 +146,7 @@ class SimRunBatchController extends Controller
         $sim_run_batch->sim_runs->whereNull('result')->each(fn($sr) => $sr->delete());
         $sim_run_batch->sim_runs->whereNotNull('log')->each(fn($sr) => $sr->delete());
 
-        return back()->with('success', "Pruned incomplete and errored sim runs for batch \"$batch->name\".");
+        return back()->with('success', "Pruned incomplete and errored sim runs for batch \"$sim_run_batch->name\".");
     }
 
     public function reset(SimRunBatch $sim_run_batch)
