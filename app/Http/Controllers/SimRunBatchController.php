@@ -242,8 +242,6 @@ class SimRunBatchController extends Controller
 
     public function spawn_child_from(SimRunBatch $sim_run_batch)
     {
-        $sim_run_batch = SimRunBatch::findOrFail($id);
-
         $child_batch = $sim_run_batch->spawn_child();
 
         return redirect('/sim-run-batches/'.$child_batch->id);
