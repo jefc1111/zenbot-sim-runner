@@ -24,7 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command("ecs-clusters:check")->everyMinute();
+        if (config('aws-zsr.do_ecs_remote_control')) {
+            $schedule->command("ecs-clusters:check")->everyMinute();
+        }        
     }
 
     /**

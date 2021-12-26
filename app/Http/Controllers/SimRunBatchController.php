@@ -153,7 +153,7 @@ class SimRunBatchController extends Controller
     {
         $sim_run_batch->reset();
         
-        return back()->with('success', "Reset batch \"$$sim_run_batch->name\".");
+        return back()->with('success', "Reset batch \"$sim_run_batch->name\".");
     }
 
     public function get_status(SimRunBatch $sim_run_batch)
