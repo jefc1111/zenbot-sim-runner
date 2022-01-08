@@ -142,7 +142,7 @@
                 //alert(res.msg)
                 $(".toast").toast('show');
                 
-                $("#run").addClass("disabled");
+                $("#run").attr("disabled", true);
             });
         });
 
