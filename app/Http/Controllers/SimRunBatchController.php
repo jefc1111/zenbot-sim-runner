@@ -130,7 +130,8 @@ class SimRunBatchController extends Controller
                 'parent_batch_id'
             ]),
             [
-                'name' => $sim_run_batch->name.' (copy)'
+                'name' => $sim_run_batch->name.' (copy)',
+                'status' => 'ready'
             ]
         ));
 
