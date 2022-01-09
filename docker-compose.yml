@@ -64,6 +64,7 @@ services:
   mysql:
     container_name: laravel-mysql
     image: mysql:5.7
+    command: --max_connections=500
     ports:
       - 13306:3306
     volumes:
