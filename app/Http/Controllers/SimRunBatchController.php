@@ -55,7 +55,7 @@ class SimRunBatchController extends Controller
         request()->session()->put('form_data', request()->all());
 
         return view('sim_run_batches.create.select_strategies', [
-            'strategies' => Strategy::all(),
+            'strategies' => Strategy::where('enabled', true)->get(),
             'batch' => new SimRunBatch(request()->session()->get('form_data')) // Just for display, not saving yet
         ]);
     }
