@@ -6,6 +6,7 @@
                 <th>id</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Enabled</th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +16,8 @@
                 <td>
                     <a href="/strategies/{{ $strategy->id }}">{{ $strategy->name }}</a>
                 </td>
-                <td>{{ $strategy->description }}</td>
+                <td>{{ $strategy->description }}</td>                
+                <td>{{ $strategy->enabled ? 'true' : 'false' }}</id>
             </tr>
             @endforeach
         </tbody>
