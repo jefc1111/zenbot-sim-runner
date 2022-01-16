@@ -50,18 +50,6 @@ class SimRunBatch extends Model
         ]
     ];
 
-    /*
-    public static function boot(){
-        parent::boot();
-        
-        static::addGlobalScope('authorised', function($builder) {
-            if (! Auth::user()->hasRole('admin')) {
-                $builder->where('user_id', Auth::user()->id);
-            }                
-        });
-    }
-    */
-
     public function setAllowAutospawnAttribute($value)
     {
         $this->attributes['allow_autospawn'] = $value === 'on' || $value == 1 || $value === 'true';
@@ -610,5 +598,15 @@ class SimRunBatch extends Model
     public function run_time()
     {
         return $this->sim_runs->sum('runtime');
+    }
+
+    public function can_be_cancelled()
+    {
+        return $this->status !== 'ready' && $this->status !== 'complete';
+    }
+
+    public function cancel()
+    {
+        
     }
 }

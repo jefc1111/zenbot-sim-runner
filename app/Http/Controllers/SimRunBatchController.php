@@ -241,6 +241,11 @@ class SimRunBatchController extends Controller
         return $sim_run_batch->run();
     }
 
+    public function cancel(SimRunBatch $sim_run_batch)
+    {
+        return $sim_run_batch->cancel();
+    }
+
     public function spawn_child_from(SimRunBatch $sim_run_batch)
     {
         $child_batch = $sim_run_batch->spawn_child();

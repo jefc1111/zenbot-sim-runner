@@ -10,10 +10,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
+        "aws/aws-sdk-php-laravel": "~3.0",
         "btcpayserver/btcpayserver-greenfield-php": "^1.2",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^8.12",
         "laravel/horizon": "^5.7",
         "laravel/tinker": "^2.5",
@@ -22,8 +23,7 @@
         "sensiolabs/ansi-to-html": "^1.2",
         "spatie/laravel-webhook-client": "^3.0",
         "symfony/process": "^5.2",
-        "tcg/voyager": "^1.4",
-        "aws/aws-sdk-php-laravel": "~3.0"
+        "tcg/voyager": "^1.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

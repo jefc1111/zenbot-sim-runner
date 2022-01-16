@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     Route::post('sim-run-batches/create/confirm', [SimRunBatchController::class, 'confirm']);
     
     Route::get('sim-run-batches/run/{sim_run_batch}', [SimRunBatchController::class, 'run'])->can('view', 'sim_run_batch');
+    Route::get('sim-run-batches/cancel/{sim_run_batch}', [SimRunBatchController::class, 'cancel'])->can('view', 'sim_run_batch');
     Route::get('sim-run-batches/copy/{sim_run_batch}', [SimRunBatchController::class, 'copy'])->can('view', 'sim_run_batch');
     Route::get('sim-run-batches/prune/{sim_run_batch}', [SimRunBatchController::class, 'prune'])->can('view', 'sim_run_batch');
     Route::get('sim-run-batches/reset/{sim_run_batch}', [SimRunBatchController::class, 'reset'])->can('view', 'sim_run_batch');
