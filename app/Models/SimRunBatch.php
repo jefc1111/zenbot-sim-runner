@@ -607,6 +607,6 @@ class SimRunBatch extends Model
 
     public function cancel()
     {
-        
+        $this->sim_runs->each(fn($sr) => $sr->cancel());
     }
 }

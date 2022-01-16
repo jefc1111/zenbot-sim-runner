@@ -37,8 +37,12 @@ class ProcessSimRun implements ShouldQueue
      * @return void
      */
     public function handle()
-    {        
-        $this->sim_run->run();        
+    {   
+        if ($this->sim_run->status === "pending-cancel") {
+            $this->sim_run->set_status("user-cancelled");
+        } else {  
+            $this->sim_run->run();
+        }        
     }
 
     public function failed(Throwable $exception)

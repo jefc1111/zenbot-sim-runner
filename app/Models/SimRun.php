@@ -22,6 +22,19 @@ class SimRun extends Model
     use InvokesZenbot;
     use HasStatus;
 
+    public $statuses = [
+        'pending-cancel' => [
+            'label' => 'cancel requested',
+            'style' => 'warning',
+            'spinner' => true
+        ],
+        'user-cancelled' => [
+            'label' => 'cancelled by user',
+            'style' => 'primary',
+            'spinner' => false
+        ],
+    ];
+
     protected $guarded = [
         'id'
     ];
@@ -252,5 +265,10 @@ class SimRun extends Model
         return json_decode(
             substr($raw_cmd_output, $start, $end - $start + 1)
         );
+    }
+
+    public function cancel()
+    {
+        $this->set_status("pending-cancel");
     }
 }
