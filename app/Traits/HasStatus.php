@@ -31,7 +31,7 @@ trait HasStatus {
         ],
     ];
 
-    public function set_status(string $status): void
+    public function set_status(string $status, string $msg = ''): void
     {
         if (array_key_exists($status, $this->all_statuses())) {
             $this->status = $status;
@@ -39,6 +39,30 @@ trait HasStatus {
             $this->save();
         } else {
             \Log::error("Sim run batch status {$status} not found.");
+        }
+
+        if ($status === 'error') {
+            $this->notify_of_error($msg);
+        }
+    }
+
+    private function notify_of_error(string $msg): void
+    {
+        $class_name = (new \ReflectionClass($this))->getShortName();
+
+        try {
+            $res = \Illuminate\Support\Facades\Http::post(config('discord.error_webhook_url'), [
+                'content' => "A $class_name completed in error",
+                'embeds' => [
+                    [
+                        'title' => "$class_name $this->name ($this->id)",
+                        'description' => $msg,
+                        'color' => '16711680',
+                    ]
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            \Log::error("Error sending message to Discord: " . $e->getMessage());
         }
     }
 

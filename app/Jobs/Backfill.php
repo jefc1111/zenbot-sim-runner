@@ -41,8 +41,8 @@ class Backfill implements ShouldQueue
         $this->sim_run_batch->do_backfill();        
     }
 
-    public function failed(Throwable $exception)
+    public function failed($exception)
     {
-        $this->sim_run_batch->set_status('error');
+        $this->sim_run_batch->set_status('error', $exception->getMessage());
     }
 }

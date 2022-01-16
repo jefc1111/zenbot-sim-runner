@@ -47,8 +47,8 @@ class ProcessSimRun implements ShouldQueue
         }        
     }
 
-    public function failed(Throwable $exception)
+    public function failed($exception)
     {
-        $this->sim_run->set_status('error');
+        $this->sim_run->set_status('error', $exception->getMessage());
     }
 }

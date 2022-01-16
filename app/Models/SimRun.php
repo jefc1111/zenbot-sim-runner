@@ -146,9 +146,7 @@ class SimRun extends Model
     {
         $this->set_status('running');
 
-        $start_time = time();
-
-        $errored_output = [];        
+        $start_time = time();       
 
         $process = new Process($this->cmd_components());
 
@@ -178,26 +176,7 @@ class SimRun extends Model
         
             $this->set_status('complete'); // This does a save
         } else {
-            $str_error_output = implode($errored_output);
-            
-            $this->log = $str_error_output;
-        
-            $this->set_status('error'); // This does a save
-            
-            try {
-                \Illuminate\Support\Facades\Http::post('https://discord.com/api/webhooks/931965394258903050/Pq2uuVkXkHCIEgPfHhz_SIYs00HhB5s0Z6VojDMSG3ASHGsvFi_or-UKL26tjo0erTLf', [
-                    'content' => "A sim run completed in error",
-                    'embeds' => [
-                        [
-                            'title' => "Sim run $this->name ($this->id) from batch {$this->sim_run_batch->name} ({$this->sim_run_batch->id})",
-                            'description' => $str_error_output,
-                            'color' => 'red',
-                        ]
-                    ],
-                ]);
-            } catch (\Throwable $e) {
-                \Log::error("Error sending message to Discord: " . $e->getMessage());
-            }
+            $this->set_status('error', $last_msg); // This does a save
 
             throw new ProcessFailedException($process);
         }

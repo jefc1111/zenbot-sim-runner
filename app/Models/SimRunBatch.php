@@ -577,7 +577,6 @@ class SimRunBatch extends Model
 
     private function delete_backfill_log()
     {
-        \Log::error($this->backfill_log_path());
         \Storage::disk('zenbot-logs')->delete($this->backfill_log_path());
     }
 
