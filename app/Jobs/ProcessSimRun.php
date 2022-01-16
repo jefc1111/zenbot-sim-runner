@@ -28,7 +28,9 @@ class ProcessSimRun implements ShouldQueue
 
         $this->sim_run = $sim_run;
 
-        $this->sim_run->set_status('queued');
+        if ($this->sim_run->status !== "pending-cancel") {
+            $this->sim_run->set_status('queued');
+        }        
     }
 
     /**

@@ -30,7 +30,7 @@ class SimRun extends Model
         ],
         'user-cancelled' => [
             'label' => 'cancelled by user',
-            'style' => 'primary',
+            'style' => 'success',
             'spinner' => false
         ],
     ];
@@ -265,6 +265,11 @@ class SimRun extends Model
         return json_decode(
             substr($raw_cmd_output, $start, $end - $start + 1)
         );
+    }
+
+    public function can_be_cancelled()
+    {
+        return $this->status === 'ready' || $this->status === 'queued';
     }
 
     public function cancel()
