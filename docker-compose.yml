@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    restart: always
     depends_on:
       - redis
       - mysql
@@ -25,6 +26,7 @@ services:
   scheduler:
     image: laravel-www
     container_name: laravel-scheduler
+    restart: always
     depends_on:
       - app
     volumes:
@@ -40,6 +42,7 @@ services:
   queue:
     image: laravel-www
     container_name: laravel-queue
+    restart: always
     depends_on:
       - app
     volumes:
@@ -56,6 +59,7 @@ services:
   redis:
     container_name: laravel-redis
     image: redis:4-alpine
+    restart: always
     expose:
       - 6379
     volumes:
@@ -64,6 +68,7 @@ services:
   mysql:
     container_name: laravel-mysql
     image: mysql:5.7
+    restart: always
     command: --max_connections=500
     ports:
       - 13306:3306
@@ -78,6 +83,7 @@ services:
   mongodb:
     image: mongo:latest
     container_name: zenbot-mongodb
+    restart: always
     volumes:
       - /var/lib/mongodb:/data/db
     command: mongod --bind_ip=0.0.0.0 --logpath=/dev/null
