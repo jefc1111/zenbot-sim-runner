@@ -3,7 +3,6 @@ FROM php:8.0.6-apache-buster
 COPY . /var/www/html
 COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/start.sh /usr/local/bin/start
-COPY docker/php.ini /usr/local/etc/php/php.ini
 
 RUN chown -R www-data:www-data /var/www/html * \
     && chmod u+x /usr/local/bin/start \
@@ -20,5 +19,6 @@ RUN npm install npm@latest -g && \
 RUN /var/www/html/docker/zenbot-install.sh
 COPY zenbot-conf.js /home/zenbot/conf.js
 
+COPY docker/php.ini /usr/local/etc/php/php.ini
 
 CMD ["/usr/local/bin/start"]
