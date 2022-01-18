@@ -40,9 +40,9 @@ trait InvokesZenbot {
         $lines = [];
 
         foreach ($process as $type => $data) {            
-            $lines[] = $data.PHP_EOL;
-
-            $lines = array_slice($lines, -config('zenbot.log_lines_to_keep'));
+            $lines[] = $data;
+            
+            $lines = array_slice($lines, config('zenbot.log_lines_to_keep') * -1);
 
             Storage::disk('zenbot-logs')->put($path, $lines);
 
