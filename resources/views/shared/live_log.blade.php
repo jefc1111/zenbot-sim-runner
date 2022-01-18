@@ -6,6 +6,7 @@
             </ul>
         </code>
     </div>
+    <p>Last {{ config('zenbot.log_lines_to_keep') }} lines</p>
 </div>
 
 <style>

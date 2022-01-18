@@ -37,10 +37,14 @@ trait InvokesZenbot {
     {
         $last_msg = '';
 
-        Storage::disk('zenbot-logs')->put($path, '');
-        
-        foreach ($process as $type => $data) {
-            Storage::disk('zenbot-logs')->append($path, $data);
+        $lines = [];
+
+        foreach ($process as $type => $data) {            
+            $lines[] = $data.PHP_EOL;
+
+            $lines = array_slice($lines, -config('zenbot.log_lines_to_keep'));
+
+            Storage::disk('zenbot-logs')->put($path, $lines);
 
             $last_msg = $data;
         }
