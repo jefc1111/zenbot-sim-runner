@@ -69,7 +69,7 @@ services:
     container_name: laravel-mysql
     image: mysql:5.7
     restart: always
-    command: --max_connections=500
+    command: --max_connections=500 --wait_timeout=30 --session_timeout=30
     ports:
       - 13306:3306
     volumes:
