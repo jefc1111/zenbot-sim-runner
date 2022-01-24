@@ -150,8 +150,8 @@ class SimRun extends Model
 
         $process = new Process($this->cmd_components());
 
-        set_time_limit(14400);
-        $process->setTimeout(14400);
+        set_time_limit(config('zenbot.sim_timeout'));
+        $process->setTimeout(config('zenbot.sim_timeout'));
 
         $process->setWorkingDirectory(config('zenbot.location'));
 

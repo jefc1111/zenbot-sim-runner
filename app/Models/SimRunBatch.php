@@ -326,9 +326,9 @@ class SimRunBatch extends Model
         $errored_output = [];
         
         $process = new Process($this->backfill_cmd_components());
-
-        set_time_limit(3600); // 1 hour
-        $process->setTimeout(3600);
+        
+        set_time_limit(config('zenbot.backfill_timeout'));
+        $process->setTimeout(config('zenbot.backfill_timeout'));
 
         $process->setWorkingDirectory(config('zenbot.location'));
 

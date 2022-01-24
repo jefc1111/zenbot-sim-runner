@@ -172,7 +172,7 @@ return [
             'memory' => env('HORIZON_MAX_MEMORY', 1024),
             'tries' => 1,
             'nice' => 0,
-            'timeout' => 14400
+            'timeout' => 60
         ],
         'supervisor-sim' => [
             'connection' => 'redis',
@@ -180,7 +180,7 @@ return [
             'memory' => env('HORIZON_MAX_MEMORY', 1024),
             'tries' => 1,
             'nice' => 0,
-            'timeout' => 14400
+            'timeout' => env('ZENBOT_SIM_TIMEOUT', 28800)
         ],
         'supervisor-backfill' => [
             'connection' => 'redis',
@@ -188,7 +188,7 @@ return [
             'memory' => env('HORIZON_MAX_MEMORY', 1024),
             'tries' => 1,
             'nice' => 0,
-            'timeout' => 14400
+            'timeout' => env('ZENBOT_BACKFILL_TIMEOUT', 28800)
         ],
         'supervisor-webhook' => [
             'connection' => 'redis',
@@ -196,7 +196,7 @@ return [
             'memory' => env('HORIZON_MAX_MEMORY', 1024),
             'tries' => 1,
             'nice' => 0,
-            'timeout' => 14400
+            'timeout' => 60
         ],
         */
     ],
@@ -234,7 +234,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => env('ZENBOT_SIM_TIMEOUT', 28800),
                 'queue' => ['sim'],
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
@@ -248,7 +248,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => env('ZENBOT_BACKFILL_TIMEOUT', 28800),
                 'queue' => ['backfill'],
                 'maxProcesses' => env('HORIZON_MAX_WORKER_PROCESSES', 1),
                 'balanceMaxShift' => 0,
@@ -262,7 +262,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => 60,
                 'queue' => ['default'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
@@ -272,7 +272,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => env('ZENBOT_SIM_TIMEOUT', 28800),
                 'queue' => ['sim'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
@@ -282,7 +282,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => env('ZENBOT_BACKFILL_TIMEOUT', 28800),
                 'queue' => ['backfill'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
@@ -292,7 +292,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 14400,
+                'timeout' => 60,
                 'queue' => ['webhook'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
