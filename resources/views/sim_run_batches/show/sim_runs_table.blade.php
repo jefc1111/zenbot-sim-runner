@@ -37,10 +37,46 @@
         </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr>
+            <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>            
+        </tr>
+    </tfoot>
 </table>  
 
-<script>
+<script>    
     $(document).ready(function () {
-        $('table#sim-runs-table').DataTable();                   
+        var addFilterSelects = function(columnsToFilter) {
+            this.api().columns(columnsToFilter).every(function () {
+                var column = this;
+
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val().trim()
+                        );
+
+                        column
+                            .search(val, false, false)
+                            .draw();
+                        }
+                    );
+
+                column
+                    .data()
+                    .map(function(e) { return $("<span>" + e + "</span>").text() })
+                    .unique()
+                    .sort()
+                    .each( function (d, j) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } 
+                );                    
+            });
+        }
+
+        $('table#sim-runs-table').DataTable({
+            initComplete: function() { addFilterSelects.call(this, [1, 7]) }
+        });
     });
 </script>
