@@ -16,6 +16,7 @@
                 <th>Qty strategies</th>
                 <th>Best vs. buy hold</th>
                 <th>Status</th>
+                <th>Initiator</th>
                 @if($show_all_columns)
                 <th>User</th>
                 @endif
@@ -37,8 +38,9 @@
                 <td>{{ $sim_run_batch->humanised_date_range_with_duration() }}</td>
                 <td>{{ $sim_run_batch->sim_runs->count() }}</td>
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
-                <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
+                <td>{{ $sim_run_batch->best_vs_buy_hold(2, '%') }}</td>
                 <td>{{ $sim_run_batch->status }}</td>
+                <td>{{ $sim_run_batch->parent_batch_id ? 'system' : 'user' }}</td>
                 @if($show_all_columns)
                 <td>{{ $sim_run_batch->user ? $sim_run_batch->user->email : 'unknown user' }}</td>
                 @endif                
@@ -47,7 +49,7 @@
         </tbody>
         <tfoot>
             <tr>
-                {!! str_repeat("<th></th>", $show_all_columns ? 12 : 9) !!}    
+                {!! str_repeat("<th></th>", $show_all_columns ? 13 : 10) !!}    
             </tr>
         </tfoot>
     </table> 
@@ -84,7 +86,7 @@
             }        
             
             $('#sim-run-batches').DataTable({
-                initComplete: function() { addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10]" : "[2, 3, 8]" !!}) }
+                initComplete: function() { addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9]" !!}) }
             });
         });
     </script>

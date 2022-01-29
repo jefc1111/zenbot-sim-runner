@@ -427,9 +427,11 @@ class SimRunBatch extends Model
         return $this->qty_complete() === $this->sim_runs->count();
     }
 
-    public function best_vs_buy_hold()
+    public function best_vs_buy_hold(int $round = 10, string $suffix = null)
     {
-        return $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max(); 
+        $res = $this->sim_runs->map(fn($sr) => $sr->result('vs_buy_hold'))->max();
+        
+        return $res ? round($res, $round).$suffix : null; 
     }
 
     public function winning_sim_run(): SimRun
