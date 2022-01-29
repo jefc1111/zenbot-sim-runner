@@ -9,6 +9,7 @@
                 <th>Product</th>
                 <th>Asset</th>
                 <th>Currency</th>
+                <th>Date range</th>
                 <th>Qty sim runs</th>
                 <th>Qty strategies</th>
                 <th>Best vs. buy hold</th>
@@ -27,6 +28,7 @@
                 <td>{{ $sim_run_batch->product->name }}</td>
                 <td>{{ $sim_run_batch->product->asset }}</td>
                 <td>{{ $sim_run_batch->product->currency }}</td>
+                <td>{{ $sim_run_batch->humanised_date_range() }}</td>
                 <td>{{ $sim_run_batch->sim_runs->count() }}</td>
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
                 <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
@@ -78,4 +80,11 @@
             });
         });
     </script>
+    <style>
+        td {
+            white-space: nowrap;
+            max-width: 200px;
+            overflow: hidden;
+        }
+    </style>
 </x-layout>

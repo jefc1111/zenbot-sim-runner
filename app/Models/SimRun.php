@@ -159,6 +159,8 @@ class SimRun extends Model
         
         $process->start();
 
+        \Storage::disk('zenbot-logs')->put($this->get_log_path(), '');  
+
         $last_msg = $this->write_log_file_and_get_last_msg($process, $this->get_log_path());
 
         if ($process->getExitCode() !== 0) {
@@ -229,7 +231,8 @@ class SimRun extends Model
         $converter = new AnsiToHtmlConverter($theme);
                 
         if (\Storage::disk('zenbot-logs')->exists($this->get_log_path())) {
-            return explode("\n", $converter->convert($this->get_log_file()));
+            return explode("\n", $this->get_log_file());
+            //return explode("\n", $converter->convert($this->get_log_file()));
         } else {
             return [];
         }
