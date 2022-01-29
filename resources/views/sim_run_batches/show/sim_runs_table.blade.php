@@ -80,7 +80,7 @@
         }
 
         $('table#sim-runs-table').DataTable({
-            initComplete: function() { addFilterSelects.call(this, [1, 7]) }
+            initComplete: function() { addFilterSelects.call(this, [1, 8]) }
         });
     });
 </script>
