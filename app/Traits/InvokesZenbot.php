@@ -40,7 +40,8 @@ trait InvokesZenbot {
         $new_data = implode('', array_map(
             function($data) {
                 return $data;
-            }
+            },
+            $process
         ));
                     
         Storage::disk('zenbot-logs')->append($path, $new_data, null);
