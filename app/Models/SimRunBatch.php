@@ -115,7 +115,7 @@ class SimRunBatch extends Model
     {
         $faked_input_data = [];
 
-        foreach ($this->get_varying_strategy_options() as $opt) {
+        foreach ($this->get_varying_options_for_winning_strategy() as $opt) {
             $rec = $this->get_recommendation_for_option($opt);
             
             $faked_input_data[$opt->id.'-min'] = $rec->min;
@@ -169,7 +169,7 @@ class SimRunBatch extends Model
         return $this->get_all_strategies_used()->count();
     } 
 
-    private function get_all_strategies_used()
+    public function get_all_strategies_used()
     {
         return $this->sim_runs->map(fn($sr) => $sr->strategy)->unique();
     }
@@ -452,14 +452,17 @@ class SimRunBatch extends Model
     }
 
     // $sim_runs all need to have the same strategy so need to probably check that
-    public function get_varying_strategy_options()
+    public function get_varying_options_for_winning_strategy()
     {
-        $winning_strategy = $this->winning_strategy();
+        return $this->get_varying_options_for_strategy($this->winning_strategy());
+    }
 
-        $runs_for_winning_strategy = $this->all_sim_runs_for_strategy($winning_strategy);
+    public function get_varying_options_for_strategy(Strategy $strategy)
+    {
+        $sim_runs = $this->all_sim_runs_for_strategy($strategy);
 
-        return $winning_strategy->options->filter(function($opt) use($runs_for_winning_strategy) {
-            $all_values_for_opt = $runs_for_winning_strategy->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
+        return $strategy->options->filter(function($opt) use($sim_runs) {
+            $all_values_for_opt = $sim_runs->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
         
             // We only want to return strategy options where the set of sim runs given has more than 
             // one distinct value (i.e. the user did select a range for interpolation)
@@ -529,7 +532,7 @@ class SimRunBatch extends Model
     {
         $that = $this; 
 
-        return $this->get_varying_strategy_options()->filter(function($opt) use($that) {
+        return $this->get_varying_options_for_winning_strategy()->filter(function($opt) use($that) {
             $that->trend_score_for_option($opt);
 
             return $opt->effect_on_trend() !== 0;  

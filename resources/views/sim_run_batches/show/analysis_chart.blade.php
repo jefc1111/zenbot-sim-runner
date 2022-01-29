@@ -30,7 +30,7 @@
                 },
                 opposite: true
             },
-            @foreach($batch->get_varying_strategy_options() as $opt)
+            @foreach($batch->get_varying_options_for_winning_strategy() as $opt)
             {
                 title: {
                     text: "{{ $opt->name }}"
@@ -59,7 +59,7 @@
             opacity: 0.5,
             data: {!! json_encode($batch->all_sim_runs_for_strategy($strategy, 'vs_buy_hold')->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
         }, 
-        @foreach($batch->get_varying_strategy_options()->values() as $k => $opt)
+        @foreach($batch->get_varying_options_for_winning_strategy()->values() as $k => $opt)
         {
             name: "{{ $opt->name }}",
             yAxis: {{ $k + 2 }},

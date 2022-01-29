@@ -181,8 +181,15 @@ class SimRunBatchController extends Controller
      */
     public function show(SimRunBatch $sim_run_batch)
     {
+        $varying_options_by_strategy_id = [];
+
+        foreach ($sim_run_batch->get_all_strategies_used() as $strategy) {
+            $varying_options_by_strategy_id[$strategy->id] = $sim_run_batch->get_varying_options_for_strategy($strategy);
+        }
+
         return view('sim_run_batches.show.main', [
-            'batch' => $sim_run_batch
+            'batch' => $sim_run_batch,
+            'varying_options_by_strategy_id' => $varying_options_by_strategy_id
         ]);
     }
 

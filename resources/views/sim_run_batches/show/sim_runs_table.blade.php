@@ -3,6 +3,7 @@
         <tr>
             <th>id</th>
             <th>Strategy</th>
+            <th>Options</th>
             <th>Run time</th>
             <th>Qty trades</th>
             <th>Buy & hold Profit</th>
@@ -20,14 +21,17 @@
             <td>
                 <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a>
             </td>
+            <td>
+                @include('sim_run_batches.show.sim_run_options_table')
+            </td>
             @if($sim_run->result || $sim_run->log)
-            <td>{{ $sim_run->runtime }}s.</td>            
+            <td>{{ gmdate("H\h i\m s\s", $sim_run->runtime) }}</td>            
             <td>{{ $sim_run->result('total_trades') }}</td>
             <td>{{ $sim_run->result_conv_pct('buy_hold_profit', 4) }}</td>
             <td>{{ $sim_run->result_conv_pct('profit', 4) }}</td>            
             <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
             @else
-            <td></td><td></td><td></td><td></td><td></td>
+            {!! str_repeat("<td></td>", 5) !!}          
             @endif
             <td>
                 <span data-id="{{ $sim_run->id }}" class="sim-run-status text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">
@@ -39,7 +43,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>            
+            {!! str_repeat("<th></th>", 9) !!}                        
         </tr>
     </tfoot>
 </table>  

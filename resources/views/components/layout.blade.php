@@ -81,5 +81,12 @@
                 <a href="/logout">Logout</a>
             </span>            
         </div>
+        <style>
+            table.sim-run-options-table tr td {
+                border: none;
+                padding: 0 2px;
+                font-size: 0.8em;
+            }
+        </style>
     </body>
 </html>

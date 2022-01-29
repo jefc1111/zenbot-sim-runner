@@ -7,9 +7,9 @@
     @endif
 </p>
 <p>
-    {{ $batch->get_varying_strategy_options()->count() }} strategy options had varying values over {{ $batch->all_sim_runs_for_strategy($strategy)->count() }} sim runs for the winning strategy
+    {{ $batch->get_varying_options_for_winning_strategy()->count() }} strategy options had varying values over {{ $batch->all_sim_runs_for_strategy($strategy)->count() }} sim runs for the winning strategy
 </p>
-@foreach($batch->get_varying_strategy_options() as $opt)
+@foreach($batch->get_varying_options_for_winning_strategy() as $opt)
 <p>
     Strategy option <strong>{{ $opt->name }}</strong> had minimum value {{ $batch->option_values($opt)->min() }} and maximum value {{ $batch->option_values($opt)->max() }} with step interval of {{ $batch->first_step_interval_for_option($opt) }} (final interval {{ $batch->last_step_interval_for_option($opt) }})<br>
     The trend score is {{ $batch->trend_score_for_option($opt) }}<br>
@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($batch->get_varying_strategy_options() as $strategy_option)
+                @foreach($batch->get_varying_options_for_winning_strategy() as $strategy_option)
                 <tr>                
                     <?php $rec = $batch->get_recommendation_for_option($strategy_option) ?>    
                     <td>{{ $strategy_option->name }}</td>
