@@ -5,8 +5,10 @@
             <tr>
                 <th>id</th>
                 <th>Name</th>
+                @if($show_all_columns)
                 <th>Exchange</th>
                 <th>Product</th>
+                @endif
                 <th>Asset</th>
                 <th>Currency</th>
                 <th>Date range</th>
@@ -14,7 +16,9 @@
                 <th>Qty strategies</th>
                 <th>Best vs. buy hold</th>
                 <th>Status</th>
+                @if($show_all_columns)
                 <th>User</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -24,22 +28,26 @@
                 <td>
                     <a href="/sim-run-batches/{{ $sim_run_batch->id }}">{{ $sim_run_batch->name }}</a>
                 </td>
+                @if($show_all_columns)
                 <td>{{ $sim_run_batch->exchange->name }}</td>
                 <td>{{ $sim_run_batch->product->name }}</td>
+                @endif
                 <td>{{ $sim_run_batch->product->asset }}</td>
                 <td>{{ $sim_run_batch->product->currency }}</td>
-                <td>{{ $sim_run_batch->humanised_date_range() }}</td>
+                <td>{{ $sim_run_batch->humanised_date_range_with_duration() }}</td>
                 <td>{{ $sim_run_batch->sim_runs->count() }}</td>
                 <td>{{ $sim_run_batch->qty_strategies() }}</td>
                 <td>{{ $sim_run_batch->best_vs_buy_hold() }}</td>
                 <td>{{ $sim_run_batch->status }}</td>
+                @if($show_all_columns)
                 <td>{{ $sim_run_batch->user ? $sim_run_batch->user->email : 'unknown user' }}</td>
+                @endif                
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>            
+                {!! str_repeat("<th></th>", $show_all_columns ? 12 : 9) !!}    
             </tr>
         </tfoot>
     </table> 
@@ -76,7 +84,7 @@
             }        
             
             $('#sim-run-batches').DataTable({
-                initComplete: function() { addFilterSelects.call(this, [2, 4, 5, 9,]) }
+                initComplete: function() { addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10]" : "[2, 3, 8]" !!}) }
             });
         });
     </script>

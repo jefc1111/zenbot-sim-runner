@@ -26,6 +26,7 @@ class SimRunBatchController extends Controller
     public function index()
     {
         return view('sim_run_batches.list', [
+            'show_all_columns' => false,
             'sim_run_batches' => Auth::user()->hasRole('admin')
             ? SimRunBatch::all()
             : Auth::user()->sim_run_batches

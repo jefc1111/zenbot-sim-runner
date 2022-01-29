@@ -14,7 +14,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Zenbot Sim Runner') }}
                     <img height="22" class="" src="{{ asset('images/zsr-logo-no-text.png') }}" alt="ZSR logo">

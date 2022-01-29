@@ -159,6 +159,11 @@ class SimRunBatch extends Model
         return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
     } 
 
+    public function humanised_date_range_with_duration(): string
+    {
+        return $this->start->format('d/m/y')."-".$this->end->format('d/m/y')." (".$this->start->diff($this->end)->d."d)";
+    }
+
     public function qty_strategies()
     {
         return $this->get_all_strategies_used()->count();
