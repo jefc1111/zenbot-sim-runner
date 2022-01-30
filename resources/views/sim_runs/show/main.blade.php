@@ -14,14 +14,14 @@
     </div>
     <div class="">
         <ul id="sim-run-tab-header" class="nav nav-tabs" role="tablist">
-            @include('shared.tab_header_item', [
-                'active' => true, 
-                'id' => 'overview', 
-                'label' => 'Overview'
-            ])
             @include('shared.tab_header_item', [               
                 'id' => 'options', 
-                'label' => 'Strategy options'
+                'label' => 'Strategy options',
+                'active' => true
+            ])
+            @include('shared.tab_header_item', [
+                'id' => 'zenbot-commands', 
+                'label' => 'Zenbot commands'
             ])
             @include('shared.tab_header_item', [ 
                 'id' => 'log', 
@@ -36,11 +36,11 @@
     <br>
     <div>
         <div class="tab-content" id="sim-run-tab-content">
-            <div class="tab-pane show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-                @include('sim_runs.show.overview')
-            </div>
-            <div class="tab-pane" id="options" role="tabpanel" aria-labelledby="options-tab">
+            <div class="tab-pane active" id="options" role="tabpanel" aria-labelledby="options-tab">
                 @include('sim_runs.show.options')
+            </div>
+            <div class="tab-pane show" id="zenbot-commands" role="tabpanel" aria-labelledby="zenbot-commands-tab">
+                @include('sim_runs.show.zenbot_commands')
             </div>
             <div class="tab-pane" id="log" role="tabpanel" aria-labelledby="log-tab">
                 @include('shared.live_log')

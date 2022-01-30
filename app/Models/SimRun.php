@@ -103,10 +103,11 @@ class SimRun extends Model
         : $strategy_option->default;
     }
 
-    private function cmd_components(): array
+    private function cmd_components(array $zenbot_actions): array
     {
         return array_merge(
             $this->cmd_primary_components(), 
+            $zenbot_actions,
             $this->cmd_common_components(), 
             $this->cmd_date_components($this->sim_run_batch),
             $this->cmd_option_components()
@@ -123,15 +124,24 @@ class SimRun extends Model
         ->map(fn($o) => "--$o->name={$o->value}")->toArray();
     }
 
-    public function cmd(): string
+    public function sim_cmd(): string
     {
-        return implode(' ', $this->cmd_components());
+        return implode(' ', $this->cmd_components(['sim']));
+    }
+
+    public function paper_trade_cmd(): string
+    {
+        return implode(' ', $this->cmd_components(['trade', '--paper']));
+    }
+
+    public function live_trade_cmd(): string
+    {
+        return implode(' ', $this->cmd_components(['trade']));
     }
 
     private function cmd_common_components(): array
     {
         $components = [
-            'sim',
             $this->get_selector(),
             "--strategy={$this->strategy->name}",
             "--buy_pct={$this->sim_run_batch->buy_pct}",
@@ -148,7 +158,7 @@ class SimRun extends Model
 
         $start_time = time();       
 
-        $process = new Process($this->cmd_components());
+        $process = new Process($this->cmd_components(['sim']));
 
         set_time_limit(config('zenbot.sim_timeout'));
         $process->setTimeout(config('zenbot.sim_timeout'));
