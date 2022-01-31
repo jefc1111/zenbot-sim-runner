@@ -49,6 +49,9 @@
                 @include('sim_runs.show.result')
             </div>
         </div>
+        <button {{ Auth::user()->has_sim_time() ? null : 'disabled' }} type="button" class="btn btn-success" id="run">
+            Initiate sim run <ion-icon name="play"></ion-icon>
+        </button>
     </div>
     
     <script>

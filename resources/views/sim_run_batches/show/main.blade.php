@@ -63,15 +63,6 @@
                 <div class="row">
                     @include('sim_run_batches.metadata_snippet')
                 </div>      
-                <div class="row">
-                    <button {{ Auth::user()->has_sim_time() && $batch->status === 'ready' ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-3" id="run">
-                        Initiate batch <ion-icon name="play"></ion-icon>
-                    </button>
-                    <button {{ Auth::user()->has_sim_time() && $batch->can_be_cancelled() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-3" id="cancel">
-                        Cancel <ion-icon name="stop-circle-outline"></ion-icon>
-                    </button>                    
-                    @include('shared.no_sim_time_warning')                    
-                </div>          
             </div>
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
                 <div class="row">
@@ -108,6 +99,15 @@
                 </p>
                 @endif
             </div>
+        </div>
+        <div class="row">
+            <button {{ Auth::user()->has_sim_time() && $batch->status === 'ready' ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-success col-md-3" id="run">
+                Initiate batch <ion-icon name="play"></ion-icon>
+            </button>
+            <button {{ Auth::user()->has_sim_time() && $batch->can_be_cancelled() ? null : 'disabled' }} style="margin: 3px; " type="button" class="btn btn-block btn-primary col-md-3" id="cancel">
+                Cancel <ion-icon name="stop-circle-outline"></ion-icon>
+            </button>                    
+            @include('shared.no_sim_time_warning')                    
         </div>            
     </div>
 
