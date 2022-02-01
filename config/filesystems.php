@@ -40,6 +40,11 @@ return [
             'root' => env('ZENBOT_LOG_LOCATION', storage_path('app')),
         ],
 
+        'zenbot-html-output' => [
+            'driver' => 'local',
+            'root' => env('ZENBOT_HTML_OUTPUT_LOCATION', storage_path('app')),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

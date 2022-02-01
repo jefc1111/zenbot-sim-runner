@@ -146,7 +146,7 @@ class SimRun extends Model
             "--strategy={$this->strategy->name}",
             "--buy_pct={$this->sim_run_batch->buy_pct}",
             "--sell_pct={$this->sim_run_batch->sell_pct}",
-            "--filename=none"
+            "--filename=".Storage::disk('zenbot-html-output')->path($this->get_html_output_path())
         ];
 
         return $components;
@@ -198,7 +198,17 @@ class SimRun extends Model
 
     private function get_log_path()
     {
-        return "zenbot-logs/$this->sim_run_batch_id-sim-run-$this->id.log";
+        return "zenbot-logs/{$this->get_filename()}.log";
+    }
+
+    private function get_html_output_path()
+    {
+        return "zenbot-html-output/{$this->get_filename()}.html";
+    }
+
+    private function get_filename()
+    {
+        return "$this->sim_run_batch_id-sim-run-$this->id";
     }
 
     private function get_log_file()
