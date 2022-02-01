@@ -598,7 +598,7 @@ class SimRunBatch extends Model
     public function get_backfill_log_lines()
     {
         if (\Storage::disk('zenbot-logs')->exists($this->backfill_log_path())) {
-            return explode("\n", \Storage::disk('zenbot-logs')->get($this->backfill_log_path()));
+            return \Storage::disk('zenbot-logs')->get($this->backfill_log_path());
         } else {
             return [];
         }

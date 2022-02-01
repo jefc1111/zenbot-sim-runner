@@ -251,8 +251,8 @@ class SimRun extends Model
         $converter = new AnsiToHtmlConverter($theme);
                 
         if (\Storage::disk('zenbot-logs')->exists($this->get_log_path())) {
-            return explode("\n", $this->get_log_file());
-            //return explode("\n", $converter->convert($this->get_log_file()));
+            return substr($converter->convert($this->get_log_file()), -10000);
+            //return explode(PHP_EOL, $converter->convert($this->get_log_file()));
         } else {
             return [];
         }

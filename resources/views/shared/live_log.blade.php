@@ -2,11 +2,8 @@
     <h4>Fetching log...</h4>
     <div>
         <code>
-            <ul class="list-unstyled">
-            </ul>
         </code>
     </div>
-    <p>Last {{ config('zenbot.log_lines_to_keep') }} lines</p>
 </div>
 
 <style>

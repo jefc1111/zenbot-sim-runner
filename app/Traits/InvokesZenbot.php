@@ -35,21 +35,10 @@ trait InvokesZenbot {
 
     private function write_log_file_and_get_last_msg(Process $process, string $path): string
     {
-        $lines = [];
-
-        foreach ($process as $data) {            
-            $lines[] = $data;
+        foreach ($process as $type => $data) {
+            Storage::disk('zenbot-logs')->append($path, $data, null);
         }
 
-        $new_data = implode('', array_map(
-            function($data) {
-                return $data;
-            },
-            $lines
-        ));
-                    
-        Storage::disk('zenbot-logs')->append($path, $new_data, null);
-
-        return $new_data;
+        return $data;
     }
 }

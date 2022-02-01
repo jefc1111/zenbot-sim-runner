@@ -194,17 +194,17 @@
         }
         
         function populateLiveLog() {
-            const qtyCurrentLines = $("#live-log ul li").length;
-
             $.get("backfill-log/{{ $batch->id }}", function(rdata) {
                 if (rdata.lines.length) {
                     $("#live-log h4").empty();
                     
-                    rdata.lines.slice(qtyCurrentLines).forEach(function(line, i) {
-                        $("#live-log ul").append(`<li>${line}</li>`);
-                    });
+                    if (rdata.lines !== $("#live-log code").html()) {
+                        $("#live-log code").html(rdata.lines);
+                    }                    
                 } else {
-                    $("#live-log h4").text("No log found")
+                    $("#live-log h4").text("No log found");
+
+                    $("#live-log code").empty();
                 }
             });
         }
