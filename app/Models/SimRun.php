@@ -169,6 +169,7 @@ class SimRun extends Model
         
         $process->start();
 
+        Storage::disk('zenbot-html-output')->put($this->get_html_output_path(), '');
         \Storage::disk('zenbot-logs')->put($this->get_log_path(), '');  
 
         $last_msg = $this->write_log_file_and_get_last_msg($process, $this->get_log_path());
@@ -204,6 +205,16 @@ class SimRun extends Model
     private function get_html_output_path()
     {
         return "zenbot-html-output/{$this->get_filename()}.html";
+    }
+
+    public function get_zenbot_html_output()
+    {
+        return Storage::disk('zenbot-html-output')->get($this->get_html_output_path());
+    }
+
+    public function has_zenbot_html_output()
+    {
+        return Storage::disk('zenbot-html-output')->exists($this->get_html_output_path());
     }
 
     private function get_filename()

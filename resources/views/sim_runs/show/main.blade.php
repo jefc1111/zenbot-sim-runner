@@ -3,12 +3,15 @@
         <div class="col-md-6">
             <h3>
                 Sim run {{ $sim_run->id }}
-            </h3>                
+            </h3>              
         </div>
         <div style="text-align: right; " class="text-muted col-md-6">
             <p>
                 From batch: <a href="/sim-run-batches/{{ $sim_run->sim_run_batch->id }}">{{ $sim_run->sim_run_batch->name }}</a><br>
                 Strategy: <a href="/strategies/{{ $sim_run->strategy->id }}">{{ $sim_run->strategy->name }}</a><br>
+                @if($has_zenbot_html_output)
+                    <a target="_blank" href="{{ url('sim-runs/zenbot-html-output', $sim_run->id) }}">Zenbot chart output</a><br>
+                @endif
             </p>
         </div>
     </div>

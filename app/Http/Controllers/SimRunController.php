@@ -53,7 +53,8 @@ class SimRunController extends Controller
     public function show(SimRun $sim_run)
     {
         return view('sim_runs.show.main', [
-            'sim_run' => $sim_run
+            'sim_run' => $sim_run,
+            'has_zenbot_html_output' => $sim_run->has_zenbot_html_output()
         ]);
     }
 
@@ -116,5 +117,13 @@ class SimRunController extends Controller
             'success' => true,
             'lines' => $sim_run->get_log_lines()
         ];
+    }
+
+    public function get_zenbot_html_output(SimRun $sim_run)
+    {
+        return view('sim_runs.show.zenbot_html_output', [
+            'sim_run' => $sim_run,
+            'zenbot_html_output' => $sim_run->get_zenbot_html_output()
+        ]);   
     }
 }

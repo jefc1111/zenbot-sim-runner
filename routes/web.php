@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     
     Route::get('sim-runs/run/{sim_run}', [SimRunController::class, 'run'])->can('view', 'sim_run');
     Route::get('sim-runs/log/{sim_run}', [SimRunController::class, 'get_log'])->can('view', 'sim_run');
+    Route::get('sim-runs/zenbot-html-output/{sim_run}', [SimRunController::class, 'get_zenbot_html_output'])->can('view', 'sim_run');
     Route::resource('sim-runs', SimRunController::class);
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
