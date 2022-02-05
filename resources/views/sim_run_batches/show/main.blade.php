@@ -67,7 +67,7 @@
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
                 <div class="row">
                     <div class="col-md-12">
-                        @include('sim_run_batches.show.sim_runs_table')  
+                        @include('sim_run_batches.show.sim_runs_table')
                     </div>
                 </div>
             </div>

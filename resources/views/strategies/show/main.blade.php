@@ -51,7 +51,7 @@
             <div class="tab-pane" id="sim-runs" role="tabpanel" aria-labelledby="sim-runs-tab">
                 <div class="row">
                     <div class="col-md-12">
-                        TABLE
+                        @include('strategies.show.sim_runs_table')
                     </div>
                 </div>
             </div>
