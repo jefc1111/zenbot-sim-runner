@@ -16,4 +16,9 @@ class Strategy extends Model
     {
         return $this->hasMany(StrategyOption::class);
     }
+
+    public function sim_runs()
+    {
+        return $this->hasMany(SimRun::class);
+    }
 }

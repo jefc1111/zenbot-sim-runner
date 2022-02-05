@@ -17,7 +17,7 @@ class StrategyController extends Controller
 
     public function show($id)
     {
-        return view('strategies.show', ['strategy' => Strategy::findOrFail($id)]);
+        return view('strategies.show.main', ['strategy' => Strategy::findOrFail($id)]);
     }
 
     public function import_strategies() {
