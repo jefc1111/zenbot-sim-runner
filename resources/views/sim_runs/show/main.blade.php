@@ -85,13 +85,13 @@
                 if (rdata.lines.length) {
                     $("#live-log h4").empty();
                     
-                    if (rdata.lines !== $("#live-log code").html()) {
-                        $("#live-log code").html(rdata.lines);
+                    if (rdata.lines !== $("#live-log pre").html()) {
+                        $("#live-log pre").html(rdata.lines);
                     }                    
                 } else {
                     $("#live-log h4").text("No log found");
 
-                    $("#live-log code").empty();
+                    $("#live-log pre").empty();
                 }
             });
         }

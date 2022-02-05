@@ -10,8 +10,6 @@ use App\Models\SimRunBatch;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Facades\Storage;
-use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
-use SensioLabs\AnsiConverter\Theme\Theme;
 
 use App\Traits\HasStatus;
 use App\Traits\InvokesZenbot;
@@ -234,39 +232,7 @@ class SimRun extends Model
 
     public function get_log_lines()
     {
-        $theme = new Class() extends Theme {                        
-            public function asArray()
-            {
-                return array(
-                    'black' => 'black',
-                    'red' => 'red',
-                    'green' => 'green',
-                    'yellow' => 'yellow',
-                    'blue' => 'blue',
-                    'magenta' => 'darkmagenta',
-                    'cyan' => 'cyan',
-                    'white' => 'white',
-
-                    'brblack' => 'black',
-                    'brred' => 'red',
-                    'brgreen' => 'lightgreen',
-                    'bryellow' => 'lightyellow',
-                    'brblue' => 'lightblue',
-                    'brmagenta' => 'magenta',
-                    'brcyan' => 'lightcyan',
-                    'brwhite' => 'white',
-                );
-            }
-        };
-        
-        $converter = new AnsiToHtmlConverter($theme);
-                
-        if (\Storage::disk('zenbot-logs')->exists($this->get_log_path())) {
-            return substr($converter->convert($this->get_log_file()), -10000);
-            //return explode(PHP_EOL, $converter->convert($this->get_log_file()));
-        } else {
-            return [];
-        }
+        return $this->tail_log_file($this->get_log_path());
     }
 
     // Extracts the chunk of JSON from the entire log output for a sim run

@@ -1,8 +1,8 @@
 <div id="live-log">
     <h4>Fetching log...</h4>
     <div>
-        <code>
-        </code>
+        <pre>
+        </pre>
     </div>
 </div>
 
