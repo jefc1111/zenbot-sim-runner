@@ -22,7 +22,9 @@
             </id>
             <td>{{ $sim_run->sim_run_batch->humanised_date_range_with_duration() }}</td>
             @foreach($strategy->options as $option)
-            <td>{{ $sim_run->get_value_for_option($option) }}</td>
+            <td style="{{ $sim_run->get_runtime_value_for_option($option)->origin === 'user' ? 'background: #efefef' : '' }}">
+                {{ $sim_run->get_runtime_value_for_option($option)->value }}
+            </td>
             @endforeach
             @if($sim_run->result || $sim_run->log)
             <td>{{ gmdate("H\h i\m s\s", $sim_run->runtime) }}</td>            

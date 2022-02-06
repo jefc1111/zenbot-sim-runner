@@ -94,11 +94,33 @@ class SimRun extends Model
         $this->unsaved_strategy_option_data = $strategy_option_data;
     }
 
+    // This is related only to the setting up of sim run batches. 
+    // Should at worst be renamed, and at best moved to a different place
     public function get_value_for_option(StrategyOption $strategy_option): string
     {
         return array_key_exists($strategy_option->id, $this->unsaved_strategy_option_data) 
         ? $this->unsaved_strategy_option_data[$strategy_option->id]
         : $strategy_option->default;
+    }
+
+    public function get_runtime_value_for_option(StrategyOption $strategy_option)
+    {
+        $option_was_set_by_user = $this->strategy_options->contains($strategy_option);
+
+        $value = $option_was_set_by_user 
+        ? $this->strategy_options->find($strategy_option)->value 
+        : $strategy_option->default.$strategy_option->unit; 
+        
+        $origin = $option_was_set_by_user ? 'user' : 'system';
+
+        return new class(
+            $value, $origin
+        ) {
+            function __construct(
+                public string $value, 
+                public string $origin,
+            ) {}
+        };
     }
 
     private function cmd_components(array $zenbot_actions): array
