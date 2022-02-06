@@ -22,7 +22,7 @@
             </id>
             <td>{{ $sim_run->sim_run_batch->humanised_date_range_with_duration() }}</td>
             @foreach($strategy->options as $option)
-            <td style="{{ $sim_run->get_runtime_value_for_option($option)->is_default_value_for_option ? 'color: #aaa;' : '' }} {{ $sim_run->get_runtime_value_for_option($option)->origin === 'user' ? 'background: #fcfcfc;' : '' }}">
+            <td style="{{ $sim_run->get_runtime_value_for_option($option)->is_default_value_for_option ? 'color: #aaa;' : '' }} {{ $sim_run->get_runtime_value_for_option($option)->origin === 'user' ? 'background: #fafafa;' : '' }}">
                 {{ $sim_run->get_runtime_value_for_option($option)->value }}
             </td>
             @endforeach
