@@ -1,4 +1,4 @@
-<table id="sim-runs-table" class="table table-sm table-bordered">
+<table id="sim-runs-table" class="table table-sm table-bordered compact">
     <thead>
         <tr>
             <th>id</th>
@@ -49,6 +49,16 @@
         </tr>
     </tfoot>
 </table>  
+
+<style>
+    table.compact {
+        font-size: 0.85em;
+    }
+
+    table.compact td {
+        padding: 2px;
+    }
+</style>
 
 <script>    
     $(document).ready(function () {
