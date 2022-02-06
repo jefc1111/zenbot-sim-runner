@@ -82,7 +82,9 @@
         }
 
         $('table#sim-runs-table').DataTable({
-            initComplete: function() { addFilterSelects.call(this, [13]) }
+            initComplete: function() { 
+                addFilterSelects.call(this, [ {{ implode(',', $cols_to_show) }} ]) 
+            }
         });
     });
 </script>

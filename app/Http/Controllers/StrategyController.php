@@ -17,7 +17,19 @@ class StrategyController extends Controller
 
     public function show($id)
     {
-        return view('strategies.show.main', ['strategy' => Strategy::findOrFail($id)]);
+        $strategy = Strategy::with('sim_runs')->findOrFail($id);
+
+        $cols_to_show = array_merge(
+            range(
+                2, $strategy->options->count() + 1
+            ), 
+            [ $strategy->options->count() + 7 ]
+        );
+
+        return view('strategies.show.main', [
+            'strategy' => $strategy,
+            'cols_to_show' => $cols_to_show
+        ]);
     }
 
     public function import_strategies() {
