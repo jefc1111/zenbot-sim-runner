@@ -52,6 +52,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         @include('strategies.show.sim_runs_table')
+                        <hr>
+                        <p>
+                            Light grey text means it is the default value for the option.
+                        </p>
+                        <p>
+                            Light grey cell background means there is a pivot entry between the sim run and the strategy option.
+                        </p>                    
                     </div>
                 </div>
             </div>
