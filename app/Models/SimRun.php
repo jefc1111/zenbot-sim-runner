@@ -114,7 +114,7 @@ class SimRun extends Model
         return new class(
             $value, 
             $option_was_set_by_user ? 'user' : 'system',
-            $value === $strategy_option->default,
+            $value == $strategy_option->default,
         ) {
             function __construct(
                 public string $value, 
