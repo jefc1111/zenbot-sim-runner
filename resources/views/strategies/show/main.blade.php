@@ -53,6 +53,7 @@
                     <div class="col-md-12">
                         @include('strategies.show.sim_runs_table')
                         <hr>
+                        <br>
                         <p>
                             Light grey text means it is the default value for the option.
                         </p>
