@@ -110,15 +110,16 @@ class SimRun extends Model
         $value = $option_was_set_by_user 
         ? $this->strategy_options->find($strategy_option)->value 
         : $strategy_option->default.$strategy_option->unit; 
-        
-        $origin = $option_was_set_by_user ? 'user' : 'system';
-
+    
         return new class(
-            $value, $origin
+            $value, 
+            $option_was_set_by_user ? 'user' : 'system',
+            $value === $strategy_option->default,
         ) {
             function __construct(
                 public string $value, 
                 public string $origin,
+                public bool $is_default_value_for_option
             ) {}
         };
     }
