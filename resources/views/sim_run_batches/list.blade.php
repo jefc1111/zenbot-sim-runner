@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($sim_run_batches->reverse() as $sim_run_batch)
+            @foreach($sim_run_batches as $sim_run_batch)
             <tr>
                 <td>{{ $sim_run_batch->id }}</id>
                 <td>
@@ -86,7 +86,10 @@
             }        
             
             $('#sim-run-batches').DataTable({
-                initComplete: function() { addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9]" !!}) }
+                order: [[ 0, "desc" ]],
+                initComplete: function() { 
+                    addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9]" !!}) 
+                }
             });
         });
     </script>
