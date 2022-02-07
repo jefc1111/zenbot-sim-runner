@@ -33,6 +33,8 @@ class SimRunBatch extends Model
     use HasStatus;
 
     protected $guarded = ['id'];
+    
+    protected $with = ['sim_runs'];
 
     protected $dates = [
         'start',
