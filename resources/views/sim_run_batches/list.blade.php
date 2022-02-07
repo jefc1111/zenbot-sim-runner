@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($sim_run_batches as $sim_run_batch)
+            @foreach($sim_run_batches->reverse() as $sim_run_batch)
             <tr>
                 <td>{{ $sim_run_batch->id }}</id>
                 <td>
