@@ -176,7 +176,7 @@ class SimRunBatch extends Model
 
     public function duration(): int
     {
-        return $this->end->diff($this->start)->d;
+        return $this->end->diffInDays($this->start);
     }
 
     public function qty_strategies()
