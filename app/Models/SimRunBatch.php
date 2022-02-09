@@ -32,9 +32,7 @@ class SimRunBatch extends Model
     use InvokesZenbot;
     use HasStatus;
 
-    protected $guarded = ['id'];
-    
-    protected $with = ['sim_runs'];
+    protected $guarded = ['id'];    
 
     protected $dates = [
         'start',
@@ -158,12 +156,27 @@ class SimRunBatch extends Model
 
     public function humanised_date_range(): string 
     {
-        return substr($this->start, 0, 10)." to ".substr($this->end, 0, 10);
+        return $this->start_human()." to ".$this->end_human();
+    } 
+
+    public function start_human(): string 
+    {
+        return substr($this->start, 0, 10);
+    } 
+
+    public function end_human(): string 
+    {
+        return substr($this->end, 0, 10);
     } 
 
     public function humanised_date_range_with_duration(): string
     {
-        return $this->start->format('d/m/y')."-".$this->end->format('d/m/y')." (".$this->start->diff($this->end)->d."d)";
+        return $this->humanised_date_range()." (".$this->duration()."d)";
+    }
+
+    public function duration(): int
+    {
+        return $this->end->diff($this->start)->d;
     }
 
     public function qty_strategies()

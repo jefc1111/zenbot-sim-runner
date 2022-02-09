@@ -2,7 +2,9 @@
     <thead>
         <tr>
             <th>id</th>
-            <th>Date range</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Duration</th>
             @foreach($strategy->options as $option)
             <th>{{ $option->name }}</th>
             @endforeach
@@ -20,7 +22,9 @@
             <td>
                 <a href="/sim-runs/{{ $sim_run->id }}">{{ $sim_run->id }}</a>
             </id>
-            <td>{{ $sim_run->sim_run_batch->humanised_date_range_with_duration() }}</td>
+            <td>{{ $sim_run->sim_run_batch->start_human() }}</td>
+            <td>{{ $sim_run->sim_run_batch->end_human() }}</td>
+            <td>{{ $sim_run->sim_run_batch->duration() }}</td>
             @foreach($strategy->options as $option)
             <td style="{{ $sim_run->get_runtime_value_for_option($option)->is_default_value_for_option ? 'color: #aaa;' : '' }} {{ $sim_run->get_runtime_value_for_option($option)->origin === 'user' ? 'background: #fafafa;' : '' }}">
                 {{ $sim_run->get_runtime_value_for_option($option)->value }}
@@ -33,7 +37,7 @@
             <td>{{ $sim_run->result_conv_pct('profit', 4) }}</td>            
             <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
             @else
-            {!! str_repeat("<td></td>", 5) !!}          
+            {!! str_repeat("<td></td>", 7) !!}          
             @endif
             <td>
                 <span data-id="{{ $sim_run->id }}" class="sim-run-status text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">
@@ -45,7 +49,7 @@
     </tbody>
     <tfoot>
         <tr>
-            {!! str_repeat("<th></th>", 14) !!}                        
+            {!! str_repeat("<th></th>", 16) !!}                        
         </tr>
     </tfoot>
 </table>  

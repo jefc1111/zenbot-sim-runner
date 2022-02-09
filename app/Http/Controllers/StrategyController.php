@@ -23,7 +23,7 @@ class StrategyController extends Controller
             range(
                 2, $strategy->options->count() + 1
             ), 
-            [ $strategy->options->count() + 7 ]
+            [ $strategy->options->count() + 9 ]
         );
 
         return view('strategies.show.main', [
