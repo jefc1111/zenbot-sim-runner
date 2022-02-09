@@ -37,7 +37,7 @@
             <td>{{ $sim_run->result_conv_pct('profit', 4) }}</td>            
             <td>{{ $sim_run->result_pct('vs_buy_hold') }}</td>
             @else
-            {!! str_repeat("<td></td>", 7) !!}          
+            {!! str_repeat("<td></td>", 5) !!}          
             @endif
             <td>
                 <span data-id="{{ $sim_run->id }}" class="sim-run-status text-{{ $sim_run->get_status_data($sim_run->status, 'style') }}">
@@ -49,7 +49,7 @@
     </tbody>
     <tfoot>
         <tr>
-            {!! str_repeat("<th></th>", 16) !!}                        
+            {!! str_repeat("<th></th>", $strategy->options->count() + 10) !!}                        
         </tr>
     </tfoot>
 </table>  

@@ -7,6 +7,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Enabled</th>
+                <th>Sim run count</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
                 </td>
                 <td>{{ $strategy->description }}</td>                
                 <td>{{ $strategy->enabled ? 'true' : 'false' }}</id>
+                <td>{{ $strategy->sim_runs->count() }}</id>
             </tr>
             @endforeach
         </tbody>
