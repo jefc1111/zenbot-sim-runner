@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Utility\StrategyImporter;
 use App\Models\Strategy;
+use App\Models\SimRun;
 use App\Models\StrategyOption;
 
 
@@ -12,7 +13,10 @@ class StrategyController extends Controller
 {
     public function index()
     {
-        return view('strategies.list', ['strategies' => Strategy::all()]);
+        return view('strategies.list', [
+            'strategies' => Strategy::all(),
+            'total_sim_run_count' => SimRun::count()
+        ]);
     }
 
     public function show($id)
@@ -21,7 +25,7 @@ class StrategyController extends Controller
 
         $cols_to_show = array_merge(
             range(
-                2, $strategy->options->count() + 1
+                1, $strategy->options->count() + 3
             ), 
             [ $strategy->options->count() + 9 ]
         );

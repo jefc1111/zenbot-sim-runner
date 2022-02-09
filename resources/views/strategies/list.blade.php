@@ -21,7 +21,13 @@
                 <td>{{ $strategy->enabled ? 'true' : 'false' }}</id>
                 <td>{{ $strategy->sim_runs->count() }}</id>
             </tr>
-            @endforeach
+            @endforeach            
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+                <td>{{ $total_sim_run_count }}</td>
+            </tr>
+        </tfoot>
     </table>    
 </x-layout>
