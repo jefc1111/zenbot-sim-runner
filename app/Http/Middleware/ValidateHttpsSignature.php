@@ -64,6 +64,5 @@ class ValidateHttpsSignature
 
         return  hash_equals($signature, (string) $request->query('signature', '')) &&
             ! ($expires && Carbon::now()->getTimestamp() > $expires);
-        }
     }
 }
