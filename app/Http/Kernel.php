@@ -60,9 +60,11 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        // https://cylab.be/blog/122/using-https-over-a-reverse-proxy-in-laravel
+        'signedhttps' => \App\Http\Middleware\ValidateHttpsSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'approved' => \App\Http\Middleware\CheckApproved::class,
-        'is-admin' => \App\Http\Middleware\IsAdmin::class,
+        'is-admin' => \App\Http\Middleware\IsAdmin::class,        
     ];
 }
