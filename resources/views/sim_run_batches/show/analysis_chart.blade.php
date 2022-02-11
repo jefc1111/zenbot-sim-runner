@@ -30,7 +30,7 @@
                 },
                 opposite: true
             },
-            @foreach($batch->get_varying_options_for_winning_strategy() as $opt)
+            @foreach($chart_options as $opt)
             {
                 title: {
                     text: "{{ $opt->name }}"
@@ -60,11 +60,11 @@
                 opacity: 0.5,
                 data: {!! json_encode($chart_sim_runs->map(fn($sr) => (int) $sr->result('total_trades'))->values()) !!}
             }, 
-            @foreach($batch->get_varying_options_for_winning_strategy()->values() as $k => $opt)
+            @foreach($chart_options->values() as $k => $opt)
             {
                 name: "{{ $opt->name }}",
                 yAxis: {{ $k + 2 }},
-                data: {!! $batch->option_values($opt) !!}     
+                data: {!! $sim_runs_container->option_values($opt) !!}     
             },
             @endforeach
         ]        

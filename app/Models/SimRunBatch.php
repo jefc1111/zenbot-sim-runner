@@ -476,19 +476,13 @@ class SimRunBatch extends Model
     {
         $sim_runs = $this->all_sim_runs_for_strategy($strategy);
 
-        return $strategy->options->filter(function($opt) use($sim_runs) {
-            $all_values_for_opt = $sim_runs->map(fn($sr) => $sr->strategy_options->find($opt->id)?->pivot->value)->values();
-        
-            // We only want to return strategy options where the set of sim runs given has more than 
-            // one distinct value (i.e. the user did select a range for interpolation)
-            return count($all_values_for_opt->unique()) > 1;
-        });
+        return $strategy->get_varying_options_for_sim_runs($sim_runs);
     }
 
     public function option_values(StrategyOption $opt)
     {
         return $this->all_sim_runs_for_strategy($opt->strategy)
-            ->sortBy(fn($sr) => $sr->result('vs_buy_hold'))
+            ->sortBy(fn($sr) => $sr->result('profit'))
             ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
             ->values();
     }

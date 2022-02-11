@@ -66,7 +66,7 @@
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
                 <div class="row">
                     <div class="col-md-12">
-                        @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
+                        @include('sim_run_batches.show.analysis_chart', ['strategy' => $strategy])
                     </div>
                 </div>
             </div>
