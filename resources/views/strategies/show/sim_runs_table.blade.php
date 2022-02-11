@@ -98,7 +98,11 @@
         $('table#sim-runs-table').DataTable({
             initComplete: function() { 
                 addFilterSelects.call(this, [ {{ implode(',', $cols_to_show) }} ]) 
-            }
+            },
+            dom: 'lfrtipB',
+            buttons: [
+                'csv'
+            ]
         });
     });
 </script>

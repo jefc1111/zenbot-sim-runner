@@ -206,7 +206,7 @@ class SimRun extends Model
 
             $this->sim_run_batch->user->available_seconds = $this->sim_run_batch->user->available_seconds - $this->runtime;
 
-            $this->result = $this->extract_json_result($this->get_log_file());    
+            $this->set_result_attributes();    
         
             $this->set_status('complete'); // This does a save
         } else {
@@ -269,6 +269,10 @@ class SimRun extends Model
         );
     }
 
+    private function set_result_attributes(): void
+    {
+        $this->result = $this->extract_json_result($this->get_log_file());   
+    }
     public function can_be_cancelled()
     {
         return $this->status === 'ready' || $this->status === 'queued';
