@@ -142,7 +142,7 @@ class SimRun extends Model
         // I _think_ `period_length` is just a dupe of `period` anyway. Maybe. 
         return $this->strategy_options
         ->filter(fn($o) => $o->name !== 'period_length')
-        ->map(fn($o) => "--$o->name={$o->value}")->toArray();
+        ->map(fn($o) => "--$o->name={$o->value}{$o->unit}")->toArray();
     }
 
     public function sim_cmd(): string
