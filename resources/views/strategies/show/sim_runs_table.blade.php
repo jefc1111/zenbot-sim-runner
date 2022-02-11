@@ -6,7 +6,7 @@
             <th>End</th>
             <th>Duration</th>
             @foreach($strategy->options as $option)
-            <th>{{ $option->name }}</th>
+            <th>{{ $option->name }} {{ $option->unit ? '('.$option->unit.')' : null  }}</th>
             @endforeach
             <th>Run time</th>
             <th>Qty trades</th>

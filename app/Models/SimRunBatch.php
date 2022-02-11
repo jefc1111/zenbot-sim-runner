@@ -463,7 +463,7 @@ class SimRunBatch extends Model
     {
         $sim_runs = $this->sim_runs->where('strategy_id', $strategy->id);
 
-        return $sort_by_result_attr ? $sim_runs->sortBy(fn($sr) => $sr->result('vs_buy_hold')) : $sim_runs;
+        return $sort_by_result_attr ? $sim_runs->sortBy(fn($sr) => $sr->result($sort_by_result_attr)) : $sim_runs;
     }
 
     // $sim_runs all need to have the same strategy so need to probably check that

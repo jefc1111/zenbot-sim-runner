@@ -27,7 +27,7 @@ class StrategyOption extends Model
 
     public function getValueAttribute()
     {
-        return $this->pivot->value.$this->unit;
+        return $this->pivot->value;
     }
 
     // -1, 0 or 1 to represent none, increasing, decreasing

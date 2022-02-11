@@ -189,7 +189,8 @@ class SimRunBatchController extends Controller
 
         return view('sim_run_batches.show.main', [
             'batch' => $sim_run_batch,
-            'varying_options_by_strategy_id' => $varying_options_by_strategy_id
+            'varying_options_by_strategy_id' => $varying_options_by_strategy_id,
+            'chart_sim_runs' => $sim_run_batch->all_sim_runs_for_strategy($sim_run_batch->winning_strategy(), 'profit')
         ]);
     }
 
