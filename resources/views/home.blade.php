@@ -75,6 +75,9 @@
         <li class="list-group-item">
             <a href="/admin">Admin</a>
         </li>
+        <li class="list-group-item">
+            <a href="/horizon">Horizon dashboard</a>
+        </li>
     </ul>    
     @endif
 </x-layout>
