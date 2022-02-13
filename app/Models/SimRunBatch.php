@@ -356,6 +356,8 @@ class SimRunBatch extends Model
 
         $start_time = time();
 
+        \Storage::disk('zenbot-logs')->put($this->backfill_log_path(), '');  
+
         $process->start();
 
         // Don't need the return value
