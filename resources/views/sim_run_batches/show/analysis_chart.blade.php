@@ -67,6 +67,7 @@
             @foreach($chart_options->values() as $k => $opt)
             {
                 name: "{{ $opt->name }}",
+                type: "spline",
                 yAxis: {{ $k + 2 }},
                 data: {!! $sim_runs_container->option_values($opt) !!}     
             },
