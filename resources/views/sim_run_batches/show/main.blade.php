@@ -179,7 +179,7 @@
             }
         });
 
-        /* ----- Duplicated for sim runs too ------ */
+        /* ----- Duplicated for sim runs and strategies too ------ */
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             var hash = $(e.target).attr('href');
             if (history.pushState) {

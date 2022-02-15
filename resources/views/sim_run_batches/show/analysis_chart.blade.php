@@ -3,7 +3,8 @@
 <script>
     const chart = Highcharts.chart('varying-options-chart', {
         chart: {
-            type: 'line'
+            type: 'line',
+            zoomType: 'x'
         },
         credits: {
             enabled: false
@@ -26,16 +27,15 @@
                     text: 'Profit / Vs buy & hold'
                 }                
             },
-            @if($show_axes_for_options)
             @foreach($chart_options as $opt)
             {
                 title: {
-                    text: "{{ $opt->name }}"
+                    text: "{{ $show_axes_for_options ? $opt->name : null }}"
                 },
-                opposite: true
+                opposite: true,
+
             },
             @endforeach
-            @endif
         ],
         navigation: {
             buttonOptions: {
@@ -67,7 +67,7 @@
             @foreach($chart_options->values() as $k => $opt)
             {
                 name: "{{ $opt->name }}",
-                yAxis: {{ $show_axes_for_options ? $k + 2 : 0 }},
+                yAxis: {{ $k + 2 }},
                 data: {!! $sim_runs_container->option_values($opt) !!}     
             },
             @endforeach
