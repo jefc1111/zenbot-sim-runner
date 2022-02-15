@@ -68,6 +68,9 @@
             {
                 name: "{{ $opt->name }}",
                 type: "spline",
+                marker: {
+                    radius: 0
+                },
                 yAxis: {{ $k + 2 }},
                 data: {!! $sim_runs_container->option_values($opt) !!}     
             },
