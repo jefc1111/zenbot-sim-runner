@@ -35,7 +35,7 @@ class Strategy extends Model
 
     public function option_values(StrategyOption $opt)
     {
-        return $this->sim_runs->filter(fn($sr) => $sr->status === 'complete')
+        return $this->sim_runs->filter(fn($sr) => $sr->fit_for_analysis())
             ->sortBy(fn($sr) => $sr->result('profit'))
             ->map(fn($sr) => (float) $sr->strategy_options->find($opt->id)?->pivot->value)
             ->values();

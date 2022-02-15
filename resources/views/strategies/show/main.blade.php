@@ -14,7 +14,7 @@
             ])
             @include('shared.tab_header_item', [ 
                 'id' => 'analysis', 
-                'label' => 'Analysis'
+                'label' => 'Analysis ('.$chart_sim_runs->count().')'
             ])
         </ul>
     </div>
@@ -65,8 +65,13 @@
             </div>
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
                 <div class="row">
+                    <p>
+                        Showing all complete {{ $strategy->name }} sim runs with quantity of trades > 0.
+            <       </p>
                     <div class="col-md-12">
-                        @include('sim_run_batches.show.analysis_chart', ['strategy' => $strategy])
+                        @include('sim_run_batches.show.analysis_chart', [                            
+                            'show_axes_for_options' => false
+                        ])
                     </div>
                 </div>
             </div>

@@ -282,4 +282,9 @@ class SimRun extends Model
     {
         $this->set_status("pending-cancel");
     }
+
+    public function fit_for_analysis()
+    {
+        return $this->status === 'complete' && $this->result('total_trades') > 0;
+    }
 }

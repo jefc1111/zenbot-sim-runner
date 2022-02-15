@@ -73,7 +73,9 @@
             </div>
             <div class="tab-pane" id="analysis" role="tabpanel" aria-labelledby="analysis-tab">
                 @if(! $batch->sim_runs->isEmpty() && $batch->is_complete())
-                @include('sim_run_batches.show.analysis_chart', ['strategy' => $batch->winning_strategy()])
+                @include('sim_run_batches.show.analysis_chart', [
+                    'show_axes_for_options' => true
+                ])
                 @include('sim_run_batches.show.analysis_text', ['strategy' => $batch->winning_strategy()])
                 @else
                 <br>

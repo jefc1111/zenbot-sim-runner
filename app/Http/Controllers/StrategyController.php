@@ -33,7 +33,9 @@ class StrategyController extends Controller
         return view('strategies.show.main', [
             'strategy' => $strategy,
             'cols_to_show' => $cols_to_show,
-            'chart_sim_runs' => $strategy->sim_runs->filter(fn($sr) => $sr->status === 'complete')->sortBy(fn($sr) => $sr->result('profit')),
+            'chart_sim_runs' => $strategy->sim_runs
+                ->filter(fn($sr) => $sr->fit_for_analysis())
+                ->sortBy(fn($sr) => $sr->result('profit')),
             'chart_options' => $strategy->options,
             'sim_runs_container' => $strategy
         ]);
