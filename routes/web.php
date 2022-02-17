@@ -7,6 +7,7 @@ use App\Http\Controllers\StrategyOptionController;
 use App\Http\Controllers\SimRunBatchController;
 use App\Http\Controllers\SimRunController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\BotController;
 use App\Http\Controllers\UserApprovalController;
 use App\Http\Controllers\ImportFromZenbotController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -63,7 +64,9 @@ Route::group(['middleware' => ['auth', 'verified', 'approved']], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
-    Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);    
+    Route::get('/shop/buy-sim-time-bundle/{id}', [App\Http\Controllers\ShopController::class, 'buy_sim_time_bundle']);
+
+    Route::resource('bots', BotController::class);
 });
 
 Route::group(['middleware' => ['auth', 'verified', 'approved', 'is-admin']], function () { 

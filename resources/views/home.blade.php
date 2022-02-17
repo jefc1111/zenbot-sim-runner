@@ -55,8 +55,17 @@
             <a href="/sim-run-batches">List sim run batches</a>
         </li>
     </ul>
+    @if (config('zenbot.bot_monitoring.active'))
+    <br>
+    <h4>Bot monitoring</h4>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="/bots">List bots</a>
+        </li>
+    </ul>   
+    @endif
     @if (Auth::user()->hasRole('admin'))
-    <hr />
+    <br>
     <h4>Import data from Zenbot</h4>
     <ul class="list-group">
         <li class="list-group-item">
@@ -69,7 +78,7 @@
             <a href="/import-exchanges">Import exchanges</a>
         </li>
     </ul>
-    <hr />
+    <br>
     <h4>Admin</h4>
     <ul class="list-group">
         <li class="list-group-item">

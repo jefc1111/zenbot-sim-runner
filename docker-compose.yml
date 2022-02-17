@@ -21,7 +21,7 @@ services:
       SESSION_DRIVER: redis
       QUEUE_DRIVER: redis
       REDIS_HOST: redis
-      ZENBOT_MONGODB_HOST: mongodb
+      ZENBOT_MONGODB_HOST: mongodb    
 
   scheduler:
     image: laravel-www
