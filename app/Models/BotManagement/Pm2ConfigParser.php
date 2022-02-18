@@ -72,7 +72,7 @@ class Pm2ConfigParser
         $res = $client->request('GET', config('zenbot.bot_monitoring.base_url').":17000/trades");
 
         $trades_output = $res->getBody()->getContents();
-//dd(array_keys((array) json_decode($trades_output)));
+dd(array_keys((array) json_decode($trades_output)));
 //dd(Arr::except(json_decode($trades_output, true), 'trades')['strategy']['phenotypes']);
 //dd(Arr::except(json_decode($trades_output, true), 'trades'));
         return $process_configs."<br><br><br>".Arr::except(json_decode($trades_output, true), 'trades');

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Exchange;
 use App\Models\Product;
 use App\Utility\ExchangeImporter;
-use App\Models\BotManagement\ConfigParser;
-
 
 use App\Jobs\BotStateGetter;
 
@@ -15,6 +13,8 @@ class BotController extends Controller
 {
     public function index()
     {
+        //new (App\Models\BotManagement\Pm2ConfigParser)->get_running_pm2_processes();
+        
         BotStateGetter::dispatch();        
     }
 
