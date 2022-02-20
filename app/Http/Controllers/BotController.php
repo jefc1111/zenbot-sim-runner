@@ -17,7 +17,7 @@ class BotController extends Controller
 
         //new (App\Models\BotManagement\Pm2ConfigParser)->get_running_pm2_processes();
         
-        //BotStateGetter::dispatch();        
+        //BotStateGetter::dispatch();     
     }
 
     public function show($id)

@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\BotStateGetter;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,7 +27,13 @@ class Kernel extends ConsoleKernel
     {
         if (config('aws-zsr.do_ecs_remote_control')) {
             $schedule->command("ecs-clusters:check")->everyMinute();
-        }        
+        }
+
+        if (config('zenbot.bot_monitoring.active')) {
+            $schedule->call(function () {
+                BotStateGetter::dispatch();
+            })->everyMinute();
+        }
     }
 
     /**
