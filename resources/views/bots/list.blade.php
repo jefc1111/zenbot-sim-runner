@@ -9,8 +9,8 @@
                 <th>Profit</th>
                 <th>HODL</th>
                 <th>Vs HODL</th>
-                <th>Asset (BTC)</th>
-                <th>Currency (BUSD)</th>
+                <th>Asset</th>
+                <th>Currency</th>
                 <th>Uptime</th>
                 <th>Active</th>
             </tr>
