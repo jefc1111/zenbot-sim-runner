@@ -3,6 +3,7 @@
 namespace App\Models\BotManagement;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BotManagement\BotSnapshot;
 
 class Bot extends Model
 {
@@ -23,24 +24,20 @@ class Bot extends Model
             $res->getBody()
         );        
 
-        \Log::error(
-            print_r(
-                \Arr::except(
-                    (array) $bot_state, ['trades', 'lookback']
-                ), 
-                true
-            )
-        );
+        $res = \Arr::except((array) $bot_state, [
+            'trades', 'lookback'
+        ]);
+
+        $snapshot = BotSnapshot::create([
+            'bot_id' => $this->id,
+            'asset_amount' => $res['balance']['asset'],
+            'currency_amount' => $res['balance']['currency'],
+            'profit' => $res['stats']['profit'],
+            'buy_hold_profit'=> $res['stats']['buy_hold_profit'],
+        ]);
     }
 }
 /*
-
-asset_capital 
-balance.asset
-balance.currency
-my_trades <- as json
-stats.profit
-stats.buy_hold_profit
 
 [2022-02-18 21:45:08] local.ERROR: Array
 (

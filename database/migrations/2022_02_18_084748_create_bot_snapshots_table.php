@@ -16,8 +16,10 @@ class CreateBotSnapshotsTable extends Migration
         Schema::create('bot_snapshots', function (Blueprint $table) {
             $table->id();    
             $table->integer('bot_id');
-            $table->decimal('profit', $precision = 5, $scale = 2);
-            $table->text('log')->nullable();
+            $table->float('asset_amount'); // balance.asset
+            $table->float('currency_amount'); // balance.currency
+            $table->decimal('profit', $precision = 5, $scale = 2); // stats.profit
+            $table->decimal('buy_hold_profit', $precision = 5, $scale = 2); // stats.buy_hold_profit
             $table->timestamps();
         });
     }
@@ -34,6 +36,14 @@ class CreateBotSnapshotsTable extends Migration
 }
 
 /*
+
+asset_capital 
+balance.asset
+balance.currency
+my_trades <- as json
+stats.profit
+stats.buy_hold_profit
+
     [acted_on_stop] => 
     [signal] => 
     [port] => 17001
