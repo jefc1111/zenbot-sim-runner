@@ -32,8 +32,8 @@ class Bot extends Model
             'bot_id' => $this->id,
             'asset_amount' => $res['balance']->asset,
             'currency_amount' => $res['balance']->currency,
-            'profit' => $res['stats']->profit,
-            'buy_hold_profit'=> $res['stats']->buy_hold_profit,
+            'profit' => str_replace('%', '', $res['stats']->profit),
+            'buy_hold_profit'=> str_replace('%', '', $res['stats']->buy_hold_profit),
         ]);
     }
 }
