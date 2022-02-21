@@ -16,6 +16,6 @@ class BotSnapshot extends Model
 
     public function age()
     {
-        return $this->created_at->diffForHumans(Carbon::now());
+        return $this->created_at->diffForHumans(Carbon::now(), true);
     }
 }
