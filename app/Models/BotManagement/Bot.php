@@ -19,6 +19,11 @@ class Bot extends Model
         return $this->hasOne(BotSnapshot::class)->latest();        
     }
 
+    public function first_snapshot()
+    {
+        return $this->hasOne(BotSnapshot::class)->first();        
+    }
+
     public function take_snapshot()
     {
         $client = new \GuzzleHttp\Client();
@@ -44,7 +49,7 @@ class Bot extends Model
 
     public function uptime()
     {
-        return "TIme since first snapshot";
+        return $this->first_snapshot->age();
     }
 }
 /*
