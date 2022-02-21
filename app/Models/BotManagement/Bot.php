@@ -4,6 +4,7 @@ namespace App\Models\BotManagement;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BotManagement\BotSnapshot;
+use Carbon\Carbon;
 
 class Bot extends Model
 {
@@ -17,11 +18,6 @@ class Bot extends Model
     public function latest_snapshot()
     {
         return $this->hasOne(BotSnapshot::class)->latest();        
-    }
-
-    public function first_snapshot()
-    {
-        return $this->hasOne(BotSnapshot::class)->first();        
     }
 
     public function take_snapshot()
@@ -49,7 +45,7 @@ class Bot extends Model
 
     public function uptime()
     {
-        return $this->first_snapshot->age();
+        return $this->created_at->diffForHumans(Carbon::now(), true);
     }
 }
 /*

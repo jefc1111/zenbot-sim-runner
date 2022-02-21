@@ -30,7 +30,7 @@
                 <td class="text-success">{{ $bot->latest_snapshot ? $bot->latest_snapshot->vs_buy_hold.'%' : null }}</td>
                 <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->asset_amount : null }}</td>
                 <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->currency_amount : null }}</td>
-                <td>{{ $bot->snapshots->count() ? $bot->uptime() : null }}</td>
+                <td>{{ $bot->uptime() }}</td>
                 <td>{{ $bot->active ?  'true' : 'false' }}</id>
             </tr>
             @endforeach
