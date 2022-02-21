@@ -29,15 +29,18 @@
                 <td>
                     {{ $bot->latest_snapshot ? $bot->latest_snapshot->age() : null }}
                 </td>
-                <td class="text-success">
-                    {{ $bot->latest_snapshot ? $bot->latest_snapshot->profit.'%' : null }}
-                </td>
-                <td>
-                    {{ $bot->latest_snapshot ? $bot->latest_snapshot->buy_hold_profit.'%' : null }}
-                </td>
-                <td class="text-success">
-                    {{ $bot->latest_snapshot ? ($bot->latest_snapshot->profit - $bot->latest_snapshot->buy_hold_profit).'%' : null }}
-                </td>
+                @include('table_components.good_bad_cell', [
+                    'content' => $bot->latest_snapshot ? $bot->latest_snapshot->profit.'%' : null,
+                    'value' => $bot->latest_snapshot ? $bot->latest_snapshot->profit : null                    
+                ])
+                @include('table_components.good_bad_cell', [
+                    'content' => $bot->latest_snapshot ? $bot->latest_snapshot->buy_hold_profit.'%' : null,
+                    'value' => $bot->latest_snapshot ? $bot->latest_snapshot->buy_hold_profit : null                    
+                ])
+                @include('table_components.good_bad_cell', [
+                    'content' => $bot->latest_snapshot ? ($bot->latest_snapshot->profit - $bot->latest_snapshot->buy_hold_profit).'%' : null,
+                    'value' => $bot->latest_snapshot ? ($bot->latest_snapshot->profit - $bot->latest_snapshot->buy_hold_profit) : null                    
+                ])
                 <td>
                     {{ $bot->latest_snapshot ? $bot->latest_snapshot->asset_amount : null }}
                 </td>
