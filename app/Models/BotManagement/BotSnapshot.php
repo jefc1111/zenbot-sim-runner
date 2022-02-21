@@ -4,6 +4,7 @@ namespace App\Models\BotManagement;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class BotSnapshot extends Model
 {
@@ -15,6 +16,6 @@ class BotSnapshot extends Model
 
     public function age()
     {
-        return "5 minutes ago lol";
+        return Carbon::now()->diffForHumans($this->created_at);;
     }
 }
