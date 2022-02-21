@@ -5,12 +5,13 @@
             <tr>
                 <th>id</th>
                 <th>Name</th>
+                <th>Qty snapshots</th>
                 <th>Last snapshot</th>                
                 <th>Profit</th>
                 <th>HODL</th>
                 <th>Vs HODL</th>
-                <th>Asset</th>
-                <th>Currency</th>
+                <th>Asset amt</th>
+                <th>Currency amt</th>
                 <th>Uptime</th>
                 <th>Active</th>
             </tr>
@@ -22,13 +23,14 @@
                 <td>
                     <a href="/bots/{{ $bot->id }}">{{ $bot->name }}</a>                    
                 </id>
-                <td>10 MINUTES AGO</td>
-                <td class="text-success">87%</td>
-                <td>8%</td>
-                <td class="text-success">198%</td>
-                <td>0.00021</td>
-                <td>1254</td>
-                <td>3 days</td>
+                <td>{{ $bot->snapshots->count() }}</id>
+                <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->age() : null }}</td>
+                <td class="text-success">{{ $bot->latest_snapshot ? $bot->latest_snapshot->profit.'%' : null }}</td>
+                <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->buy_hold_profit.'%' : null }}</td>
+                <td class="text-success">{{ $bot->latest_snapshot ? $bot->latest_snapshot->vs_buy_hold.'%' : null }}</td>
+                <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->asset_amount : null }}</td>
+                <td>{{ $bot->latest_snapshot ? $bot->latest_snapshot->currency_amount : null }}</td>
+                <td>{{ $bot->snapshots->count() ? $bot->uptime() : null }}</td>
                 <td>{{ $bot->active ?  'true' : 'false' }}</id>
             </tr>
             @endforeach

@@ -14,6 +14,11 @@ class Bot extends Model
         return $this->hasMany(BotSnapshot::class);
     }
 
+    public function latest_snapshot()
+    {
+        return $this->hasOne(BotSnapshot::class)->latest();        
+    }
+
     public function take_snapshot()
     {
         $client = new \GuzzleHttp\Client();

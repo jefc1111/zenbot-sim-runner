@@ -12,4 +12,9 @@ class BotSnapshot extends Model
     protected $guarded = [
         'id'
     ];
+
+    public function age()
+    {
+        return "5 minutes ago lol";
+    }
 }
