@@ -41,6 +41,11 @@ class Bot extends Model
             'buy_hold_profit'=> str_replace('%', '', $res['stats']->buy_hold_profit),
         ]);
     }
+
+    public function uptime()
+    {
+        return "TIme since first snapshot";
+    }
 }
 /*
 
