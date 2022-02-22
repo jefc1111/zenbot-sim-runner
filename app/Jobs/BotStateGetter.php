@@ -52,6 +52,6 @@ class BotStateGetter implements ShouldQueue
 
     public function failed($exception)
     {
-        $exception->getMessage();
+        \Log::error($exception->getMessage());
     }
 }
