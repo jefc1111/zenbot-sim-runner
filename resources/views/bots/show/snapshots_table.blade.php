@@ -6,7 +6,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($bot->snapshots->reverse() as $snapshot)
+        @foreach($bot->snapshots as $snapshot)
         <tr>
             <td>{{ $snapshot->id }}</id>
             @include('bots.shared.snapshot_body_cells', ['snapshot' => $snapshot])
@@ -17,6 +17,8 @@
 
 <script>    
     $(document).ready(function () {
-        $('table#snapshots-table').DataTable();
+        $('table#snapshots-table').DataTable({
+            order: [[ 0, "desc" ]],
+        });
     });
 </script>
