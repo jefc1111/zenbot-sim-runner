@@ -57,9 +57,7 @@
                     {!! \Session::get('error') !!}
                 </span>
             </div>
-            @endif
-            @include('shared.private_beta_warning')
-            <hr />        
+            @endif        
             {{ $slot }}
             <hr />
             <a href="/">Home</a>            
