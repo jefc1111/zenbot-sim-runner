@@ -15,6 +15,7 @@
                 <th>Currency amt</th>
                 <th>Uptime</th>
                 <th>Active</th>
+                <th>Zenbot port</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +23,7 @@
             <tr>
                 <td>{{ $bot->id }}</id>
                 <td>
-                    <a href="/bots/{{ $bot->id }}">{{ $bot->name }}</a>                    
+                    <a href="/bots/{{ $bot->id }}">{{ $bot->name }}</a>                  
                 </id>
                 <td>
                     {{ $bot->snapshots->count() }}
@@ -55,7 +56,10 @@
                     {{ $bot->snapshots->count() ? $bot->uptime() : null }}
                 </td>
                 <td>
-                    {{ $bot->active ?  'true' : 'false' }}
+                    {{ $bot->active ? 'true' : 'false' }}
+                </id>
+                <td>
+                    <a target="blank" href="{{ config('zenbot.bot_monitoring.base_url') }}:{{ $bot->zenbot_port }}">{{ $bot->zenbot_port }}</a>
                 </id>
             </tr>
             @endforeach
