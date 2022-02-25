@@ -46,10 +46,10 @@
                     'value' => $bot->latest_snapshot ? ($bot->latest_snapshot->profit - $bot->latest_snapshot->buy_hold_profit) : null                    
                 ])
                 <td>
-                    {{ $bot->latest_snapshot ? $bot->latest_snapshot->asset_amount : null }}
+                    {{ $bot->latest_snapshot ? number_format($bot->latest_snapshot->asset_amount, 8) : null }}
                 </td>
                 <td>
-                    {{ $bot->latest_snapshot ? $bot->latest_snapshot->currency_amount : null }}
+                    {{ $bot->latest_snapshot ? number_format($bot->latest_snapshot->currency_amount, 8) : null }}
                 </td>
                 <td>
                     {{ $bot->snapshots->count() ? $bot->uptime() : null }}
