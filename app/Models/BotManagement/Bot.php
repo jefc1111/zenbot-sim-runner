@@ -36,6 +36,7 @@ class Bot extends Model
 
         $snapshot = BotSnapshot::create([
             'bot_id' => $this->id,
+            'qty_trades' => isset($res['my_trades']) && is_array($res['my_trades']) ? count($res['my_trades']) : 0,
             'asset_amount' => $res['balance']->asset,
             'currency_amount' => $res['balance']->currency,
             'profit' => str_replace('%', '', $res['stats']->profit),

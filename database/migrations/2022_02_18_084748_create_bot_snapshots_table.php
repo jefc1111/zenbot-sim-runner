@@ -16,8 +16,9 @@ class CreateBotSnapshotsTable extends Migration
         Schema::create('bot_snapshots', function (Blueprint $table) {
             $table->id();    
             $table->integer('bot_id');
-            $table->float('asset_amount'); // balance.asset
-            $table->float('currency_amount'); // balance.currency
+            $table->integer('qty_trades');
+            $table->float('asset_amount', $precision = 16, $scale = 8); // balance.asset
+            $table->float('currency_amount', $precision = 16, $scale = 8); // balance.currency
             $table->decimal('profit', $precision = 5, $scale = 2); // stats.profit
             $table->decimal('buy_hold_profit', $precision = 5, $scale = 2); // stats.buy_hold_profit
             $table->timestamps();
