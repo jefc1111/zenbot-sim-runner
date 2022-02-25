@@ -6,7 +6,8 @@
                 <th>id</th>
                 <th>Name</th>
                 <th>Qty snapshots</th>
-                <th>Last snapshot</th>                
+                <th>Last snapshot</th>
+                <th>Qty trades</th>                
                 <th>Profit</th>
                 <th>HODL</th>
                 <th>Vs HODL</th>
@@ -28,6 +29,9 @@
                 </id>
                 <td>
                     {{ $bot->latest_snapshot ? $bot->latest_snapshot->age() : null }}
+                </td>
+                <td>
+                    {{ $bot->latest_snapshot ? $bot->latest_snapshot->qty_trades : null }}
                 </td>
                 @include('table_components.good_bad_cell', [
                     'content' => $bot->latest_snapshot ? $bot->latest_snapshot->profit.'%' : null,
