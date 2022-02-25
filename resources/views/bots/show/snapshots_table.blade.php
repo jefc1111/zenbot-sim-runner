@@ -6,7 +6,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($bot->snapshots as $snapshot)
+        @foreach($bot->snapshots->reverse() as $snapshot)
         <tr>
             <td>{{ $snapshot->id }}</id>
             @include('bots.shared.snapshot_body_cells', ['snapshot' => $snapshot])
