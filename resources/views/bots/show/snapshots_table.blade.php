@@ -8,7 +8,7 @@
     <tbody>
         @foreach($bot->snapshots as $snapshot)
         <tr>
-            <td>{{ $ssnapshot->id }}</id>
+            <td>{{ $snapshot->id }}</id>
             @include('bots.shared.snapshot_body_cells', ['snapshot' => $snapshot])
         </tr>
         @endforeach
