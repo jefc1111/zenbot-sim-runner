@@ -24,7 +24,7 @@ class BotController extends Controller
     {
         $bot = Bot::findOrFail($id);
 
-        return view('bots.show', [
+        return view('bots.show.main', [
             'bot' => $bot
         ]);
     }
