@@ -27,7 +27,7 @@
                     {{ $bot->latest_snapshot ? $bot->latest_snapshot->age() : null }}
                 </td>
                 @if($bot->latest_snapshot)
-                @include('bots.shared.snapshot_body_cells')
+                @include('bots.shared.snapshot_body_cells', ['snapshot' => $bot->latest_snapshot])
                 @else
                 {!! str_repeat("<td></td>", 6) !!}
                 @endif
