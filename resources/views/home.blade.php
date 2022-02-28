@@ -55,7 +55,7 @@
             <a href="/sim-run-batches">List sim run batches</a>
         </li>
     </ul>
-    @if (config('zenbot.bot_monitoring.active'))
+    @if (config('zenbot.bot_monitoring.active') && Auth::user()->hasRole('admin'))
     <br>
     <h4>Bot monitoring</h4>
     <ul class="list-group">
