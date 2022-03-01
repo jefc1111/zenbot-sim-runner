@@ -43,6 +43,11 @@
                 title: {
                     text: 'Currency amt.'
                 }                
+            },
+            {
+                title: {
+                    text: 'Qty trades'
+                }                
             }
         ],
         navigation: {
@@ -51,6 +56,36 @@
             }
         },
         series: [
+            {
+                name: 'Qty trades',
+                yAxis: 3,
+                type: 'area',
+                opacity: 0.2,
+                data: {!! json_encode($bot->snapshots->map(fn($s) => $s->qty_trades)) !!},
+                marker: {
+                    radius: 0
+                },
+            },
+            {
+                name: 'Asset amt.',
+                yAxis: 1,
+                type: 'column',
+                opacity: 0.5,
+                data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->asset_amount)) !!},
+                marker: {
+                    radius: 0
+                },
+            },
+            {
+                name: 'Currency amt.',
+                yAxis: 2,
+                type: 'column',
+                opacity: 0.5,
+                data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->currency_amount)) !!},
+                marker: {
+                    radius: 0
+                },
+            },
             {
                 name: 'Profit',
                 yAxis: 0,    
@@ -74,26 +109,6 @@
                 yAxis: 0,
                 type: 'line',
                 data: {!! json_encode($bot->snapshots->map(fn($s) => (float) ($s->profit - $s->buy_hold_profit))) !!},
-                marker: {
-                    radius: 0
-                },
-            },
-            {
-                name: 'Asset amt.',
-                yAxis: 1,
-                type: 'column',
-                opacity: 0.5,
-                data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->asset_amount)) !!},
-                marker: {
-                    radius: 0
-                },
-            },
-            {
-                name: 'Currency amt.',
-                yAxis: 2,
-                type: 'column',
-                opacity: 0.5,
-                data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->currency_amount)) !!},
                 marker: {
                     radius: 0
                 },
