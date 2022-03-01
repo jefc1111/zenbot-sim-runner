@@ -22,6 +22,7 @@
                     text: 'Profit'
                 }
             },
+            /*
             {
                 title: {
                     text: 'Buy & hold profit'
@@ -32,6 +33,7 @@
                     text: 'Vs. buy & hold'
                 }                
             },
+            */
             {
                 title: {
                     text: 'Asset amt.'
@@ -60,7 +62,7 @@
             },
             {
                 name: 'Buy & hold profit',
-                yAxis: 1,
+                yAxis: 0,
                 type: 'line',
                 data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->buy_hold_profit)) !!},
                 marker: {
@@ -69,7 +71,7 @@
             },
             {
                 name: 'Vs. buy & hold',
-                yAxis: 2,
+                yAxis: 0,
                 type: 'line',
                 data: {!! json_encode($bot->snapshots->map(fn($s) => (float) ($s->profit - $s->buy_hold_profit))) !!},
                 marker: {
@@ -78,7 +80,7 @@
             },
             {
                 name: 'Asset amt.',
-                yAxis: 3,
+                yAxis: 1,
                 type: 'column',
                 opacity: 0.5,
                 data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->asset_amount)) !!},
@@ -88,7 +90,7 @@
             },
             {
                 name: 'Currency amt.',
-                yAxis: 4,
+                yAxis: 2,
                 type: 'column',
                 opacity: 0.5,
                 data: {!! json_encode($bot->snapshots->map(fn($s) => (float) $s->currency_amount)) !!},
