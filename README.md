@@ -8,6 +8,9 @@
   </p>
   <hr />
   <h3>
+    The documentation below is very out of date at the moment as I do not have time to update it or support a documented deployment guide.
+  </h3>
+  <h3>
     If you are interested in this project please contact me here in Github or hit me up on <a target="_blank" href="https://discord.com/channels/880347822854115328/880347822854115331">Discord</a>.
   </h3>
   <hr />
