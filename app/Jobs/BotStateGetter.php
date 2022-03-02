@@ -36,6 +36,8 @@ class BotStateGetter implements ShouldQueue
             return;
         }
 
+        set_time_limit(180);
+
         // First contact our service which extracts config from pm2.
         // This adds any new bots to the database and sets any inactive
         // ones to inactive 
