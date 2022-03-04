@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         if (config('zenbot.bot_monitoring.active')) {
             $schedule->call(function () {
                 BotStateGetter::dispatch();
-            })->everyFiveMinutes();
+            })->everyThirtyMinutes();
         }
     }
 
