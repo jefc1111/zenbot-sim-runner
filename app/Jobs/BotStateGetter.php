@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\BotManagement\Pm2ConfigParser;
 use App\Models\BotManagement\Bot;
+use App\Jobs\BotSnapshotGetter;
 
 class BotStateGetter implements ShouldQueue
 {
@@ -49,7 +50,7 @@ class BotStateGetter implements ShouldQueue
         // memory intensive so for now I am running them in series)
         // Each one taking a Bot and asking the relevant API endpoint (i.e. /trades:17000)
         // For data which then gets stashed as a BotSnapshot
-        Bot::where('active', '=', 1)->get()->each(fn($bot) => $bot->take_snapshot());
+        Bot::where('active', '=', 1)->get()->each(fn($bot) => BotSnapshotGetter::dispatch($bot));
     }
 
     public function failed($exception)
