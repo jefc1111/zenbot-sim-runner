@@ -27,7 +27,10 @@ class BotSnapshotGetter implements ShouldQueue
      * @return void
      */
     public function handle()
-    {        
+    {   
+        // Some bots keep a whole load of trade history which makes the call to the API very slow :-/    
+        set_time_limit(180);
+
         $this->bot->take_snapshot();
     }
 
