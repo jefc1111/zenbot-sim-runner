@@ -12,7 +12,7 @@ class BotController extends Controller
     public function index()
     {
         return view('bots.list', [
-            'bots' => Bot::orderBy('active')->get()
+            'bots' => Bot::where('active', '=', 1)->get()
         ]);
 
         //new (App\Models\BotManagement\Pm2ConfigParser)->get_running_pm2_processes();
