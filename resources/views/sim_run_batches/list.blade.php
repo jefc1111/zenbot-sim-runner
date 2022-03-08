@@ -17,9 +17,7 @@
                 <th>Best vs. buy hold</th>
                 <th>Status</th>
                 <th>Initiator</th>
-                @if($show_all_columns)
                 <th>User</th>
-                @endif
             </tr>
         </thead>
         <tbody>
@@ -41,15 +39,13 @@
                 <td>{{ $sim_run_batch->best_vs_buy_hold(2, '%') }}</td>
                 <td>{{ $sim_run_batch->status }}</td>
                 <td>{{ $sim_run_batch->parent_batch_id ? 'system' : 'user' }}</td>
-                @if($show_all_columns)
                 <td>{{ $sim_run_batch->user ? $sim_run_batch->user->email : 'unknown user' }}</td>
-                @endif                
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                {!! str_repeat("<th></th>", $show_all_columns ? 13 : 10) !!}    
+                {!! str_repeat("<th></th>", $show_all_columns ? 13 : 11) !!}    
             </tr>
         </tfoot>
     </table> 
@@ -88,7 +84,7 @@
             $('#sim-run-batches').DataTable({
                 order: [[ 0, "desc" ]],
                 initComplete: function() { 
-                    addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9]" !!}) 
+                    addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9, 10]" !!}) 
                 }
             });
         });

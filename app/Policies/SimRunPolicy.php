@@ -36,7 +36,8 @@ class SimRunPolicy
      */
     public function view(User $user, SimRun $simRun)
     {
-        return $user->id === $simRun->sim_run_batch->user_id;
+        return true;
+        //return $user->id === $simRun->sim_run_batch->user_id;
     }
 
     /**
