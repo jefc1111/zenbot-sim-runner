@@ -84,7 +84,7 @@
             $('#sim-run-batches').DataTable({
                 order: [[ 0, "desc" ]],
                 initComplete: function() { 
-                    addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9, 10]" !!}) 
+                    addFilterSelects.call(this, {!! $show_all_columns ? "[2, 4, 5, 10, 11]" : "[2, 3, 8, 9]" !!}) 
                 }
             });
         });
