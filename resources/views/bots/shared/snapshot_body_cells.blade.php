@@ -1,6 +1,3 @@
-<td>
-    {{ $snapshot->qty_trades }}
-</td>
 @include('table_components.good_bad_cell', [
     'content' => $snapshot->profit.'%',
     'value' => $snapshot->profit                    
@@ -18,4 +15,7 @@
 </td>
 <td>
     {{ number_format($snapshot->currency_amount, 8) }}
+</td>
+<td>
+    {{ $snapshot->qty_trades }}
 </td>

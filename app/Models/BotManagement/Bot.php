@@ -48,6 +48,16 @@ class Bot extends Model
     {
         return $this->created_at->diffForHumans(Carbon::now(), true);
     }
+
+    public function is_paper()
+    {
+        return str_contains($this->args, "--paper");
+    }
+
+    public function is_live()
+    {
+        return ! $this->is_paper();
+    }
 }
 /*
 

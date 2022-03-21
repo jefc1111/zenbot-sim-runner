@@ -12,7 +12,7 @@ class BotController extends Controller
     public function index()
     {
         return view('bots.list', [
-            'bots' => Bot::orderBy('active', 'desc')->get()
+            'bots' => Bot::orderBy('active', 'desc')->get()->sort(fn($b) => $b->is_paper())
         ]);  
     }
 
