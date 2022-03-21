@@ -25,7 +25,10 @@ class Pm2ConfigParser
         foreach ($process_configs as $process_config) {
             $arg_str = implode(' ', $process_config->args);
 
-            $existing_bot = Bot::where('args', '=', $arg_str)->first();
+            $existing_bot = Bot::where('args', '=', $arg_str)
+                ->where('name', '=', $process_config->name)
+                ->where('zenbot_port', '=', $process_config->zenbot_port)
+                ->first();
             
             if ($existing_bot) {
                 $active_bots->push($existing_bot);
