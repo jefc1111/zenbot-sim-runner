@@ -14,8 +14,8 @@
     </thead>
     <tbody>
         @foreach($bots as $bot)
-        <tr class="{{ $bot->is_live() ? 'table-info' : null }}">
-            <td>{{ $bot->id }}</id>
+        <tr>
+            <td class="{{ $bot->is_live() ? 'table-info' : null }}">{{ $bot->id }}</id>
             <td>
                 <a href="/bots/{{ $bot->id }}">{{ $bot->name }}</a>                  
             </id>
