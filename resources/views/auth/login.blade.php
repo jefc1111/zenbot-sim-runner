@@ -8,6 +8,9 @@
     <div class="row">    
         Please visit &nbsp;<a href="https://discord.com/channels/880347822854115328/880347822854115331" target="_blank">Discord</a> &nbsp;to discuss anything to do with this platform. 
     </div>
+    <div class="row">    
+        This project is open source, but I do not maintain a 'one-click' or probably even 'hundred-click' installation method. So good luck! The source is on &nbsp;<a href="https://github.com/jefc1111/zenbot-sim-runner" target="_blank">Github</a>. 
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-8">   
             <div class="card">            
