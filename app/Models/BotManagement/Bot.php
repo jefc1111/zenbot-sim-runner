@@ -39,7 +39,7 @@ class Bot extends Model
             'qty_trades' => isset($res['my_trades']) && is_array($res['my_trades']) ? count($res['my_trades']) : 0,
             'asset_amount' => $res['balance']->asset,
             'currency_amount' => $res['balance']->currency,
-            'asset_capital' => $res['asset capital'],
+            'asset_capital' => $res['asset_capital'],
             'profit' => str_replace('%', '', $res['stats']->profit),
             'buy_hold_profit'=> str_replace('%', '', $res['stats']->buy_hold_profit),
         ]);
