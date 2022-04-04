@@ -11,10 +11,13 @@
     'value' => ($snapshot->profit - $snapshot->buy_hold_profit)                    
 ])
 <td>
-    {{ number_format($snapshot->asset_amount, 8) }}
+    {{ number_format($snapshot->asset_amount, 4) }}
 </td>
 <td>
-    {{ number_format($snapshot->currency_amount, 8) }}
+    {{ number_format($snapshot->currency_amount, 4) }}
+</td>
+<td>
+    {{ number_format($snapshot->asset_capital, 4) }}
 </td>
 <td>
     {{ $snapshot->qty_trades }}
