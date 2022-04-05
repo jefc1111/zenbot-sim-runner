@@ -34,7 +34,9 @@
                 {{ $bot->snapshots->count() ? $bot->uptime() : null }}
             </td>
             <td>
+                @if($bot->active)
                 <a target="blank" href="{{ config('zenbot.bot_monitoring.base_url') }}:{{ $bot->zenbot_port }}">{{ $bot->zenbot_port }}</a>
+                @endif
             </id>
             <td>
                 {{ $bot->is_paper() ? 'paper' : 'live' }}

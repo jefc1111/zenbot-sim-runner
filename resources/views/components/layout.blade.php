@@ -91,23 +91,22 @@
                 padding: 0 2px;
                 font-size: 0.8em;
             }
-            
+
             div.asseet-capital-split {         
                 color: white; 
                 display: block; 
-                width: 120px;
+                width: 101px;
                 height: 20px;
             }
 
             div.asseet-capital-split > div {
                 display: inline-block;
-                height: 20px;
             }
 
             div.asseet-capital-split > div > span {
-                padding: 0 3px;
+                padding: 3px;
                 font-size: 0.85em;
-                color: white;
+                color: white;                
             }
 
             div.asseet-capital-split > div:first-child {
@@ -117,6 +116,7 @@
             div.asseet-capital-split > div:nth-child(2) {
                 background: #3caea3;        
                 text-align: right;
+                margin-left: -4px;
             }
         </style>
     </body>
