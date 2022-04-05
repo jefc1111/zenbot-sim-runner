@@ -22,10 +22,10 @@
 <td>
     <div class="asseet-capital-split">
         <div style="width: {{ number_format($snapshot->asset_pct(), 0) }}px">
-            <span>{{ $snapshot->asset }}</span>
+            <span style="visibility: {{ $snapshot->asset_pct() > 30 ? 'visible' : 'hidden' }}; ">{{ $snapshot->asset }}</span>
         </div>
         <div style="width: {{ number_format($snapshot->currency_pct(), 0) }}">
-            <span>{{ $snapshot->currency }}</span>
+            <span style="visibility: {{ $snapshot->currency_pct() > 30 ? 'visible' : 'hidden' }}; ">{{ $snapshot->currency }}</span>
         </div>
     </div>
 </td>
@@ -34,21 +34,21 @@
 </td>
 
 <style>
-    div.asseet-capital-split {
-        font-size: 0.8em; 
+    div.asseet-capital-split {         
         color: white; 
         display: block; 
         width: 120px;
+        height: 20px;
     }
 
     div.asseet-capital-split > div {
-        border: 0; 
         display: inline-block;
         height: 20px;
     }
 
-    div.asseet-capital-split > span {
-        padding: 2px;
+    div.asseet-capital-split > div > span {
+        padding: 0 3px;
+        font-size: 0.85em;
     }
 
     div.asseet-capital-split > div:first-child {
@@ -57,5 +57,6 @@
     
     div.asseet-capital-split > div:nth-child(2) {
         background: purple;
+        text-align: right;
     }
 </style>
