@@ -20,6 +20,7 @@
     {{ number_format($snapshot->currency_amount, 2) }}
 </td>
 <td>
+    @if($snapshot->asset_capital > 0)
     <div class="asseet-capital-split">
         <div style="width: {{ number_format($snapshot->asset_pct(), 0) }}px">
             <span style="visibility: {{ $snapshot->asset_pct() > 30 ? 'visible' : 'hidden' }}; ">{{ $snapshot->asset }}</span>
@@ -28,6 +29,7 @@
             <span style="visibility: {{ $snapshot->currency_pct() > 30 ? 'visible' : 'hidden' }}; ">{{ $snapshot->currency }}</span>
         </div>
     </div>
+    @endif
 </td>
 <td>
     {{ $snapshot->qty_trades }}
