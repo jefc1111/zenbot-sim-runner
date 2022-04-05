@@ -18,4 +18,14 @@ class BotSnapshot extends Model
     {
         return $this->created_at->diffForHumans(Carbon::now(), true);
     }
+
+    public function asset_pct()
+    {
+        return 100 - $this->currency_pct();
+    }
+
+    public function currency_pct()
+    {
+        return $this->asset_capital ? ($this->currency_amount / ($this->asset_capital + $this->currency_amount)) * 100 : 0;
+    }
 }
