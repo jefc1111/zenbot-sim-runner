@@ -22,7 +22,7 @@
             @if($bot->latest_snapshot)
             @include('bots.shared.snapshot_body_cells', ['snapshot' => $bot->latest_snapshot])
             @else
-            {!! str_repeat("<td></td>", 6) !!}
+            {!! str_repeat("<td></td>", 8) !!}
             @endif
             <td>
                 {{ $bot->snapshots->count() }}
