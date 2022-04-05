@@ -49,16 +49,15 @@
     div.asseet-capital-split > div > span {
         padding: 0 3px;
         font-size: 0.85em;
+        color: white;
     }
 
     div.asseet-capital-split > div:first-child {
-        background: #85144b;
-        color: #ffdc00;
+        background: #20639b;
     }
     
     div.asseet-capital-split > div:nth-child(2) {
-        background: #7fdbff;
-        color: #85144b;
+        background: #3caea3;        
         text-align: right;
     }
 </style>
