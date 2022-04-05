@@ -52,11 +52,11 @@
     }
 
     div.asseet-capital-split > div:first-child {
-        background: blue;
+        background: #20639b;
     }
     
     div.asseet-capital-split > div:nth-child(2) {
-        background: purple;
+        background: #f6d55c;
         text-align: right;
     }
 </style>
