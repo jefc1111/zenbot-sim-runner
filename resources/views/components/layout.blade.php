@@ -91,6 +91,33 @@
                 padding: 0 2px;
                 font-size: 0.8em;
             }
+            
+            div.asseet-capital-split {         
+                color: white; 
+                display: block; 
+                width: 120px;
+                height: 20px;
+            }
+
+            div.asseet-capital-split > div {
+                display: inline-block;
+                height: 20px;
+            }
+
+            div.asseet-capital-split > div > span {
+                padding: 0 3px;
+                font-size: 0.85em;
+                color: white;
+            }
+
+            div.asseet-capital-split > div:first-child {
+                background: #20639b;
+            }
+            
+            div.asseet-capital-split > div:nth-child(2) {
+                background: #3caea3;        
+                text-align: right;
+            }
         </style>
     </body>
 </html>
