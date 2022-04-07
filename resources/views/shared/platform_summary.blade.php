@@ -4,7 +4,7 @@
         <li>a backtesting framework based on <a target="_blank" href="https://github.com/DeviaVir/zenbot">Zenbot</a></li>
         <li>a hobby project</li>
         <li>intended for techincally-minded individuals</li>
-        <li>not based on a subscription model (yet) - you pay for the simulation time you use</li>
+        <li>not based on a subscription model - you pay for the simulation time you use</li>
         <li>clever</li>
     </ul>
 </div>
