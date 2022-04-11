@@ -262,7 +262,7 @@ return [
                 'memory' => env('HORIZON_MAX_MEMORY', 1024),
                 'tries' => 1,
                 'nice' => 0,
-                'timeout' => 180,
+                'timeout' => 600,
                 'queue' => ['default'],
                 'maxProcesses' => env('HORIZON_MAX_PROCESSES', 3),
             ],
